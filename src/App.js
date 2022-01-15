@@ -1,5 +1,10 @@
+/* Next steps: I have a search component, and want to use serch terms to 
+   filter the array of possible algorithms that displays */
+
+
+
 import * as React from 'react';
-import ReactDOM from 'react-dom';
+import {ReactDOM} from 'react-dom';
 import './App.css';
 
 /* Can create the account objects using object literal notation
@@ -55,6 +60,13 @@ const handleSearch = (event) => {
   setSearchTerm(event.target.value);
 }
 
+const algorithms = ['Bubble Sort', 'Insertion Sort', '0/1 Knapsack', 'Fractional Knapsack', 'Huffman Coding', 'Optimal Binary Search Tree', 'Traveling Salesperson' ];
+
+/*
+const searchedAccounts = accounts.filter.(function (account) {
+  return account.name.includes(searchTerm);
+});*/
+
   // dynamic value for searchTerm; if it updates, it will re-render the search component
   const [searchTerm, setSearchTerm] = React.useState('Default');
 
@@ -69,6 +81,8 @@ const handleSearch = (event) => {
       <label>
       </label>
       <h2>Welcome {account.name}</h2>
+      <h2>Select an algorithm to practice</h2>
+      <ListAlg list={algorithms}/> {/* monkey; new component I'm making */}
 
     <Search onSearch={handleSearch}/> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
 
@@ -77,6 +91,23 @@ const handleSearch = (event) => {
     </div>
   );
 }
+
+const ListAlg = ({ list }) => {
+
+  return (
+    <div>
+      <p>Pick an algorithm to practice</p>
+      <ul>
+
+      {list.map((item, index) => (
+          <li key={index}><a href={item}>{item}</a></li>
+          ))}
+        
+      </ul>
+    </div>
+  )
+}
+
 
 const ListStudentAccounts = ({ accounts }) => {
   return ( 
