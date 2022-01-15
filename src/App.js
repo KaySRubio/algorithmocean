@@ -52,9 +52,11 @@ const accounts = [kay, judy];
 
 // Variables and functions used for Search component
 const handleSearch = (event) => {
-  console.log(event.target.value);
+  setSearchTerm(event.target.value);
 }
 
+  // dynamic value for searchTerm; if it updates, it will re-render the search component
+  const [searchTerm, setSearchTerm] = React.useState('Default');
 
   return (
     <div>
@@ -95,23 +97,21 @@ const ListStudentAccounts = ({ accounts }) => {
 
 // Search component signature destructures props to show onSearch property
 const Search = ({ onSearch }) => {
+  //console.log("Search component is re-rendering");
 
-  // dynamic value for searchTerm; if it updates, it will re-render the search component
-  const [searchTerm, setSearchTerm] = React.useState('Default');
-
-  // function takes event object as parameter, updates the search term, and then runs onSearch function
+  /* function takes event object as parameter, updates the search term, and then runs onSearch function
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     onSearch(event);
-  };
+  };*/
 
   // in JSX, when data in the input is changed, run handleChange function, also show the searchTerm
   return ( 
     <div>
       <h1>Search</h1>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange}/>
-      <p> Searching for <strong>{searchTerm}</strong>.</p>
+      <input id="search" type="text" onChange={onSearch}/>
+      {/*<p> Searching for <strong>{searchTerm}</strong>.</p>*/}
     </div>
    );
 }
