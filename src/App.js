@@ -81,8 +81,9 @@ const searchedAccounts = accounts.filter.(function (account) {
       <h2>Welcome {account.name}</h2>
       <h2>Select an algorithm to practice</h2>
 
-      <InputWithLabel id="search" label="Search" value={searchTerm} onInputChange={handleSearch}/> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
-
+      <InputWithLabel id="search" value={searchTerm} onInputChange={handleSearch}> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
+        Search
+      </InputWithLabel>
       <ListAlg list={algorithms} searchBy={searchTerm} /> {/* monkey; new component I'm making */}
 
     <ListStudentAccounts accounts={accounts} /> {/* Render the ListStudentAccounts component. Pass it the property accounts which is an array of account objects*/}
