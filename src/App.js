@@ -5,6 +5,7 @@ import './App.css';
 import ListAlg from './ListAlg';
 import ListStudentAccounts from './ListStudentAccounts';
 import InputWithLabel from './InputWithLabel';
+import CreateAccount from './CreateAccount';
 
 /* Can create the account objects using object literal notation
 const accounts = [
@@ -66,8 +67,10 @@ const searchedAccounts = accounts.filter.(function (account) {
   return account.name.includes(searchTerm);
 });*/
 
-  // dynamic value for searchTerm; if it updates, it will re-render the search component
+  // dynamic value for searchTerm; if it updates, it will re-render the component
   const [searchTerm, setSearchTerm] = React.useState('');
+  let isFocused=true;
+
 
   return (
     <div>
@@ -81,13 +84,15 @@ const searchedAccounts = accounts.filter.(function (account) {
       <h2>Welcome {account.name}</h2>
       <h2>Select an algorithm to practice</h2>
 
-      <InputWithLabel id="search" value={searchTerm} onInputChange={handleSearch}> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
+      <InputWithLabel id="search" value={searchTerm} isFocused={isFocused} onInputChange={handleSearch}> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
         Search
       </InputWithLabel>
       <ListAlg list={algorithms} searchBy={searchTerm} /> {/* monkey; new component I'm making */}
 
-    <ListStudentAccounts accounts={accounts} /> {/* Render the ListStudentAccounts component. Pass it the property accounts which is an array of account objects*/}
-
+      <ListStudentAccounts accounts={accounts} /> {/* Render the ListStudentAccounts component. Pass it the property accounts which is an array of account objects*/}
+      <CreateAccount>
+        
+      </CreateAccount>
     </div>
   );
 }
