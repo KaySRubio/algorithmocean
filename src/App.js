@@ -4,7 +4,7 @@ import {ReactDOM} from 'react-dom';
 import './App.css';
 import ListAlg from './ListAlg';
 import ListStudentAccounts from './ListStudentAccounts';
-import Search from './Search';
+import InputWithLabel from './InputWithLabel';
 
 /* Can create the account objects using object literal notation
 const accounts = [
@@ -81,7 +81,7 @@ const searchedAccounts = accounts.filter.(function (account) {
       <h2>Welcome {account.name}</h2>
       <h2>Select an algorithm to practice</h2>
 
-      <Search onSearch={handleSearch}/> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
+      <InputWithLabel id="search" label="Search" value={searchTerm} onInputChange={handleSearch}/> {/* Render the search component. Pass it the property onSearch which is the handleSearch function */}
 
       <ListAlg list={algorithms} searchBy={searchTerm} /> {/* monkey; new component I'm making */}
 
