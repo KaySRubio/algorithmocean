@@ -1,11 +1,10 @@
-/* Next steps: I have a search component, and want to use serch terms to 
-   filter the array of possible algorithms that displays */
-
-
 
 import * as React from 'react';
 import {ReactDOM} from 'react-dom';
 import './App.css';
+import ListAlg from './ListAlg';
+import ListStudentAccounts from './ListStudentAccounts';
+import Search from './Search';
 
 /* Can create the account objects using object literal notation
 const accounts = [
@@ -88,81 +87,10 @@ const searchedAccounts = accounts.filter.(function (account) {
 
     <ListStudentAccounts accounts={accounts} /> {/* Render the ListStudentAccounts component. Pass it the property accounts which is an array of account objects*/}
 
-
-   
     </div>
   );
 }
-
-const ListAlg = ({ list, searchBy }) => {
-
-  const searchedList = list.filter(function (item) {
-    return item.toLowerCase().includes(searchBy.toLowerCase());
-  });
-
-  return (
-    <div>
- 
-      <ul>
-
-      {/* List without search option 
-      {list.map((item, index) => (
-          <li key={index}><a href={item}>{item}</a></li>
-          ))}
-        */}
-
-
-      {searchedList.map((item, index) => (
-          <li key={index}><a href={item}>{item}</a></li>
-          ))} 
-      </ul>
-    </div>
-  )
-}
-
-
-const ListStudentAccounts = ({ accounts }) => {
-  return ( 
-    <div>
-      <h1>Student Accounts</h1>
-      <ul>
-        {accounts.map((student) => (
-          <li key={student.id}>
-            <span>{student.name} </span>
-            <span><a href={student.email}>{student.email}</a> </span>
-            <span>{student.teacher}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-   );
-}
-
-// Search component signature destructures props to show onSearch property
-const Search = ({ onSearch }) => {
-  //console.log("Search component is re-rendering");
-
-  /* function takes event object as parameter, updates the search term, and then runs onSearch function
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
-    onSearch(event);
-  };*/
-
-  // in JSX, when data in the input is changed, run handleChange function, also show the searchTerm
-  return ( 
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={onSearch}/>
-      {/*<p> Searching for <strong>{searchTerm}</strong>.</p>*/}
-    </div>
-   );
-}
- 
-//export default Search;
-//export default ListStudentAccounts;
-
 export default App;
 
-/*
 
- */
+
