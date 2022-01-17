@@ -7,6 +7,7 @@ import ListStudentAccounts from './ListStudentAccounts';
 import InputWithLabel from './InputWithLabel';
 import CreateAccount from './CreateAccount';
 
+
 /* Can create the account objects using object literal notation
 const accounts = [
   {
@@ -89,14 +90,18 @@ const searchedAccounts = accounts.filter.(function (account) {
       </InputWithLabel>
       <ListAlg list={algorithms} searchBy={searchTerm} /> {/* monkey; new component I'm making */}
 
-      <ListStudentAccounts accounts={accounts} /> {/* Render the ListStudentAccounts component. Pass it the property accounts which is an array of account objects*/}
+     
       <CreateAccount>
         
       </CreateAccount>
+
+      <ListStudentAccounts />
     </div>
   );
 }
 export default App;
 
-
+/*
+ <ListStudentAccounts accounts={accounts} />
+ */
 

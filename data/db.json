@@ -1,0 +1,14 @@
+{
+    "blogs": [
+      {
+        "name": "Judy Rubio",
+        "email": "JRubio@cainc.com",
+        "id": 1
+      },
+      {
+        "name": "Kay Rubio",
+        "email": "KRubio@cainc.com",
+        "id": 2
+      }
+    ]
+  }
