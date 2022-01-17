@@ -2,7 +2,7 @@ import useFetch from './useFetch';
 
 const ListStudentAccounts = () => {
 
-    const { data: accounts, error, isPending } = useFetch('http://localhost:8000/blogs/');
+    const { data: accounts, error, isPending } = useFetch('http://localhost:8000/accounts/');
 
     return ( 
         <div className="account-list">

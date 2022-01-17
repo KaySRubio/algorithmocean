@@ -8,53 +8,18 @@ import InputWithLabel from './InputWithLabel';
 import CreateAccount from './CreateAccount';
 
 
-/* Can create the account objects using object literal notation
-const accounts = [
-  {
-    name: 'Kay Rubio',
-    email: 'KRubio@cainc.com',
-    teacher: 'Mrs. D',
-    id: 0,
-  },
-  {
-    name: 'Judy Rubio',
-    email: 'JRubio@cainc.com',
-    teacher: 'Mrs. D',
-    id: 1,
-  }
-]
-*/
+
 
 /* App is the root compenent. It displays headers and student name, then calls children */
 function App() {
 
   // Variables needed for displaying student info on the page
   //eventually would get this via fetch request, but just declaring for now
-const account = {
-  name: 'Enter name',
-  email: 'Enter email',
-  teacher: 'Enter teacher'
-};
-
-// variables used in ListStudentAccounts component
-// OR can create account objects using a class with a constructor, and instantiating 2 objects
-// then putting them in a list
-class Account {
-  constructor(name, email, teacher, id){
-    this.name = name;
-    this.email = email;
-    this.teacher = teacher;
-    this.id = id;
-  }
-  //getName() {return this.name;} // not sure get methods are needed since the properties aren't private
-  //getEmail() {return this.email;}
-  //getTeacher() {return this.teacher;}
-  //getId() {return this.id;}
-
-}
-const kay = new Account('Kay Rubio', 'KRubio@cainc.com', 'Mrs. D', 0);
-const judy = new Account('Judy Rubio', 'JRubio@cainc.com', 'Mrs. D', 1);
-const accounts = [kay, judy];
+  const account = {
+    name: 'Kay',
+    email: 'Enter email',
+  };
+  
 
 // Variables and functions used for Search component
 const handleSearch = (event) => {
