@@ -1,4 +1,4 @@
-const ListAlg = ({ list, searchBy }) => {
+/* const ListAlg = ({ list, searchBy }) => {
 
     const searchedList = list.filter(function (item) {
       return item.toLowerCase().includes(searchBy.toLowerCase());
@@ -9,11 +9,11 @@ const ListAlg = ({ list, searchBy }) => {
    
         <ul>
   
-        {/* List without search option 
+        { List without search option 
         {list.map((item, index) => (
             <li key={index}><a href={item}>{item}</a></li>
             ))}
-          */}
+          }
   
   
         {searchedList.map((item, index) => (
@@ -24,4 +24,4 @@ const ListAlg = ({ list, searchBy }) => {
     )
   }
 
-  export default ListAlg;
+  export default ListAlg; */
