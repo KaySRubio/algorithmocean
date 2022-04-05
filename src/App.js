@@ -2,16 +2,17 @@
  * 
  */
 
-import * as React from 'react';
+
 // import { ReactDOM } from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Footer from './Footer';
 import Home from './Home';
 import CreateAccount from './CreateAccount';
-import Login from './Login';
+import Login from './Login.js';
 import Demo from './Demo';
 import Lesson from './Lesson';
 import NotFound from './NotFound';
+
 
 function App() {
   return (

@@ -7,6 +7,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#activity {
+  border-style: solid;
+  border-width: 2px;
+  border-color: green;
+  width: 700px;
+  /*background-color: green;*/
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
