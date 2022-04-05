@@ -66,8 +66,8 @@ const CreateAccount = () => {
                 <InputWithLabel id="email" value={email} isFocused={isFocused} onInputChange={updateEmail}> 
                 Email
                 </InputWithLabel>
-                {!isPending && <button>Add Blog</button>} {/* output this button that works if a fetch request is not currently pending*/}
-                {isPending && <button disabled>Adding Blog...</button>}       {/* output the pending message inside a disabled button if a fetch request is still running */}         
+                {!isPending && <button type="submit">Add Account</button>} {/* output this button that works if a fetch request is not currently pending*/}
+                {isPending && <button type="submit" disabled>Adding Account...</button>}       {/* output the pending message inside a disabled button if a fetch request is still running */}         
                 <p>{ name }</p><p>{ email }</p>{/* for debugging, you can view the state data on the page here */}
             </form>
         </div>
