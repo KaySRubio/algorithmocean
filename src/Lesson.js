@@ -17,17 +17,26 @@ class Lesson extends React.Component {
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
-    this.numbers[0] = Math.floor(Math.random()*100);
-    // Set the rest of the numbers ensuring no repeats
+
+
+    this.numbers[0] = this.randomNumBetween10and100();
+
     for (let i = 1; i < 6; i++ ) {
-      let m = Math.floor(Math.random()*100);
-      while(this.numbers.includes(m) && m < 10){
-          m = Math.floor(Math.random()*100);
+      let m = this.randomNumBetween10and100();
+      while(this.numbers.includes(m)){
+        m = this.randomNumBetween10and100();
       }
-      m = Math.floor(Math.random()*100);
       this.numbers[i] = m;
     }
     console.log('array is ', this.numbers);
+  }
+
+  randomNumBetween10and100 = () => {
+      let m = Math.floor(Math.random()*100);
+      while(m < 10) {
+        m = Math.floor(Math.random()*100);
+      }
+      return m;
   }
 
   // todo program another method to re-call initializeArray if the list is too close to sorted
@@ -55,7 +64,7 @@ class Lesson extends React.Component {
     for (let i = 0; i < this.numbers.length; i++ ) {
         let textSquare1 = this.makeTextSquare(x, y, this.numbers[i]);
         stage.addChild(textSquare1);
-        x += 40;
+        x += 50;
     }
 
     stage.update(); 
@@ -65,12 +74,12 @@ class Lesson extends React.Component {
   makeTextSquare(x, y, num){
     let textSquare = new Container();
     let square = new Shape();
-    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 34, 25);
+    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35);
 
-    let text = new Text(num, '20px Arial', 'white');
+    let text = new Text(num, '30px Arial', 'white');
     text.textBaseline = "alphabetic";
     text.x = x+6;
-    text.y = y+19;
+    text.y = y+28;
 
     textSquare.addChild(square, text);
     return textSquare;
