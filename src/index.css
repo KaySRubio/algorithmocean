@@ -7,12 +7,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#activity {
+#demoCanvas {
   border-style: solid;
+  margin: 10px;
   border-width: 2px;
   border-color: green;
-  width: 700px;
-  /*background-color: green;*/
+  background-color: #000922;
 }
 
 code {
