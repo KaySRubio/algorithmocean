@@ -5,7 +5,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  cursor: default;
+
 }
+
+#demoCanvas.Merge{
+  cursor: s-resize;
+ }
+
+#demoCanvas.Swap{
+ cursor: all-scroll;
+}
+
+
 
 #demoCanvas {
   border-style: solid;
@@ -13,6 +26,9 @@ body {
   border-width: 2px;
   border-color: green;
   background-color: #000922;
+  /* cursor: all-scroll;*/
+  /* cursor: url(https://www.schoolservice.com/image/cache/data/product/469-800x800.jpg), auto; */
+
 }
 
 code {
