@@ -7,25 +7,73 @@ body {
   -moz-osx-font-smoothing: grayscale;
   
   cursor: default;
-
+  background-color: #000922;
 }
 
-#demoCanvas.Merge{
+h1 {
+  color: white;
+  width: 100%;
+  text-align: center;
+}
+h2 {
+  color: white;
+  width: 100%;
+  text-align: center;
+  margin: 0px;
+}
+h3 {
+  color: white;
+  margin: 0px;
+}
+p, ul, li, ol {
+  color: white;
+  margin: 0px;
+}
+
+#footer>p {
+  text-align: center;
+}
+
+#yourMoves {
+  width: 350px;
+  float: left;
+}
+
+.Merge{
   cursor: s-resize;
  }
 
-#demoCanvas.Swap{
+.Swap{
  cursor: all-scroll;
 }
 
-
-
-#demoCanvas {
+#activity {
+  width: 1000px;
+  height: 500px;
+  margin: auto;
+  padding: 10px;
   border-style: solid;
-  margin: 10px;
   border-width: 2px;
   border-color: green;
-  background-color: #000922;
+}
+
+#toolbox{
+  width: 1000px;
+  padding: 10px;
+  margin: 10px auto 10px auto;
+  border-style: solid;
+  border-width: 2px;
+  border-color: green;
+}
+
+#demoCanvas {
+  /* width: 1000px;
+  height: 100px;*/
+  /* margin: 10px;*/
+  /* border-style: solid;
+  border-width: 2px;
+  border-color: green; */
+  /* background-color: #000922; */
   /* cursor: all-scroll;*/
   /* cursor: url(https://www.schoolservice.com/image/cache/data/product/469-800x800.jpg), auto; */
 

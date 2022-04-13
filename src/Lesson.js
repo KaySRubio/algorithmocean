@@ -28,6 +28,8 @@ class Lesson extends React.Component {
   operandContainers = [];
   stage = {};
   stackPointer = 0; // Will point to top of the stack and be used to remove move during undo operation
+  sortType = 'Bubble'; 
+  maxNumberOfOperations = 20;
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
@@ -119,7 +121,13 @@ class Lesson extends React.Component {
           )) 
         ) {
         this.undoLastMove()
-      // process two unique clicks
+        // don't allow more moves if they've hit 20
+        } else if ( this.stackPointer >= this.maxNumberOfOperations ) {
+          alert("You should not need more than 20 operations");
+          this.operandContainers[0].y=0;
+          this.operandContainers[1].y=0;
+          this.stage.update();
+        // process two unique clicks 
         } else {
             this.operandContainers[1].y+=10;
             this.stage.update();
@@ -210,24 +218,22 @@ class Lesson extends React.Component {
     return (
         <div className="lesson">
             <Navbar/>
-            <h1>Lesson</h1>
-            <div id="activity">
-                <h2>Question 2</h2>
-                <div>
-                  <h3>Your moves:</h3>
-                  <ol className="movesList">
-                    {this.state.stack.map((item, index) => (
-                      <li key={index}
-                        className="movesListItem"
-                      >
-                        {item[0]} {item[1].children[1].text} and {item[2].children[1].text}
-                      </li>
-                    ))}
-                  </ol>
-                  </div>
-                <canvas id="demoCanvas" className={this.state.operation} width="1000" height="100">
+            <div className={this.state.operation} id="activity">
+              <h1>Sort from left to right using {this.sortType} Sort</h1>
+              <div id="yourMoves">
+                <h3>Your moves:</h3>
+                <ol className="movesList">
+                  {this.state.stack.map((item, index) => (
+                    <li key={index}
+                      className="movesListItem"
+                    >
+                      {item[0]} {item[1].children[1].text} and {item[2].children[1].text}
+                    </li>
+                  ))}
+                </ol>
+                </div>
+                <canvas id="demoCanvas" width="315">
                 </canvas>
-                <p>hello</p>
             </div>
             <Toolbox onClick={this.toolboxClickHandler}/>
         </div>

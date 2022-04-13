@@ -14,7 +14,7 @@ class Toolbox extends React.Component {
 
   render(){
     return (
-      <aside className="toolbox">
+      <aside id="toolbox">
           <h2>Toolbox</h2>
           <button 
             className='toolboxButton' 
