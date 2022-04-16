@@ -14,15 +14,17 @@ class Lesson extends React.Component {
     super(props);
     this.state = { 
       operation: 'None',
-      stack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
+      userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
     };
-    this.numbers = []; // array for the numbers that will be sorted
-    this.workingNumbers = []; // parallel array of numbers user will sort
-    // this.workingNumbersAuditTrail = []; // A non-state variable to hold the workingNumbers at any point in time
+    this.array = []; // original array of unsorted numbers will not change
+    this.userArray = []; // parallel array of numbers user will sort
+    this.programArray = []; // parallel array of numbers program will sort
+    this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
   }
 
   componentDidMount = () => {
     this.initializeArray();
+    this.sort(this.sortType, this.programArray);
     this.init();
   }
 
@@ -30,25 +32,29 @@ class Lesson extends React.Component {
   canvasClicks = 0;
   operandContainers = [];
   stage = {};
-  stackPointer = 0; // Will point to top of the stack and be used to remove move during undo operation
+  userSP = 0; // Stack Pointer, will point to top of the stack and be used to remove move during undo operation
+  programSP = 0; // program Stack Pointer
   sortType = 'Bubble'; 
   maxNumberOfOperations = 20;
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
-    this.numbers[0] = this.randomNumBetween10and100();
+    // get the first random number
+    this.array[0] = this.randomNumBetween10and100();
     for (let i = 1; i < 6; i++ ) {
       let m = this.randomNumBetween10and100();
-      while(this.numbers.includes(m)){
+      // get a different random number if that number was already in the array
+      while(this.array.includes(m)){
         m = this.randomNumBetween10and100();
       }
-      this.numbers[i] = m;
+      this.array[i] = m;
     }
-    // copy final array into userCopy
-    this.workingNumbers = [...this.numbers];
-
+    // copy final array into userCopy and programCopy that will be modified with operations
+    this.userArray = [...this.array];
+    this.programArray = [...this.array];
   }
 
+  // get a random number between 10 and 100
   randomNumBetween10and100 = () => {
       let m = Math.floor(Math.random()*100);
       while(m < 10) {
@@ -59,24 +65,50 @@ class Lesson extends React.Component {
 
   // todo sort array then re-call initializeArray if the list is too close to sorted
 
-  /* 
-  sort(this.sortType);
+  sort = (type, array) => {
+    switch(type) {
+      case 'Bubble':
+        this.bubbleSort(array);
+        break;
+      case 'Insertion':
+        console.log("insertion sort");
+        break;
+      case 'Selection':
+        console.log("selection sort");
+        break;
+      default:
+        break;
+    }
 
-  sort(type) = () => {
-    switch(type)
-  } */
-  /*
-  BubbleSort(array){
-    for i -> 0 to arrayLength 
-       for j -> 0 to (arrayLength - i - 1)
-        if arr[j] > arr[j + 1]
-          swap(arr[j], arr[j + 1])
+    // If the randomly generated array was almost sorted and only took 2 moves to re-sort, try again
+    if(this.programSP < 4){
+      console.log("Too easy");
+      // reset SP and programStack, then re-initialize and re-sort array
+      this.programSP = 0;
+      this.programStack = [];
+      this.initializeArray();
+      this.sort(this.sortType, this.programArray);
+    }
   }
-  */
 
+  bubbleSort(array){
+    let i, j;
+    for (i = 0; i < array.length; i++) {
+      for (j = 0; j < array.length - i - 1; j++) {
+        if (array[j] > array[j + 1]) {
+          // push the swap operation to the stack
+          this.programStack.push(['Swap', array[j], array[j + 1]]);
+          this.programSP++;
+          [array[j], array[j + 1]] = [array[j + 1], array[j]]
+        }
+      }
+    }
+    console.log("sorted array is: ", array);
+    console.log("program stack is: ", this.programStack);
+    console.log("program stack pointer: ", this.programSP);
 
-
-
+  }
+  
   // Initialize the createJS canvas
   init() {
     let x = 10;
@@ -85,8 +117,8 @@ class Lesson extends React.Component {
 
     let textSquares = [];
 
-    for (let i = 0; i < this.numbers.length; i++ ) {
-        textSquares[i] = this.makeTextSquare(x, y, this.numbers[i]);
+    for (let i = 0; i < this.array.length; i++ ) {
+        textSquares[i] = this.makeTextSquare(x, y, this.array[i]);
         this.stage.addChild(textSquares[i]);
         x += 50;
     }
@@ -151,18 +183,18 @@ class Lesson extends React.Component {
             this.stage.update();
         // if the two clicks were the same as the last 2 clicks (without regard to order), run the undo operation
         } else if (
-          this.stackPointer > 0
+          this.userSP > 0
           && ((
-            this.operandContainers[0] === this.state.stack[this.stackPointer-1][1]
-            && this.operandContainers[1] === this.state.stack[this.stackPointer-1][2]
+            this.operandContainers[0] === this.state.userStack[this.userSP-1][4]
+            && this.operandContainers[1] === this.state.userStack[this.userSP-1][5]
           ) || (
-            this.operandContainers[1] === this.state.stack[this.stackPointer-1][1]
-            && this.operandContainers[0] === this.state.stack[this.stackPointer-1][2]
+            this.operandContainers[1] === this.state.userStack[this.userSP-1][4]
+            && this.operandContainers[0] === this.state.userStack[this.userSP-1][5]
           )) 
         ) {
         this.undoLastMove()
         // don't allow more moves if they've hit 20
-        } else if ( this.stackPointer >= this.maxNumberOfOperations ) {
+        } else if ( this.userSP >= this.maxNumberOfOperations ) {
           alert("You should not need more than 20 operations");
           this.operandContainers[0].y=0;
           this.operandContainers[1].y=0;
@@ -179,7 +211,7 @@ class Lesson extends React.Component {
   }
 
   runOperation(){
-    this.stackPointer++; // increment the stack pointer
+    this.userSP++; // increment the stack pointer
     switch (this.state.operation) {
       case 'Swap':
         this.swap();
@@ -213,32 +245,37 @@ class Lesson extends React.Component {
 
   swap(){
 
-    // Get the numbers of what was swapped, make sure the larger one is in numA
-
-    let numA, numB; 
+    // Get the array of what was swapped, make sure the larger one is in numA
+    let containerA, containerB; 
     if(this.operandContainers[0].children[1].text > this.operandContainers[1].children[1].text) {
-      numA = this.operandContainers[0];
-      numB = this.operandContainers[1];
+      containerA = this.operandContainers[0];
+      containerB = this.operandContainers[1];
     } else {
-      numA = this.operandContainers[1];
-      numB = this.operandContainers[0];
+      containerA = this.operandContainers[1];
+      containerB = this.operandContainers[0];
     }
 
-    // Swap the operands in the users copy of the array; get numeric operand's indices
-    let indexA = this.workingNumbers.indexOf(numA.children[1].text);
-    let indexB = this.workingNumbers.indexOf(numB.children[1].text);
-    // swap
-    [this.workingNumbers[indexA], this.workingNumbers[indexB]] = [this.workingNumbers[indexB], this.workingNumbers[indexA]]
-    
-    // Copy workingNumbers into a static temporary version to write to stack
-    const auditTrail = [...this.workingNumbers];
+    // get the actual numbers inside
+    const numA = containerA.children[1].text;
+    const numB = containerB.children[1].text;
 
-    // Add 4 objects to the stack of user moves including 1) operation, 2-3) numeric operands in order from larger to smaller, 4) resulting array
+    // Swap the operands in the users copy of the array; get numeric operand's indices
+    const indexA = this.userArray.indexOf(numA);
+    const indexB = this.userArray.indexOf(numB);
+    // swap
+    [this.userArray[indexA], this.userArray[indexB]] = [this.userArray[indexB], this.userArray[indexA]]
+    
+    // Copy userArray into a static temporary version to write to stack
+    const auditTrail = [...this.userArray];
+
+    // Add 5 objects to the stack of user moves including 1) operation, 2-3) numeric operands in order from larger to smaller, 4) resulting array, 5-6) operand containers for visual swap
     this.setState(prevState => ({
-      stack: [...prevState.stack, [ this.state.operation, numA, numB, auditTrail ]]
+      userStack: [...prevState.userStack, [ this.state.operation, numA, numB, auditTrail, containerA, containerB  ]]
     }))
 
-    this.visualSwap(numA, numB);
+    this.visualSwap(containerA, containerB);
+
+    
 
   }
 
@@ -258,20 +295,20 @@ class Lesson extends React.Component {
 
 
   undoLastMove() {
-    if (this.stackPointer > 0) {
+    if (this.userSP > 0) {
       // swap the elements back visually
-      this.visualSwap(this.state.stack[this.stackPointer-1][1], this.state.stack[this.stackPointer-1][2]);
+      this.visualSwap(this.state.userStack[this.userSP-1][4], this.state.userStack[this.userSP-1][5]);
 
-      this.stackPointer--;
+      this.userSP--;
 
-      // Revert workingNumbers back to the move 1 before or back to the original array
-      if(this.stackPointer > 0) { this.workingNumbers = [...this.state.stack[this.stackPointer-1][3]];} 
-      else { this.workingNumbers = [...this.numbers]; }
+      // Revert userArray back to the move 1 before or back to the original array
+      if(this.userSP > 0) { this.userArray = [...this.state.userStack[this.userSP-1][3]];} 
+      else { this.userArray = [...this.array]; }
 
       // Pop off the last element on the stack of moves
-      let arr = [...this.state.stack];
-      arr.length = this.stackPointer; // chop off last element of array copy
-      this.setState( {stack: arr } );
+      let arr = [...this.state.userStack];
+      arr.length = this.userSP; // chop off last element of array copy
+      this.setState( {userStack: arr } );
     }
   }
 
@@ -284,11 +321,11 @@ class Lesson extends React.Component {
               <div id="yourMoves">
                 <h3>Your moves:</h3>
                 <ol className="movesList">
-                  {this.state.stack.map((item, index) => (
+                  {this.state.userStack.map((item, index) => (
                     <li key={index}
                       className="movesListItem"
                     >
-                      {item[0]} {item[1].children[1].text} and {item[2].children[1].text}: [{item[3].join(', ')}]
+                      {item[0]} {item[1]} and {item[2]}: [{item[3].join(', ')}]
                     </li>
                   ))}
                 </ol>
