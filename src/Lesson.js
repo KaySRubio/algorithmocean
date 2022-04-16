@@ -4,6 +4,9 @@ import Navbar from './Navbar';
 import Toolbox from './Toolbox';
 import { Tween, Ease } from "@createjs/tweenjs";
 import { useState } from 'react';
+// import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
+// import AccessibilityModule from '@curriculumAssociates/createjs-accessibility';
+// import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; - does not work, babel error unresolvable
 
 
 class Lesson extends React.Component {
@@ -11,12 +14,12 @@ class Lesson extends React.Component {
     super(props);
     this.state = { 
       operation: 'None',
-      stack: [], // Stack will hold all moves of user, with each move being it's own 2-number array
+      stack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
     };
     this.numbers = []; // array for the numbers that will be sorted
+    this.workingNumbers = []; // parallel array of numbers user will sort
+    // this.workingNumbersAuditTrail = []; // A non-state variable to hold the workingNumbers at any point in time
   }
-
-
 
   componentDidMount = () => {
     this.initializeArray();
@@ -41,7 +44,9 @@ class Lesson extends React.Component {
       }
       this.numbers[i] = m;
     }
-    // console.log('array is ', this.numbers);
+    // copy final array into userCopy
+    this.workingNumbers = [...this.numbers];
+
   }
 
   randomNumBetween10and100 = () => {
@@ -53,6 +58,24 @@ class Lesson extends React.Component {
   }
 
   // todo sort array then re-call initializeArray if the list is too close to sorted
+
+  /* 
+  sort(this.sortType);
+
+  sort(type) = () => {
+    switch(type)
+  } */
+  /*
+  BubbleSort(array){
+    for i -> 0 to arrayLength 
+       for j -> 0 to (arrayLength - i - 1)
+        if arr[j] > arr[j + 1]
+          swap(arr[j], arr[j + 1])
+  }
+  */
+
+
+
 
   // Initialize the createJS canvas
   init() {
@@ -70,18 +93,35 @@ class Lesson extends React.Component {
     this.stage.update(); 
   }
 
+  // Method to make a CreateJS text square which consists of a container, square, and text
   makeTextSquare(x, y, num){
-    let textSquare = new Container();
-    let square = new Shape();
-    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35);
-    square.addEventListener('click', this.handleCanvasClick)
+    let textSquare = new Container(); // create container
+    /* CANNOT USE CAM DOES NOT RUN 
+    AccessibilityModule.register({ // Register it to HTML for accessiblity for KN/SR users
+      displayObject: textSquare,
+      role: AccessibilityModule.ROLES.NONE,
+    }); */
 
-    let text = new Text(num, '30px Arial', 'white');
+    let square = new Shape(); // create square
+    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35);
+    square.addEventListener('click', this.handleCanvasClick) // click event on square
+
+    let text = new Text(num, '30px Arial', 'white'); // create text
     text.textBaseline = "alphabetic";
-    text.x = x+6;
+    text.x = x+6; // positioning text so it's in the center of the square
     text.y = y+28;
 
-    textSquare.addChild(square, text);
+    /* CANNOT USE CAM DOES NOT RUN
+    AccessibilityModule.register({ // Register text to HTML for accessiblity for KN/SR users
+      displayObject: text,
+      role: AccessibilityModule.ROLES.HEADING3,
+      parent: textSquare,
+      accessibleOptions: {
+        text: num,
+      },
+    });*/
+
+    textSquare.addChild(square, text); // put the square and the text in the container
     return textSquare;
   }
 
@@ -131,20 +171,6 @@ class Lesson extends React.Component {
         } else {
             this.operandContainers[1].y+=10;
             this.stage.update();
-            // todo store both operands on a stack of what was switched
-            let operandA = this.operandContainers[0].children[1].text;
-            let operandB = this.operandContainers[1].children[1].text;
-            // Add them both to stateful stack variable in order from larger to smaller
-            if (operandA > operandB) { 
-              this.setState(prevState => ({
-                stack: [...prevState.stack, [ this.state.operation, this.operandContainers[0], this.operandContainers[1] ]]
-              }))
-            } else { 
-              this.setState(prevState => ({
-                stack: [...prevState.stack, [ this.state.operation, this.operandContainers[1], this.operandContainers[0] ]]
-              }))
-            }
-            this.stackPointer++; // increment the stack pointer
             this.runOperation();
 
         }
@@ -153,39 +179,66 @@ class Lesson extends React.Component {
   }
 
   runOperation(){
-      switch (this.state.operation) {
-          case 'Swap':
-            this.swap();
-            break;
-          case 'split':
-              console.log("splitting");
-              break;
-          case 'merge':
-            console.log('splitting');
-            break;
-          default:
-              break;
-      }
+    this.stackPointer++; // increment the stack pointer
+    switch (this.state.operation) {
+      case 'Swap':
+        this.swap();
+        break;
+      case 'split':
+        console.log("splitting");
+        break;
+      case 'merge':
+        console.log('splitting');
+        break;
+      default:
+        break;
+    }
+  }
+
+  visualSwap(containerA, containerB){
+    // Get the distance between them on the screen for visual swapping
+    const distance = containerA.getTransformedBounds().x - containerB.getTransformedBounds().x;
+    const pow = 4;
+    // Tween the createJS containers for a visual swap
+    Tween.get(containerA)
+      .to({ y: 40, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(pow))
+      .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(pow)); 
+    Tween.get(containerB)
+      .to({ y: 80, x: containerB.x+distance/2 }, 500, Ease.getPowIn(pow))
+      .to({ y: 0, x: containerB.x+distance }, 500, Ease.getPowOut(pow));
+    
+    Ticker.addEventListener("tick", this.stage);
+    // todo - remove event listener at some point after animations are done?
   }
 
   swap(){
 
-    let operandA = this.state.stack[this.stackPointer-1][1];
-    let operandB = this.state.stack[this.stackPointer-1][2];
+    // Get the numbers of what was swapped, make sure the larger one is in numA
 
-    let distance = operandA.getTransformedBounds().x - operandB.getTransformedBounds().x;
-    let pow = 4;
+    let numA, numB; 
+    if(this.operandContainers[0].children[1].text > this.operandContainers[1].children[1].text) {
+      numA = this.operandContainers[0];
+      numB = this.operandContainers[1];
+    } else {
+      numA = this.operandContainers[1];
+      numB = this.operandContainers[0];
+    }
 
-    Tween.get(operandA)
-      .to({ y: 40, x: operandA.x+distance/2*-1 }, 500, Ease.getPowIn(pow))
-      .to({ y: 0, x: operandA.x+distance*-1 }, 500, Ease.getPowOut(pow)); 
-    Tween.get(operandB)
-      .to({ y: 80, x: operandB.x+distance/2 }, 500, Ease.getPowIn(pow))
-      .to({ y: 0, x: operandB.x+distance }, 500, Ease.getPowOut(pow));
+    // Swap the operands in the users copy of the array; get numeric operand's indices
+    let indexA = this.workingNumbers.indexOf(numA.children[1].text);
+    let indexB = this.workingNumbers.indexOf(numB.children[1].text);
+    // swap
+    [this.workingNumbers[indexA], this.workingNumbers[indexB]] = [this.workingNumbers[indexB], this.workingNumbers[indexA]]
+    
+    // Copy workingNumbers into a static temporary version to write to stack
+    const auditTrail = [...this.workingNumbers];
 
-    Ticker.addEventListener("tick", this.stage);
+    // Add 4 objects to the stack of user moves including 1) operation, 2-3) numeric operands in order from larger to smaller, 4) resulting array
+    this.setState(prevState => ({
+      stack: [...prevState.stack, [ this.state.operation, numA, numB, auditTrail ]]
+    }))
 
-    // todo - remove event listener at some point after animations are done?
+    this.visualSwap(numA, numB);
 
   }
 
@@ -202,17 +255,25 @@ class Lesson extends React.Component {
 
   }
 
+
+
   undoLastMove() {
     if (this.stackPointer > 0) {
-      this.swap(); // swap the elements back
+      // swap the elements back visually
+      this.visualSwap(this.state.stack[this.stackPointer-1][1], this.state.stack[this.stackPointer-1][2]);
+
       this.stackPointer--;
+
+      // Revert workingNumbers back to the move 1 before or back to the original array
+      if(this.stackPointer > 0) { this.workingNumbers = [...this.state.stack[this.stackPointer-1][3]];} 
+      else { this.workingNumbers = [...this.numbers]; }
+
       // Pop off the last element on the stack of moves
       let arr = [...this.state.stack];
       arr.length = this.stackPointer; // chop off last element of array copy
       this.setState( {stack: arr } );
     }
   }
-  
 
   render(){
     return (
@@ -227,7 +288,7 @@ class Lesson extends React.Component {
                     <li key={index}
                       className="movesListItem"
                     >
-                      {item[0]} {item[1].children[1].text} and {item[2].children[1].text}
+                      {item[0]} {item[1].children[1].text} and {item[2].children[1].text}: [{item[3].join(', ')}]
                     </li>
                   ))}
                 </ol>
@@ -241,5 +302,7 @@ class Lesson extends React.Component {
   }
 
 }
+
+/* {item[0]} {item[1].children[1].text} and {item[2].children[1].text} */
 
 export default Lesson;
