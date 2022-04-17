@@ -2,6 +2,7 @@ import React from 'react';
 import { Stage, Shape, Container, Text, Ticker } from '@createjs/easeljs';
 import Navbar from './Navbar';
 import Toolbox from './Toolbox';
+import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
 import { useState } from 'react';
 // import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
@@ -15,6 +16,8 @@ class Lesson extends React.Component {
     this.state = { 
       operation: 'None',
       userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
+      showSubmit: false, // controls when the submit button will appear when array is sorted
+      answerSubmitted: false, // controls when submission feedback appears
     };
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
@@ -225,6 +228,17 @@ class Lesson extends React.Component {
       default:
         break;
     }
+    // show submit button when the userArray is sorted 
+    if (  this.arrayEquals(this.userArray, this.programArray) ) { console.log("Array is sorted yay!"); this.setState({ showSubmit: true }); }
+  }
+
+  // Check if two arrays with same number of elements are equal
+  arrayEquals(arr1, arr2) {
+    let i;
+    for (i = 0; i < arr1.length; i++) {
+      if(arr1[i] !== arr2[i]) return false;
+    }
+    return true;
   }
 
   visualSwap(containerA, containerB){
@@ -275,24 +289,26 @@ class Lesson extends React.Component {
 
     this.visualSwap(containerA, containerB);
 
-    
-
   }
 
   // Click event on toolbox button will call setOperation which will 
   // set the operation state variable to the id of the button that was clicked 
     toolboxClickHandler = (event) => {
-    if (event.target.id === 'undo') {
+    if (event.target.id === 'submit') {
+      this.handleSubmit();
+    } else if (event.target.id === 'undo') {
       this.undoLastMove();
     } else {
-      this.setState({
-        operation: event.target.id
-      });
+      this.setState({ operation: event.target.id });
     }
 
   }
 
-
+  // Submit event
+  handleSubmit() {
+    // set state of answerSubmitted to true to re-render DOM and show submissionFeedback
+    this.setState( { operation: 'None', answerSubmitted: true} );
+  }
 
   undoLastMove() {
     if (this.userSP > 0) {
@@ -318,7 +334,7 @@ class Lesson extends React.Component {
             <Navbar/>
             <div className={this.state.operation} id="activity">
               <h1>Sort from left to right using {this.sortType} Sort</h1>
-              <div id="yourMoves">
+              {!this.state.answerSubmitted && <div id="yourMoves">
                 <h3>Your moves:</h3>
                 <ol className="movesList">
                   {this.state.userStack.map((item, index) => (
@@ -329,11 +345,15 @@ class Lesson extends React.Component {
                     </li>
                   ))}
                 </ol>
-                </div>
-                <canvas id="demoCanvas" width="315">
-                </canvas>
+                </div>}
+                <canvas id="demoCanvas" width="315"></canvas>
+                {this.state.answerSubmitted && <SubmissionFeedback 
+                  onClick={this.toolboxClickHandler}
+                  userMoves={this.state.userStack}
+                  programMoves={this.programStack}
+                />}
             </div>
-            <Toolbox onClick={this.toolboxClickHandler}/>
+            {!this.state.answerSubmitted && <Toolbox onClick={this.toolboxClickHandler} showSubmit={this.state.showSubmit}/>}
         </div>
       );
   }

@@ -9,8 +9,10 @@ class Toolbox extends React.Component {
   static get propTypes() {
     return {
       onClick: PropTypes.func,
+      showSubmit: PropTypes.bool,
     };
   }
+
 
   render(){
     return (
@@ -26,12 +28,15 @@ class Toolbox extends React.Component {
             id='undo' 
             onClick={this.props.onClick}
           >Undo</button>
+          {this.props.showSubmit && <button 
+            className='toolboxButton' 
+            id='submit'
+            onClick={this.props.onClick}
+            >Submit</button>}
       </aside>
     );
   }
-
 }
-
 
 export default Toolbox;
 
