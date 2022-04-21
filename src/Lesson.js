@@ -50,7 +50,6 @@ class Lesson extends React.Component {
   initializeArray = () => {
     // this.array = [10, 30, 40, 20, 50, 60]; // testing
    
-
     // get the first random number
     this.array[0] = this.randomNumBetween10and100();
     for (let i = 1; i < 6; i++ ) {
@@ -62,7 +61,6 @@ class Lesson extends React.Component {
       this.array[i] = m;
     }
     // copy final array into userCopy and programCopy that will be modified with operations
-
     this.userArray = [...this.array];
     this.programArray = [...this.array];
     
@@ -125,7 +123,6 @@ class Lesson extends React.Component {
     // Operation is Insert operand1 right before operand2
     // When examining a number, if that number causes other numbers to shift right that number becomes operand1
     // When if numbers shifted right, the first one that shifted right becomes operand2
-
     let operand1;
     let operand2;
 
@@ -184,7 +181,6 @@ class Lesson extends React.Component {
     if (this.state.operation === 'Insert') {
       this.triangleFillCommands.push(triangle.graphics.beginFill("white").command);
       triangle.graphics.drawPolyStar(x, y+50, 10, 3, 0, 270); // x, y, size, #sides, 0, angle
-      // triangle.graphics.beginFill("white").drawPolyStar(x, y+50, 10, 3, 0, 270); // x, y, size, #sides, 0, angle
       triangle.addEventListener('click', this.handleCanvasTriangleClick) // click event on triangle
     }
 
@@ -262,12 +258,6 @@ class Lesson extends React.Component {
       // if the user already clicked on another square, move the previous square back to it's original place
         if (this.operandContainers[0]) {
         this.operandContainers[0].y=0;
-        // this.reDrawTriangle(this.operandContainers[0]); // nightmare
-        // his.fillCommand.style="orange";
-        // console.log(this.triangleFillCommands);
-        // this.triangleFillCommands[2];
-        // let fill = this.operandContainers[0].children[2].beginFill("orange").command;
-        // fill.style = "green";
         let i = this.array.findIndex(e => e === this.operandContainers[0].children[1].text);
         
         this.triangleFillCommands[i].style = "white";
@@ -280,16 +270,11 @@ class Lesson extends React.Component {
         this.operandContainers[0] = 0;
         let i = this.array.findIndex(e => e === event.target.parent.children[1].text);
         this.triangleFillCommands[i].style = "white";
-        // this.changeTriangleColor("white");
         this.stage.update();
       }
       else {
         // Store the currently clicked square as the first operand. Second operand must be an insert triangle symbol
         this.operandContainers[0] = event.target.parent;
-        // this.operandContainers[0].y+=60;
-        // remove the triangle
-        // this.operandContainers[0].children[2].graphics.clear(); // nightmare
-        // this.changeTriangleColor("black");
         this.stage.update();
         // tween the box down
         Tween.get(this.operandContainers[0])
@@ -310,29 +295,6 @@ class Lesson extends React.Component {
     }
   }
 
-  /* re-draws the triangle that goes in the container under the square
-  // nightmare only works if other elements have not moved around
-  reDrawTriangle(container) {
-    console.log("redrawing for ", container.children[1].text)
-    // monkey
-    
-    // console.log("container.x", container.x);
-    console.log("container.getTransformedBounds().x", container.getTransformedBounds().x);
-    // console.log("the operand container that you're trying to re-draw triangle", this.operandContainers[0]);
-    let x = container.getTransformedBounds().x-8;
-    // let x = container.x-8;
-    console.log("redrawing at x: ", x);
-
-    // when it uses teh x from teh preivous location for some reason it's drawing it in teh correct spot
-    // unclear what this is relative to?  other calculatinos being done before drawing that are hidden?
-    // it seems like x is relative to the total canvas, not the container
-
-    // let x = container.x-8;
-    container.children[2].graphics.beginFill("white").drawPolyStar(x, 58, 10, 3, 0, 270);
-    this.stage.update();
-    console.log(container.children[2]);
-  } */
-
   handleCanvasTriangleClick = (event) => {
     // if user has clicked on a square already, store the second operand (the triangle's parent) and run operation
     if (this.operandContainers[0]) {
@@ -348,7 +310,6 @@ class Lesson extends React.Component {
         this.swap();
         break;
       case 'Insert':
-        console.log("inserting");
         this.insert();
         break;
       case 'Split':
@@ -420,8 +381,6 @@ class Lesson extends React.Component {
     const indexB = this.userArray.indexOf(numB);
     let shiftToRight = []; // keep track of all numbers pushed to the right
 
-    // console.log("Inserting ", numA, " before ", numB);
-
     let j = indexA-1;
 
     // Update the user's array
@@ -435,8 +394,6 @@ class Lesson extends React.Component {
       j--; // check the item next
     }
     this.userArray[j+1] = numA; // store operand1 in the new spot
-
-    // console.log(this.userArray);
 
     // Copy userArray into a static temporary version to write to stack
     const auditTrail = [...this.userArray];
@@ -473,58 +430,25 @@ class Lesson extends React.Component {
 
   visualInsert(containerA, shiftToRight){
     this.changeTriangleColor("black");
-    console.log("Visual insert called with containerA: ", containerA, " and shiftToRight: ", shiftToRight);
 
     // get the distance between containerA and the last element in shiftToRight, which is the place that containerA is going
     const distance = containerA.getTransformedBounds().x - shiftToRight[shiftToRight.length-1].getTransformedBounds().x;
 
-    // let x = containerA.getTransformedBounds().x
-
     // tween all containers in shiftToRight to the right
     for(let i = 0; i < shiftToRight.length; i++) {
       const container = shiftToRight[i];
-      // console.log("container.x: ", container.x);
-      // console.log("container.getTransformedBounds().x: ", container.getTransformedBounds().x);
       Tween.get(container)
       .to({ x: container.x+50 }, 500, Ease.getPowIn(4));
     }
     
     // tween containerA into it's new location
-
-    
     Tween.get(containerA)
     .to({ y: 60, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(4))
     .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(4)); 
     
-    // containerA.x+=containerA.x+distance*-1;
-    // containerA.y = 0;
-
     Ticker.addEventListener("tick", this.stage);
-    // after a 1 second delay, re-draw triangle when the container arrives at it's final destination
-    // this.reDrawTriangle(containerA);
-
-    // setTimeout(() => {this.reDrawTriangleAfterMove(containerA)}, 2002); // nightmare
     setTimeout(() => {this.changeTriangleColor("white")}, 1001);
   }
-
-/* nightmare - will not re-draw in consistent locations despite giving it the exact same coordinates 
-   every time
-  reDrawTriangleAfterMove(container) {
-    // container.children[2].updateCache();
-    this.stage.update();
-    let x = container.getTransformedBounds().x+43;
-    console.log("supposed to be drawing here: ", x);
-    // container.children[2].graphics.beginFill("white").drawPolyStar(x, 58, 10, 3, 0, 270);
-    container.children[2].graphics.beginFill("white").drawPolyStar(80, 100, 10, 3, 0, 270);
-    // container.children[2].x = container.getTransformedBounds().x+43;
-
-    console.log("supposed to set x to", container.children[2].x);
-
-    this.stage.update();
-    console.log("container.children[2].graphics", container.children[2].graphics);
-    
-  } */
-
 
   // Click event on toolbox button will call setOperation which will 
   // set the operation state variable to the id of the button that was clicked 
@@ -534,7 +458,6 @@ class Lesson extends React.Component {
     } else if (event.target.id === 'undo') {
       this.undoLastMove();
     } else {
-      // console.log("this is the event.target.id", event.target.id);
       this.setState({ operation: event.target.id });
     }
 
@@ -570,7 +493,6 @@ class Lesson extends React.Component {
      item[2] = Operand2
      item[3] = Updated array after the operation
   */
-
   render(){
     return (
         <div className="lesson">
@@ -604,7 +526,5 @@ class Lesson extends React.Component {
   }
 
 }
-
-/* {item[0]} {item[1].children[1].text} and {item[2].children[1].text} */
 
 export default Lesson;
