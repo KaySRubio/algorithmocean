@@ -2,7 +2,14 @@
   "name": "learn-algorithms",
   "version": "0.1.0",
   "private": true,
-  "author": "Kay Rubio",
+  "author": {
+    "name": "Kay Rubio",
+    "email": "ksweeneyrubio@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaysrubio/algorithmocean.git"
+  },
   "main": "index.js",
   "dependencies": {
     "@createjs/easeljs": "^2.0.0-beta.4",
@@ -42,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
     "eslint": "^8.10.0",
     "eslint-plugin-react": "^7.29.3",

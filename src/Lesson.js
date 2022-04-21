@@ -7,22 +7,26 @@ import { Tween, Ease } from "@createjs/tweenjs";
 import { useState } from 'react';
 // import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
 // import AccessibilityModule from '@curriculumAssociates/createjs-accessibility';
-// import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; - does not work, babel error unresolvable
+// import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; // does not work, babel error unresolvable
 
 
 class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      operation: 'None',
-      userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
-      showSubmit: false, // controls when the submit button will appear when array is sorted
-      answerSubmitted: false, // controls when submission feedback appears
-    };
+    this.sortType = 'Insertion'; // todo - set from url
+    if (this.sortType === 'Bubble') this.defaultOperation = 'Swap';
+    else this.defaultOperation = 'Insert';
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
     this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
+
+    this.state = { 
+      operation: this.defaultOperation,
+      userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
+      showSubmit: false, // controls when the submit button will appear when array is sorted
+      answerSubmitted: false, // controls when submission feedback appears
+    };
   }
 
   componentDidMount = () => {
@@ -32,16 +36,21 @@ class Lesson extends React.Component {
   }
 
   // Global variables
-  canvasClicks = 0;
+  swapClicks = 0;
+  insertClicks = 0;
   operandContainers = [];
   stage = {};
+  textSquares = [];
   userSP = 0; // Stack Pointer, will point to top of the stack and be used to remove move during undo operation
   programSP = 0; // program Stack Pointer
-  sortType = 'Bubble'; 
   maxNumberOfOperations = 20;
+  triangleFillCommands = [];
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
+    // this.array = [10, 30, 40, 20, 50, 60]; // testing
+   
+
     // get the first random number
     this.array[0] = this.randomNumBetween10and100();
     for (let i = 1; i < 6; i++ ) {
@@ -53,8 +62,10 @@ class Lesson extends React.Component {
       this.array[i] = m;
     }
     // copy final array into userCopy and programCopy that will be modified with operations
+
     this.userArray = [...this.array];
     this.programArray = [...this.array];
+    
   }
 
   // get a random number between 10 and 100
@@ -66,15 +77,14 @@ class Lesson extends React.Component {
       return m;
   }
 
-  // todo sort array then re-call initializeArray if the list is too close to sorted
-
+  // sort array then re-call initializeArray if the list is too close to sorted
   sort = (type, array) => {
     switch(type) {
       case 'Bubble':
         this.bubbleSort(array);
         break;
       case 'Insertion':
-        console.log("insertion sort");
+        this.insertionSort(array);
         break;
       case 'Selection':
         console.log("selection sort");
@@ -89,8 +99,8 @@ class Lesson extends React.Component {
       // reset SP and programStack, then re-initialize and re-sort array
       this.programSP = 0;
       this.programStack = [];
-      this.initializeArray();
-      this.sort(this.sortType, this.programArray);
+      this.initializeArray(); // Kay turn back on
+      this.sort(this.sortType, this.programArray); // Kay turn back on
     }
   }
 
@@ -108,8 +118,37 @@ class Lesson extends React.Component {
     }
     console.log("sorted array is: ", array);
     console.log("program stack is: ", this.programStack);
-    console.log("program stack pointer: ", this.programSP);
+  }
 
+  insertionSort(array) {
+
+    // Operation is Insert operand1 right before operand2
+    // When examining a number, if that number causes other numbers to shift right that number becomes operand1
+    // When if numbers shifted right, the first one that shifted right becomes operand2
+
+    let operand1;
+    let operand2;
+
+    for (let i = 1; i < array.length; i++) {
+      // Choosing the first element in our unsorted subarray
+      let current = array[i];
+      // The last element of our sorted subarray
+      let j = i-1; 
+      while ((j > -1) && (current < array[j])) {
+        operand1 = current; // store operands
+        operand2 = array[j]; 
+        array[j+1] = array[j]; // move this item to the right
+        j--; // check the item next
+      }
+      // check if anything was moved
+      if ( array[j+1] !== current ) {
+        array[j+1] = current; // store current item in the new spot
+        this.programSP++;
+        this.programStack.push(['Insert', operand1, operand2]);
+      }
+    }
+    console.log("sorted array is: ", array);
+    console.log("program stack is: ", this.programStack);
   }
   
   // Initialize the createJS canvas
@@ -118,13 +157,12 @@ class Lesson extends React.Component {
     let y = 10;
     this.stage = new Stage('demoCanvas');
 
-    let textSquares = [];
-
     for (let i = 0; i < this.array.length; i++ ) {
-        textSquares[i] = this.makeTextSquare(x, y, this.array[i]);
-        this.stage.addChild(textSquares[i]);
+        this.textSquares[i] = this.makeTextSquare(x, y, this.array[i]);
+        this.stage.addChild(this.textSquares[i]);
         x += 50;
     }
+
     this.stage.update(); 
   }
 
@@ -138,8 +176,17 @@ class Lesson extends React.Component {
     }); */
 
     let square = new Shape(); // create square
-    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35);
-    square.addEventListener('click', this.handleCanvasClick) // click event on square
+    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35); // x,y,width,height
+    square.addEventListener('click', this.handleCanvasSquareClick) // click event on square
+
+    let triangle = new Shape();
+
+    if (this.state.operation === 'Insert') {
+      this.triangleFillCommands.push(triangle.graphics.beginFill("white").command);
+      triangle.graphics.drawPolyStar(x, y+50, 10, 3, 0, 270); // x, y, size, #sides, 0, angle
+      // triangle.graphics.beginFill("white").drawPolyStar(x, y+50, 10, 3, 0, 270); // x, y, size, #sides, 0, angle
+      triangle.addEventListener('click', this.handleCanvasTriangleClick) // click event on triangle
+    }
 
     let text = new Text(num, '30px Arial', 'white'); // create text
     text.textBaseline = "alphabetic";
@@ -156,30 +203,30 @@ class Lesson extends React.Component {
       },
     });*/
 
-    textSquare.addChild(square, text); // put the square and the text in the container
+    // put the square and the text in the container
+    if (this.state.operation === 'Insert') { textSquare.addChild(square, text, triangle); }
+    else textSquare.addChild(square, text);
+
     return textSquare;
   }
 
 
-  handleCanvasClick = (event) => {
-
-    if (this.state.operation === 'None') {
-      alert("Hint: Choose a tool from the toolbox");
-    } else {
-      // increment canvasClicks since the user clicked on a canvas element
-      this.canvasClicks++;
+  handleCanvasSquareClick = (event) => {
+    if (this.state.operation === 'Swap') {
+      // increment swapClicks since the user clicked on a canvas element
+      this.swapClicks++;
 
       // Store the clicked number and the element location
-      this.operandContainers[this.canvasClicks-1] = event.target.parent;
+      this.operandContainers[this.swapClicks-1] = event.target.parent;
       
       // first canvasClick just move the element down a little
-      this.operandContainers[this.canvasClicks-1].y+=10;
+      this.operandContainers[this.swapClicks-1].y+=10;
       this.stage.update();
 
-      if (this.canvasClicks===1) {
+      if (this.swapClicks===1) {
         // 
       } else { // second canvasClick run operation if clicked on 2 different elements
-        this.canvasClicks = 0; // reset canvasClicks to 0
+        this.swapClicks = 0; // reset swapClicks to 0
         // if the clicked on the same element twice move it back to where it was
         if (this.operandContainers[0] === this.operandContainers[1]) {
             this.operandContainers[0].y=0;
@@ -210,6 +257,87 @@ class Lesson extends React.Component {
 
         }
       }
+    } else if (this.state.operation === 'Insert') {
+
+      // if the user already clicked on another square, move the previous square back to it's original place
+        if (this.operandContainers[0]) {
+        this.operandContainers[0].y=0;
+        // this.reDrawTriangle(this.operandContainers[0]); // nightmare
+        // his.fillCommand.style="orange";
+        // console.log(this.triangleFillCommands);
+        // this.triangleFillCommands[2];
+        // let fill = this.operandContainers[0].children[2].beginFill("orange").command;
+        // fill.style = "green";
+        let i = this.array.findIndex(e => e === this.operandContainers[0].children[1].text);
+        
+        this.triangleFillCommands[i].style = "white";
+        // this.changeTriangleColor("black");
+        this.stage.update();
+      }
+      // if user clicked on same square twice move it back to it's original place then clear it out 
+      if (this.operandContainers[0] === event.target.parent) {
+        this.operandContainers[0].y=0;
+        this.operandContainers[0] = 0;
+        let i = this.array.findIndex(e => e === event.target.parent.children[1].text);
+        this.triangleFillCommands[i].style = "white";
+        // this.changeTriangleColor("white");
+        this.stage.update();
+      }
+      else {
+        // Store the currently clicked square as the first operand. Second operand must be an insert triangle symbol
+        this.operandContainers[0] = event.target.parent;
+        // this.operandContainers[0].y+=60;
+        // remove the triangle
+        // this.operandContainers[0].children[2].graphics.clear(); // nightmare
+        // this.changeTriangleColor("black");
+        this.stage.update();
+        // tween the box down
+        Tween.get(this.operandContainers[0])
+        .to({ y: 60}, 500, Ease.getPowIn(4));
+        let i = this.array.findIndex(e => e === event.target.parent.children[1].text);
+        this.triangleFillCommands[i].style = "black";
+        Ticker.addEventListener("tick", this.stage); // doto - need to remove ticker at some point?
+
+      }
+
+    } else { alert("Please select a tool from the toolbox"); }
+
+  }
+
+  changeTriangleColor(color) {
+    for(let i = 0; i < this.array.length; i++) {
+      this.triangleFillCommands[i].style = color;
+    }
+  }
+
+  /* re-draws the triangle that goes in the container under the square
+  // nightmare only works if other elements have not moved around
+  reDrawTriangle(container) {
+    console.log("redrawing for ", container.children[1].text)
+    // monkey
+    
+    // console.log("container.x", container.x);
+    console.log("container.getTransformedBounds().x", container.getTransformedBounds().x);
+    // console.log("the operand container that you're trying to re-draw triangle", this.operandContainers[0]);
+    let x = container.getTransformedBounds().x-8;
+    // let x = container.x-8;
+    console.log("redrawing at x: ", x);
+
+    // when it uses teh x from teh preivous location for some reason it's drawing it in teh correct spot
+    // unclear what this is relative to?  other calculatinos being done before drawing that are hidden?
+    // it seems like x is relative to the total canvas, not the container
+
+    // let x = container.x-8;
+    container.children[2].graphics.beginFill("white").drawPolyStar(x, 58, 10, 3, 0, 270);
+    this.stage.update();
+    console.log(container.children[2]);
+  } */
+
+  handleCanvasTriangleClick = (event) => {
+    // if user has clicked on a square already, store the second operand (the triangle's parent) and run operation
+    if (this.operandContainers[0]) {
+      this.operandContainers[1] = event.target.parent;
+      this.runOperation();
     }
   }
 
@@ -219,10 +347,14 @@ class Lesson extends React.Component {
       case 'Swap':
         this.swap();
         break;
-      case 'split':
+      case 'Insert':
+        console.log("inserting");
+        this.insert();
+        break;
+      case 'Split':
         console.log("splitting");
         break;
-      case 'merge':
+      case 'Merge':
         console.log('splitting');
         break;
       default:
@@ -241,25 +373,8 @@ class Lesson extends React.Component {
     return true;
   }
 
-  visualSwap(containerA, containerB){
-    // Get the distance between them on the screen for visual swapping
-    const distance = containerA.getTransformedBounds().x - containerB.getTransformedBounds().x;
-    const pow = 4;
-    // Tween the createJS containers for a visual swap
-    Tween.get(containerA)
-      .to({ y: 40, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(pow))
-      .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(pow)); 
-    Tween.get(containerB)
-      .to({ y: 80, x: containerB.x+distance/2 }, 500, Ease.getPowIn(pow))
-      .to({ y: 0, x: containerB.x+distance }, 500, Ease.getPowOut(pow));
-    
-    Ticker.addEventListener("tick", this.stage);
-    // todo - remove event listener at some point after animations are done?
-  }
-
   swap(){
-
-    // Get the array of what was swapped, make sure the larger one is in numA
+    // Store the larger number in containerA and smaller number in containerB
     let containerA, containerB; 
     if(this.operandContainers[0].children[1].text > this.operandContainers[1].children[1].text) {
       containerA = this.operandContainers[0];
@@ -291,6 +406,126 @@ class Lesson extends React.Component {
 
   }
 
+  insert(){
+    // retrieve the containers holding the number to be inserted, and the number where it will be inserted
+    const containerA = this.operandContainers[0];
+    const containerB = this.operandContainers[1];
+
+    // get the numbers for these operands
+    const numA = containerA.children[1].text;
+    const numB = containerB.children[1].text;
+
+    // get the indices of both operands for calculations below
+    const indexA = this.userArray.indexOf(numA);
+    const indexB = this.userArray.indexOf(numB);
+    let shiftToRight = []; // keep track of all numbers pushed to the right
+
+    // console.log("Inserting ", numA, " before ", numB);
+
+    let j = indexA-1;
+
+    // Update the user's array
+    // Push all numbers in between the operands to the right
+    while (j >= indexB) {
+      // find the corresonding container for this element that will be shifted to the right
+      const container = this.textSquares.find(ele => ele.children[1].text === this.userArray[j]);
+      // Put it an array that will be used in the visual insert operation
+      shiftToRight.push(container);
+      this.userArray[j+1] = this.userArray[j]; // move this item to the right
+      j--; // check the item next
+    }
+    this.userArray[j+1] = numA; // store operand1 in the new spot
+
+    // console.log(this.userArray);
+
+    // Copy userArray into a static temporary version to write to stack
+    const auditTrail = [...this.userArray];
+
+
+    // Add 5 objects to the stack of user moves including 1) operation, 2-3) numeric operands in order from larger to smaller, 4) resulting array, 5-6) operand containers for visual swap
+    this.setState(prevState => ({
+      userStack: [...prevState.userStack, [ this.state.operation, numA, numB, auditTrail, containerA, shiftToRight ]]
+    }))
+
+    // Clear out the this.operandContainers array so that the user will need to start over clicking on a square then a triangle
+    this.operandContainers = [];
+
+    this.visualInsert(containerA, shiftToRight);
+
+    // after the visualInsert, clear the shiftToRight array
+    shiftToRight = [];
+  }
+
+  visualSwap(containerA, containerB){
+    // Get the distance between them on the screen for visual swapping
+    const distance = containerA.getTransformedBounds().x - containerB.getTransformedBounds().x;
+    // Tween the createJS containers for a visual swap
+    Tween.get(containerA)
+      .to({ y: 40, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(4))
+      .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(4)); 
+    Tween.get(containerB)
+      .to({ y: 80, x: containerB.x+distance/2 }, 500, Ease.getPowIn(4))
+      .to({ y: 0, x: containerB.x+distance }, 500, Ease.getPowOut(4));
+    
+    Ticker.addEventListener("tick", this.stage);
+    // todo - remove event listener at some point after animations are done?
+  }
+
+  visualInsert(containerA, shiftToRight){
+    this.changeTriangleColor("black");
+    console.log("Visual insert called with containerA: ", containerA, " and shiftToRight: ", shiftToRight);
+
+    // get the distance between containerA and the last element in shiftToRight, which is the place that containerA is going
+    const distance = containerA.getTransformedBounds().x - shiftToRight[shiftToRight.length-1].getTransformedBounds().x;
+
+    // let x = containerA.getTransformedBounds().x
+
+    // tween all containers in shiftToRight to the right
+    for(let i = 0; i < shiftToRight.length; i++) {
+      const container = shiftToRight[i];
+      // console.log("container.x: ", container.x);
+      // console.log("container.getTransformedBounds().x: ", container.getTransformedBounds().x);
+      Tween.get(container)
+      .to({ x: container.x+50 }, 500, Ease.getPowIn(4));
+    }
+    
+    // tween containerA into it's new location
+
+    
+    Tween.get(containerA)
+    .to({ y: 60, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(4))
+    .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(4)); 
+    
+    // containerA.x+=containerA.x+distance*-1;
+    // containerA.y = 0;
+
+    Ticker.addEventListener("tick", this.stage);
+    // after a 1 second delay, re-draw triangle when the container arrives at it's final destination
+    // this.reDrawTriangle(containerA);
+
+    // setTimeout(() => {this.reDrawTriangleAfterMove(containerA)}, 2002); // nightmare
+    setTimeout(() => {this.changeTriangleColor("white")}, 1001);
+  }
+
+/* nightmare - will not re-draw in consistent locations despite giving it the exact same coordinates 
+   every time
+  reDrawTriangleAfterMove(container) {
+    // container.children[2].updateCache();
+    this.stage.update();
+    let x = container.getTransformedBounds().x+43;
+    console.log("supposed to be drawing here: ", x);
+    // container.children[2].graphics.beginFill("white").drawPolyStar(x, 58, 10, 3, 0, 270);
+    container.children[2].graphics.beginFill("white").drawPolyStar(80, 100, 10, 3, 0, 270);
+    // container.children[2].x = container.getTransformedBounds().x+43;
+
+    console.log("supposed to set x to", container.children[2].x);
+
+    this.stage.update();
+    console.log("container.children[2].graphics", container.children[2].graphics);
+    
+  } */
+
+
   // Click event on toolbox button will call setOperation which will 
   // set the operation state variable to the id of the button that was clicked 
     toolboxClickHandler = (event) => {
@@ -299,6 +534,7 @@ class Lesson extends React.Component {
     } else if (event.target.id === 'undo') {
       this.undoLastMove();
     } else {
+      // console.log("this is the event.target.id", event.target.id);
       this.setState({ operation: event.target.id });
     }
 
@@ -328,6 +564,13 @@ class Lesson extends React.Component {
     }
   }
 
+  /* Structure of stack of moves to be printed should be:
+     item[0] = Operation (e.g., 'Insert' or 'Swap')
+     item[1] = Operand1
+     item[2] = Operand2
+     item[3] = Updated array after the operation
+  */
+
   render(){
     return (
         <div className="lesson">
@@ -336,17 +579,19 @@ class Lesson extends React.Component {
               <h1>Sort from left to right using {this.sortType} Sort</h1>
               {!this.state.answerSubmitted && <div id="yourMoves">
                 <h3>Your moves:</h3>
-                <ol className="movesList">
+                {this.state.userStack>0} && <ol className="movesList">
                   {this.state.userStack.map((item, index) => (
                     <li key={index}
                       className="movesListItem"
                     >
-                      {item[0]} {item[1]} and {item[2]}: [{item[3].join(', ')}]
+                      {item[0]} {item[1]} 
+                      {item[0]==='Insert' ? ' before ' : ' and '}
+                      {item[2]}: [{item[3].join(', ')}] 
                     </li>
                   ))}
                 </ol>
                 </div>}
-                <canvas id="demoCanvas" width="315"></canvas>
+                <canvas id="demoCanvas" width="315" height="800"></canvas>
                 {this.state.answerSubmitted && <SubmissionFeedback 
                   onClick={this.toolboxClickHandler}
                   userMoves={this.state.userStack}

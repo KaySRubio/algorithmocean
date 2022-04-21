@@ -25,6 +25,11 @@ class Toolbox extends React.Component {
           >Swap</button>
           <button 
             className='toolboxButton' 
+            id='Insert' 
+            onClick={this.props.onClick}
+          >Insert</button>
+          <button 
+            className='toolboxButton' 
             id='undo' 
             onClick={this.props.onClick}
           >Undo</button>
