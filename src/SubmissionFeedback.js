@@ -7,7 +7,6 @@ class SubmissionFeedback extends React.Component {
     this.state = { 
       answerCorrect: false, // controls what submission feedback looks like
     };
-    console.log("programMoves", this.props.programMoves);
   }
 
   static get propTypes() {
@@ -15,6 +14,7 @@ class SubmissionFeedback extends React.Component {
       onClick: PropTypes.func,
       userMoves: PropTypes.array,
       programMoves: PropTypes.array,
+      array: PropTypes.array,
     };
   }
 
@@ -44,31 +44,37 @@ class SubmissionFeedback extends React.Component {
   render(){
     return (
       <div>
-        <div>
+        <h2>Original Array</h2>
+        <p className="center">[{this.props.array.join(', ')}]</p>
+        <div className="movesList">
           <h2>Your Moves</h2>
-          <ol className="movesList">
+          <ol>
             {this.props.userMoves.map((item, index) => (
               <li key={index}
                 className="movesListItem"
               >
-                {item[0]} {item[1]} and {item[2]}
+                {item[0]} {item[1]}
+                {item[0]==='Insert' ? ' before ' : ' and '}
+                {item[2]}: [{item[3].join(', ')}] 
               </li>
             ))}
           </ol>
         </div>
-        <div>
+        <div className="movesList">
           <h2>Program Moves</h2>
-          <ol className="movesList">
+          <ol>
             {this.props.programMoves.map((item, index) => (
               <li key={index}
                 className="movesListItem"
               >
-                {item[0]} {item[1]} and {item[2]}
+                {item[0]} {item[1]} 
+                {item[0]==='Insert' ? ' before ' : ' and '}
+                {item[2]}
               </li>
             ))}
           </ol>
         </div>
-        { this.state.answerCorrect && <h3>Great job!</h3>}
+        { this.state.answerCorrect && <h3 className="center">Great job!</h3>}
       </div>
     );
   }

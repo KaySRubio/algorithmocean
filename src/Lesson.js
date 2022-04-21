@@ -14,8 +14,8 @@ class Lesson extends React.Component {
   constructor(props) {
     super(props);
     this.sortType = 'Insertion'; // todo - set from url
-    if (this.sortType === 'Bubble') this.defaultOperation = 'Swap';
-    else this.defaultOperation = 'Insert';
+    if (this.sortType === 'Bubble') { this.defaultOperation = 'Swap'; this.length = 6; }
+    else { this.defaultOperation = 'Insert'; this.length = 7; }
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
@@ -52,7 +52,7 @@ class Lesson extends React.Component {
    
     // get the first random number
     this.array[0] = this.randomNumBetween10and100();
-    for (let i = 1; i < 6; i++ ) {
+    for (let i = 1; i < this.length; i++ ) {
       let m = this.randomNumBetween10and100();
       // get a different random number if that number was already in the array
       while(this.array.includes(m)){
@@ -92,7 +92,7 @@ class Lesson extends React.Component {
     }
 
     // If the randomly generated array was almost sorted and only took 2 moves to re-sort, try again
-    if(this.programSP < 4){
+    if(this.programSP < 3){
       console.log("Too easy");
       // reset SP and programStack, then re-initialize and re-sort array
       this.programSP = 0;
@@ -296,11 +296,21 @@ class Lesson extends React.Component {
   }
 
   handleCanvasTriangleClick = (event) => {
+    
     // if user has clicked on a square already, store the second operand (the triangle's parent) and run operation
     if (this.operandContainers[0]) {
-      this.operandContainers[1] = event.target.parent;
-      this.runOperation();
-    }
+      
+      // Find the indices of these operands in the users's working copy of hte array 
+      const opAIndex = this.userArray.findIndex(e => e === this.operandContainers[0].children[1].text)
+      const opBIndex = this.userArray.findIndex(e => e === event.target.parent.children[1].text)
+
+      // if user tried to move square in the wrong direction (to the right) don't run operation  
+      if (opAIndex < opBIndex ) {alert("Hint: You can only move squares to the left");}
+      else {
+        this.operandContainers[1] = event.target.parent;
+        this.runOperation();
+      }
+    } else { alert("Please first click on a square with a number to insert into this location"); }
   }
 
   runOperation(){
@@ -450,6 +460,28 @@ class Lesson extends React.Component {
     setTimeout(() => {this.changeTriangleColor("white")}, 1001);
   }
 
+  visualUndoInsert(containerA, shiftToRight){
+    this.changeTriangleColor("black");
+
+    // get the distance between containerA and the first element in shiftToRight, which is the place that containerA is going
+    const distance = containerA.getTransformedBounds().x - shiftToRight[0].getTransformedBounds().x;
+
+    // tween all containers in shiftToRight to the left
+    for(let i = 0; i < shiftToRight.length; i++) {
+      const container = shiftToRight[i];
+      Tween.get(container)
+      .to({ x: container.x-50 }, 500, Ease.getPowIn(4));
+    }
+    
+    // tween containerA into it's new location
+    Tween.get(containerA)
+    .to({ y: 60, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(4))
+    .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(4)); 
+    
+    Ticker.addEventListener("tick", this.stage);
+    setTimeout(() => {this.changeTriangleColor("white")}, 1001);
+  }
+
   // Click event on toolbox button will call setOperation which will 
   // set the operation state variable to the id of the button that was clicked 
     toolboxClickHandler = (event) => {
@@ -467,23 +499,42 @@ class Lesson extends React.Component {
   handleSubmit() {
     // set state of answerSubmitted to true to re-render DOM and show submissionFeedback
     this.setState( { operation: 'None', answerSubmitted: true} );
+
+
   }
 
   undoLastMove() {
     if (this.userSP > 0) {
-      // swap the elements back visually
-      this.visualSwap(this.state.userStack[this.userSP-1][4], this.state.userStack[this.userSP-1][5]);
 
-      this.userSP--;
+      // Get the most recent operation from the top of the stack
+      const operation = this.state.userStack[this.userSP-1][0];
+      let arr
+      switch (operation) {
+        case 'Swap':
+            // swap the elements back visually using the containers stored on the top of the stack
+            this.visualSwap(this.state.userStack[this.userSP-1][4], this.state.userStack[this.userSP-1][5]);
+
+          break;
+        case 'Insert':
+          // swap elements back visually using the containers stored on the top of the stack
+          this.visualUndoInsert(this.state.userStack[this.userSP-1][4], this.state.userStack[this.userSP-1][5])
+          break;
+        default:
+          console.log("cannot undo ", operation);
+
+      }
+
+      this.userSP--; // decrement user stack pointer
 
       // Revert userArray back to the move 1 before or back to the original array
       if(this.userSP > 0) { this.userArray = [...this.state.userStack[this.userSP-1][3]];} 
       else { this.userArray = [...this.array]; }
 
       // Pop off the last element on the stack of moves
-      let arr = [...this.state.userStack];
+      arr = [...this.state.userStack];
       arr.length = this.userSP; // chop off last element of array copy
-      this.setState( {userStack: arr } );
+      this.setState( {userStack: arr } ); // call set state to update the list of moves that displays for user
+
     }
   }
 
@@ -513,9 +564,10 @@ class Lesson extends React.Component {
                   ))}
                 </ol>
                 </div>}
-                <canvas id="demoCanvas" width="315" height="800"></canvas>
+                {!this.state.answerSubmitted && <canvas id="demoCanvas" width="400" height="120"></canvas> }
                 {this.state.answerSubmitted && <SubmissionFeedback 
                   onClick={this.toolboxClickHandler}
+                  array={this.array}
                   userMoves={this.state.userStack}
                   programMoves={this.programStack}
                 />}

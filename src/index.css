@@ -15,6 +15,9 @@ h1 {
   width: 100%;
   text-align: center;
 }
+
+.center { text-align: center; }
+
 h2 {
   color: white;
   width: 100%;
@@ -76,7 +79,11 @@ p, ul, li, ol {
   /* background-color: #000922; */
   /* cursor: all-scroll;*/
   /* cursor: url(https://www.schoolservice.com/image/cache/data/product/469-800x800.jpg), auto; */
+}
 
+.movesList {
+  float: left;
+  width: 49%;
 }
 
 code {
