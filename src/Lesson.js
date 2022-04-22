@@ -13,9 +13,9 @@ import { useState } from 'react';
 class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.sortType = 'Insertion'; // todo - set from url
-    if (this.sortType === 'Bubble') { this.defaultOperation = 'Swap'; this.length = 6; }
-    else { this.defaultOperation = 'Insert'; this.length = 7; }
+    this.sortType = 'Selection'; // todo - set from url
+    if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; }
+    else { this.defaultOperation = 'Swap'; this.length = 6; }
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
@@ -48,7 +48,7 @@ class Lesson extends React.Component {
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
-    // this.array = [10, 30, 40, 20, 50, 60]; // testing
+    // this.array = [20, 30, 40, 50, 10, 60]; // testing
    
     // get the first random number
     this.array[0] = this.randomNumBetween10and100();
@@ -59,7 +59,7 @@ class Lesson extends React.Component {
         m = this.randomNumBetween10and100();
       }
       this.array[i] = m;
-    }
+    } 
     // copy final array into userCopy and programCopy that will be modified with operations
     this.userArray = [...this.array];
     this.programArray = [...this.array];
@@ -85,7 +85,7 @@ class Lesson extends React.Component {
         this.insertionSort(array);
         break;
       case 'Selection':
-        console.log("selection sort");
+        this.selectionSort(array);
         break;
       default:
         break;
@@ -107,7 +107,7 @@ class Lesson extends React.Component {
     for (i = 0; i < array.length; i++) {
       for (j = 0; j < array.length - i - 1; j++) {
         if (array[j] > array[j + 1]) {
-          // push the swap operation to the stack
+          // push the swap operation to the stack, then perform it
           this.programStack.push(['Swap', array[j], array[j + 1]]);
           this.programSP++;
           [array[j], array[j + 1]] = [array[j + 1], array[j]]
@@ -148,6 +148,29 @@ class Lesson extends React.Component {
     console.log("program stack is: ", this.programStack);
   }
   
+  selectionSort(array){
+    for(let i = 0; i < array.length; i++) {
+
+      let min = i;
+      for(let j = i+1; j < array.length; j++){
+        if(array[j] < array[min]) {
+            min=j; 
+        }
+      }
+      if (min !== i) {
+        // push the swap operation to the stack, then perform it
+        this.programStack.push(['Swap', array[i], array[min]]);
+        this.programSP++;
+        [array[i], array[min]] = [array[min], array[i]]
+        
+      }
+    }
+
+    console.log("sorted array is: ", array);
+    console.log("program stack is: ", this.programStack);
+    console.log("program stack pointer is: ", this.programSP);
+  }
+
   // Initialize the createJS canvas
   init() {
     let x = 10;
