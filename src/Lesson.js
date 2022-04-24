@@ -13,7 +13,7 @@ import { useState } from 'react';
 class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.sortType = 'Selection'; // todo - set from url
+    this.sortType = 'Insertion'; // todo - set from url
     if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; }
     else { this.defaultOperation = 'Swap'; this.length = 6; }
     this.array = []; // original array of unsorted numbers will not change
@@ -44,7 +44,6 @@ class Lesson extends React.Component {
   userSP = 0; // Stack Pointer, will point to top of the stack and be used to remove move during undo operation
   programSP = 0; // program Stack Pointer
   maxNumberOfOperations = 20;
-  triangleFillCommands = [];
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
@@ -196,15 +195,19 @@ class Lesson extends React.Component {
     }); */
 
     let square = new Shape(); // create square
-    square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35); // x,y,width,height
-    square.addEventListener('click', this.handleCanvasSquareClick) // click event on square
+    let squareFill = square.graphics.beginFill("black").command; // create a command to change square color
+    // square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35); //monkey
+    square.graphics.setStrokeStyle(3).beginStroke("white").drawRect(x, y, 46, 35); // x,y,width,height
+    square.addEventListener('click', this.handleCanvasSquareClick); // click event on square
+    square.squareFill = squareFill; // store the command to change color in the square object for easy access
 
     let triangle = new Shape();
 
     if (this.state.operation === 'Insert') {
-      this.triangleFillCommands.push(triangle.graphics.beginFill("white").command);
+      let fillCommand = triangle.graphics.beginFill("white").command; // create a command to change triangle color
       triangle.graphics.drawPolyStar(x, y+50, 10, 3, 0, 270); // x, y, size, #sides, 0, angle
       triangle.addEventListener('click', this.handleCanvasTriangleClick) // click event on triangle
+      triangle.fillCommand = fillCommand; // store the command to change color in the triangle object for easy access
     }
 
     let text = new Text(num, '30px Arial', 'white'); // create text
@@ -229,8 +232,8 @@ class Lesson extends React.Component {
     return textSquare;
   }
 
-
   handleCanvasSquareClick = (event) => {
+
     if (this.state.operation === 'Swap') {
       // increment swapClicks since the user clicked on a canvas element
       this.swapClicks++;
@@ -281,18 +284,14 @@ class Lesson extends React.Component {
       // if the user already clicked on another square, move the previous square back to it's original place
         if (this.operandContainers[0]) {
         this.operandContainers[0].y=0;
-        let i = this.array.findIndex(e => e === this.operandContainers[0].children[1].text);
-        
-        this.triangleFillCommands[i].style = "white";
-        // this.changeTriangleColor("black");
+        this.operandContainers[0].children[2].fillCommand.style = "white"; // make triangle appear again
         this.stage.update();
       }
       // if user clicked on same square twice move it back to it's original place then clear it out 
       if (this.operandContainers[0] === event.target.parent) {
         this.operandContainers[0].y=0;
+        this.operandContainers[0].children[2].fillCommand.style = "white"; // make triangle appear again
         this.operandContainers[0] = 0;
-        let i = this.array.findIndex(e => e === event.target.parent.children[1].text);
-        this.triangleFillCommands[i].style = "white";
         this.stage.update();
       }
       else {
@@ -301,21 +300,21 @@ class Lesson extends React.Component {
         this.stage.update();
         // tween the box down
         Tween.get(this.operandContainers[0])
-        .to({ y: 60}, 500, Ease.getPowIn(4));
-        let i = this.array.findIndex(e => e === event.target.parent.children[1].text);
-        this.triangleFillCommands[i].style = "black";
+        .to({ y: 60}, 250, Ease.getPowIn(4));
+        this.operandContainers[0].children[2].fillCommand.style = "black";
         Ticker.addEventListener("tick", this.stage); // doto - need to remove ticker at some point?
 
       }
+    } else if (this.state.operation === 'markSorted') {
+      if(event.target.squareFill.style === "black") {
+        event.target.squareFill.style="blue";
+      } else {
+        event.target.squareFill.style="black";
+      }
+      this.stage.update();
 
     } else { alert("Please select a tool from the toolbox"); }
 
-  }
-
-  changeTriangleColor(color) {
-    for(let i = 0; i < this.array.length; i++) {
-      this.triangleFillCommands[i].style = color;
-    }
   }
 
   handleCanvasTriangleClick = (event) => {
@@ -323,7 +322,7 @@ class Lesson extends React.Component {
     // if user has clicked on a square already, store the second operand (the triangle's parent) and run operation
     if (this.operandContainers[0]) {
       
-      // Find the indices of these operands in the users's working copy of hte array 
+      // Find the indices of these operands in the users's working copy of the array 
       const opAIndex = this.userArray.findIndex(e => e === this.operandContainers[0].children[1].text)
       const opBIndex = this.userArray.findIndex(e => e === event.target.parent.children[1].text)
 
@@ -462,7 +461,7 @@ class Lesson extends React.Component {
   }
 
   visualInsert(containerA, shiftToRight){
-    this.changeTriangleColor("black");
+    this.textSquares.forEach(e => e.children[2].fillCommand.style = "black"); // hide all triangles during visual insert
 
     // get the distance between containerA and the last element in shiftToRight, which is the place that containerA is going
     const distance = containerA.getTransformedBounds().x - shiftToRight[shiftToRight.length-1].getTransformedBounds().x;
@@ -471,20 +470,22 @@ class Lesson extends React.Component {
     for(let i = 0; i < shiftToRight.length; i++) {
       const container = shiftToRight[i];
       Tween.get(container)
-      .to({ x: container.x+50 }, 500, Ease.getPowIn(4));
+      .to({ x: container.x+50 }, 250, Ease.getPowIn(4));
     }
     
     // tween containerA into it's new location
     Tween.get(containerA)
-    .to({ y: 60, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(4))
-    .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(4)); 
+    .to({ y: 60, x: containerA.x+distance/2*-1 }, 250, Ease.getPowIn(4))
+    .to({ y: 0, x: containerA.x+distance*-1 }, 250, Ease.getPowOut(4)); 
     
     Ticker.addEventListener("tick", this.stage);
-    setTimeout(() => {this.changeTriangleColor("white")}, 1001);
+    setTimeout(() => {this.textSquares.forEach(e => e.children[2].fillCommand.style = "white")}, 501); // show triangles again
   }
 
+
+
   visualUndoInsert(containerA, shiftToRight){
-    this.changeTriangleColor("black");
+    this.textSquares.forEach(e => e.children[2].fillCommand.style = "black"); // hide all triangles during visual animation
 
     // get the distance between containerA and the first element in shiftToRight, which is the place that containerA is going
     const distance = containerA.getTransformedBounds().x - shiftToRight[0].getTransformedBounds().x;
@@ -493,16 +494,16 @@ class Lesson extends React.Component {
     for(let i = 0; i < shiftToRight.length; i++) {
       const container = shiftToRight[i];
       Tween.get(container)
-      .to({ x: container.x-50 }, 500, Ease.getPowIn(4));
+      .to({ x: container.x-50 }, 250, Ease.getPowIn(4));
     }
     
     // tween containerA into it's new location
     Tween.get(containerA)
-    .to({ y: 60, x: containerA.x+distance/2*-1 }, 500, Ease.getPowIn(4))
-    .to({ y: 0, x: containerA.x+distance*-1 }, 500, Ease.getPowOut(4)); 
+    .to({ y: 60, x: containerA.x+distance/2*-1 }, 250, Ease.getPowIn(4))
+    .to({ y: 0, x: containerA.x+distance*-1 }, 250, Ease.getPowOut(4)); 
     
     Ticker.addEventListener("tick", this.stage);
-    setTimeout(() => {this.changeTriangleColor("white")}, 1001);
+    setTimeout(() => {this.textSquares.forEach(e => e.children[2].fillCommand.style = "white")}, 501); // show triangles again
   }
 
   // Click event on toolbox button will call setOperation which will 
@@ -512,6 +513,8 @@ class Lesson extends React.Component {
       this.handleSubmit();
     } else if (event.target.id === 'undo') {
       this.undoLastMove();
+    } else if (event.target.id === 'markSorted') {
+      this.setState({ operation: event.target.id });
     } else {
       this.setState({ operation: event.target.id });
     }
@@ -560,6 +563,8 @@ class Lesson extends React.Component {
 
     }
   }
+
+
 
   /* Structure of stack of moves to be printed should be:
      item[0] = Operation (e.g., 'Insert' or 'Swap')

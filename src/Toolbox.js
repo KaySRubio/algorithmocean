@@ -33,6 +33,11 @@ class Toolbox extends React.Component {
             id='undo' 
             onClick={this.props.onClick}
           >Undo</button>
+          <button 
+            className='toolboxButton' 
+            id='markSorted' 
+            onClick={this.props.onClick}
+          >Mark Sorted</button>
           {this.props.showSubmit && <button 
             className='toolboxButton' 
             id='submit'
