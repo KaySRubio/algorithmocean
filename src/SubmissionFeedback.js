@@ -74,7 +74,7 @@ class SubmissionFeedback extends React.Component {
             ))}
           </ol>
         </div>
-        { this.state.answerCorrect && <h3 className="center">Great job!</h3>}
+        { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
       </div>
     );
   }

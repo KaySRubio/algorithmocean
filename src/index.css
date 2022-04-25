@@ -18,6 +18,13 @@ h1 {
 
 .center { text-align: center; }
 
+#hints {
+  width: 40%;
+  margin-right: 130px;
+  float: right;
+
+}
+
 h2 {
   color: white;
   width: 100%;
@@ -37,10 +44,7 @@ p, ul, li, ol {
   text-align: center;
 }
 
-#yourMoves {
-  width: 350px;
-  float: left;
-}
+
 
 .Merge{
   cursor: s-resize;
@@ -57,7 +61,7 @@ p, ul, li, ol {
   padding: 10px;
   border-style: solid;
   border-width: 2px;
-  border-color: green;
+  border-color: blue;
 }
 
 #toolbox{
@@ -66,10 +70,11 @@ p, ul, li, ol {
   margin: 10px auto 10px auto;
   border-style: solid;
   border-width: 2px;
-  border-color: green;
+  border-color: blue;
 }
 
 #demoCanvas {
+  margin-bottom: 80px;
   /* width: 1000px;
   height: 100px;*/
   /* margin: 10px;*/
@@ -81,9 +86,21 @@ p, ul, li, ol {
   /* cursor: url(https://www.schoolservice.com/image/cache/data/product/469-800x800.jpg), auto; */
 }
 
+#yourMoves {
+  width: 450px;
+  float: left;
+  margin-right: 20px;
+  font-size: 90%;
+}
+
 .movesList {
   float: left;
   width: 49%;
+} 
+
+#greatJob {
+  font-size: 150%;
+  color: orange;
 }
 
 code {

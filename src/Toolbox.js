@@ -10,6 +10,7 @@ class Toolbox extends React.Component {
     return {
       onClick: PropTypes.func,
       showSubmit: PropTypes.bool,
+      sortType: PropTypes.string,
     };
   }
 
@@ -18,16 +19,18 @@ class Toolbox extends React.Component {
     return (
       <aside id="toolbox">
           <h2>Toolbox</h2>
-          <button 
-            className='toolboxButton' 
-            id='Swap' 
-            onClick={this.props.onClick}
-          >Swap</button>
+          { this.props.sortType === 'Insertion' ? 
           <button 
             className='toolboxButton' 
             id='Insert' 
             onClick={this.props.onClick}
-          >Insert</button>
+          >Insert</button> 
+          : 
+          <button 
+          className='toolboxButton' 
+          id='Swap' 
+          onClick={this.props.onClick}
+        >Swap</button> }
           <button 
             className='toolboxButton' 
             id='undo' 

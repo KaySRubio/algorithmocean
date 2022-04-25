@@ -4,46 +4,70 @@ import Navbar from './Navbar';
 import Toolbox from './Toolbox';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
-import { useState } from 'react';
 // import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
 // import AccessibilityModule from '@curriculumAssociates/createjs-accessibility';
 // import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; // does not work, babel error unresolvable
 
-
+/**
+ * Lesson component holds the activity region which includes a title, canvas, moves list, and hints
+ * Currently programmed for Linear Sorts (Bubble, Selection, Insertion) with two possible operations (Swap / Insert)
+ * Also renders a separate Toolbox component
+ */
 class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.sortType = 'Insertion'; // todo - set from url
-    if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; }
+    this.sortType = 'Insertion'; // todo - set sortType from URL after home page links are programmed
+    if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; } // Set length of array based on sort Type
     else { this.defaultOperation = 'Swap'; this.length = 6; }
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
     this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
 
+    // Hint messages
+    this.swapHint = 'To swap two numbers, click on the square containing a number, then click on a second square containing a number. When the array is sorted a "Submit" button will appear in the Toolbox.';
+    this.insertHint = 'To insert a number into a different place in the array, click on a square containing a number then click on one of the triangles where you would like it to be inserted. When the array is sorted a "Submit" button will appear in the Toolbox.';
+    this.markSortedHint1 = 'Tip:  You can mark what elements you have already sorted to help you keep track of your progress using the Mark Sorted tool in the Toolbox.';
+    this.markSortedHint2 = 'To mark squares as sorted, click on them. When you are done, remember to select a different tool to keep sorting.';
+    this.submitHint = 'The array is sorted, but you can still undo/redo moves as needed. When you are done, click Submit in the Toolbox.';
+
     this.state = { 
-      operation: this.defaultOperation,
+      operation: this.defaultOperation, // Holds operation for user, with a default value, and updated by user clicks in ToolBox
       userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
       showSubmit: false, // controls when the submit button will appear when array is sorted
       answerSubmitted: false, // controls when submission feedback appears
+      hints: '', // hint messages will appear on screen to help user
     };
   }
 
+    /**
+   * React lifecycle method
+   *
+   * @see {@link https://reactjs.org/docs/react-component.html#componentdidmount|React.Component#componentDidMount}
+   */
   componentDidMount = () => {
     this.initializeArray();
     this.sort(this.sortType, this.programArray);
     this.init();
+    // set the initial hint
+    if (this.sortType === 'Insertion') {
+      this.setState({ hints: this.insertHint });
+    } else {
+      this.setState({ hints: this.swapHint });
+    }
   }
 
   // Global variables
-  swapClicks = 0;
-  insertClicks = 0;
-  operandContainers = [];
-  stage = {};
-  textSquares = [];
+  swapClicks = 0; // keeps track of how many clicks user has made with the swap operation
+  insertClicks = 0; // keeps track of how many clicks user has made with the insert operation
+  operandContainers = []; // temporary holding place for the first and second number being used in the operation
+  stage = {}; // CreateJS stage
+  textSquares = []; // Array to hold CreateJS text squares which will be accessed in various places
   userSP = 0; // Stack Pointer, will point to top of the stack and be used to remove move during undo operation
   programSP = 0; // program Stack Pointer
   maxNumberOfOperations = 20;
+
+  
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
@@ -196,7 +220,6 @@ class Lesson extends React.Component {
 
     let square = new Shape(); // create square
     let squareFill = square.graphics.beginFill("black").command; // create a command to change square color
-    // square.graphics.setStrokeStyle(3).beginStroke("white").beginFill("black").drawRect(x, y, 46, 35); //monkey
     square.graphics.setStrokeStyle(3).beginStroke("white").drawRect(x, y, 46, 35); // x,y,width,height
     square.addEventListener('click', this.handleCanvasSquareClick); // click event on square
     square.squareFill = squareFill; // store the command to change color in the square object for easy access
@@ -234,7 +257,14 @@ class Lesson extends React.Component {
 
   handleCanvasSquareClick = (event) => {
 
-    if (this.state.operation === 'Swap') {
+            // don't allow more moves if they've hit 20
+    if ( this.userSP >= this.maxNumberOfOperations ) {
+      alert("You should not need more than 20 operations");
+      if (this.operandContainers[0]) this.operandContainers[0].y=0;
+      if (this.operandContainers[1]) this.operandContainers[1].y=0;
+      this.stage.update();
+    
+    } else if (this.state.operation === 'Swap') {
       // increment swapClicks since the user clicked on a canvas element
       this.swapClicks++;
 
@@ -265,12 +295,6 @@ class Lesson extends React.Component {
           )) 
         ) {
         this.undoLastMove()
-        // don't allow more moves if they've hit 20
-        } else if ( this.userSP >= this.maxNumberOfOperations ) {
-          alert("You should not need more than 20 operations");
-          this.operandContainers[0].y=0;
-          this.operandContainers[1].y=0;
-          this.stage.update();
         // process two unique clicks 
         } else {
             this.operandContainers[1].y+=10;
@@ -337,6 +361,12 @@ class Lesson extends React.Component {
 
   runOperation(){
     this.userSP++; // increment the stack pointer
+
+    // Update the help message if they were able to successfully do an operation to give an additional tip
+    if(this.userSP === 1) {
+      this.setState({ hints: this.markSortedHint1 });
+    }
+
     switch (this.state.operation) {
       case 'Swap':
         this.swap();
@@ -354,7 +384,11 @@ class Lesson extends React.Component {
         break;
     }
     // show submit button when the userArray is sorted 
-    if (  this.arrayEquals(this.userArray, this.programArray) ) { console.log("Array is sorted yay!"); this.setState({ showSubmit: true }); }
+    if (  this.arrayEquals(this.userArray, this.programArray) ) { 
+      console.log("Array is sorted yay!"); 
+      this.setState({ showSubmit: true });
+      this.setState({ hints: this.submitHint });
+    }
   }
 
   // Check if two arrays with same number of elements are equal
@@ -514,9 +548,19 @@ class Lesson extends React.Component {
     } else if (event.target.id === 'undo') {
       this.undoLastMove();
     } else if (event.target.id === 'markSorted') {
-      this.setState({ operation: event.target.id });
+      this.setState({ hints: this.markSortedHint2, operation: event.target.id });
+    } else if (event.target.id === 'Swap'){
+      this.setState({ 
+        operation: event.target.id, 
+        hints: this.swapHint
+      });
+    } else if (event.target.id === 'Insert'){
+      this.setState({ 
+        operation: event.target.id, 
+        hints: this.insertHint
+      });
     } else {
-      this.setState({ operation: event.target.id });
+      console.warn("Error! Invalid tool selected from the toolbox.");
     }
 
   }
@@ -578,9 +622,9 @@ class Lesson extends React.Component {
             <Navbar/>
             <div className={this.state.operation} id="activity">
               <h1>Sort from left to right using {this.sortType} Sort</h1>
-              {!this.state.answerSubmitted && <div id="yourMoves">
+              { !this.state.answerSubmitted && <div className="center" id="yourMoves">
                 <h3>Your moves:</h3>
-                {this.state.userStack>0} && <ol className="movesList">
+                {this.state.userStack>0} && <ol>
                   {this.state.userStack.map((item, index) => (
                     <li key={index}
                       className="movesListItem"
@@ -592,15 +636,21 @@ class Lesson extends React.Component {
                   ))}
                 </ol>
                 </div>}
-                {!this.state.answerSubmitted && <canvas id="demoCanvas" width="400" height="120"></canvas> }
-                {this.state.answerSubmitted && <SubmissionFeedback 
+                { !this.state.answerSubmitted && <canvas id="demoCanvas" width="400" height="135"></canvas> }
+
+                { !this.state.answerSubmitted && <div id="hints" className="center">
+                  <h3>Hint:</h3>
+                  <p>{this.state.hints}</p>
+                </div> }
+
+                { this.state.answerSubmitted && <SubmissionFeedback 
                   onClick={this.toolboxClickHandler}
                   array={this.array}
                   userMoves={this.state.userStack}
                   programMoves={this.programStack}
                 />}
             </div>
-            {!this.state.answerSubmitted && <Toolbox onClick={this.toolboxClickHandler} showSubmit={this.state.showSubmit}/>}
+            {!this.state.answerSubmitted && <Toolbox onClick={this.toolboxClickHandler} showSubmit={this.state.showSubmit} sortType={this.sortType}/>}
         </div>
       );
   }
