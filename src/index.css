@@ -93,6 +93,11 @@ p, ul, li, ol {
   font-size: 90%;
 }
 
+
+.link {
+  color: white;
+}
+
 .movesList {
   float: left;
   width: 49%;

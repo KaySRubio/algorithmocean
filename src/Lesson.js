@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Toolbox from './Toolbox';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
+import { useLocation } from 'react-router-dom';
 // import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
 // import AccessibilityModule from '@curriculumAssociates/createjs-accessibility';
 // import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; // does not work, babel error unresolvable
@@ -16,13 +17,18 @@ import { Tween, Ease } from "@createjs/tweenjs";
 class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    this.sortType = 'Insertion'; // todo - set sortType from URL after home page links are programmed
+    // this.path = window.location.pathname;
+    if (window.location.pathname.includes('insertion')) this.sortType = 'Insertion';
+    else if (window.location.pathname.includes('selection')) this.sortType = 'Selection';
+    else this.sortType = 'Bubble';
+    // this.sortType = 'Insertion'; // todo - set sortType from URL after home page links are programmed
     if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; } // Set length of array based on sort Type
     else { this.defaultOperation = 'Swap'; this.length = 6; }
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
     this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
+
 
     // Hint messages
     this.swapHint = 'To swap two numbers, click on the square containing a number, then click on a second square containing a number. When the array is sorted a "Submit" button will appear in the Toolbox.';
@@ -46,6 +52,9 @@ class Lesson extends React.Component {
    * @see {@link https://reactjs.org/docs/react-component.html#componentdidmount|React.Component#componentDidMount}
    */
   componentDidMount = () => {
+
+    
+
     this.initializeArray();
     this.sort(this.sortType, this.programArray);
     this.init();
@@ -621,7 +630,7 @@ class Lesson extends React.Component {
         <div className="lesson">
             <Navbar/>
             <div className={this.state.operation} id="activity">
-              <h1>Sort from left to right using {this.sortType} Sort</h1>
+              <h1>Sort from left to right, smallest to biggest using {this.sortType} Sort</h1>
               { !this.state.answerSubmitted && <div className="center" id="yourMoves">
                 <h3>Your moves:</h3>
                 {this.state.userStack>0} && <ol>
