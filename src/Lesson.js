@@ -76,6 +76,7 @@ class Lesson extends React.Component {
   programSP = 0; // program Stack Pointer
   maxNumberOfOperations = 20;
 
+
   
 
   // Initialize an array of 6 elements with random numbers [10-100]
@@ -617,8 +618,6 @@ class Lesson extends React.Component {
     }
   }
 
-
-
   /* Structure of stack of moves to be printed should be:
      item[0] = Operation (e.g., 'Insert' or 'Swap')
      item[1] = Operand1
@@ -633,7 +632,7 @@ class Lesson extends React.Component {
               <h1>Sort from left to right, smallest to biggest using {this.sortType} Sort</h1>
               { !this.state.answerSubmitted && <div className="center" id="yourMoves">
                 <h3>Your moves:</h3>
-                {this.state.userStack>0} && <ol>
+                {this.state.userStack>0} <ol>
                   {this.state.userStack.map((item, index) => (
                     <li key={index}
                       className="movesListItem"
@@ -645,7 +644,7 @@ class Lesson extends React.Component {
                   ))}
                 </ol>
                 </div>}
-                { !this.state.answerSubmitted && <canvas id="demoCanvas" width="400" height="135"></canvas> }
+                { !this.state.answerSubmitted && <canvas id="demoCanvas" width="400px" height="135px"></canvas> }
 
                 { !this.state.answerSubmitted && <div id="hints" className="center">
                   <h3>Hint:</h3>

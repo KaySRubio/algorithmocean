@@ -1,3 +1,15 @@
+
+:root {
+  --very-light-blue: #E5ECF3;
+  --light-blue: #C5D5E4;
+  --med-blue: #2F71B3;
+  --dark-blue: #16324F;
+  --darker-blue: #162E46;
+  /* --darkest-blue: #1C2541;*/
+  --darkest-blue-green: #13293D; /* used for most icons */
+  /* https://webaim.org/resources/contrastchecker/ */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,72 +17,87 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
   cursor: default;
-  background-color: #000922;
+  background-color: var(--dark-blue);
 }
 
 h1 {
-  color: white;
+  color: var(--very-light-blue);
   width: 100%;
   text-align: center;
 }
 
-.center { text-align: center; }
-
-#hints {
-  width: 40%;
-  margin-right: 130px;
-  float: right;
-
-}
-
 h2 {
-  color: white;
+  color: var(--light-blue);
   width: 100%;
   text-align: center;
   margin: 0px;
 }
 h3 {
-  color: white;
+  color: var(--light-blue);
   margin: 0px;
 }
 p, ul, li, ol {
-  color: white;
+  color: var(--light-blue);
   margin: 0px;
 }
 
-#footer>p {
-  text-align: center;
+.link {
+  color: white;
+}
+
+.center { text-align: center; }
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 
 
-.Merge{
-  cursor: s-resize;
- }
-
-.Swap{
- cursor: all-scroll;
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+li {
+  margin: 0px;
+  padding: 0px;
+  text-align: left;
 }
 
+/*************** Lesson Page *****************/
 #activity {
   width: 1000px;
   height: 500px;
   margin: auto;
   padding: 10px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: blue;
+  /* border-style: solid 2px blue; */
+  background-color: var(--darker-blue);
+   
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; 
+
+  -moz-box-shadow: 0 0 10px var(--light-blue);
+  -webkit-box-shadow: 0 0 10px var(--light-blue);
+  box-shadow: 0 0 10px var(--light-blue);
 }
 
 #toolbox{
   width: 1000px;
   padding: 10px;
-  margin: 10px auto 10px auto;
-  border-style: solid;
-  border-width: 2px;
-  border-color: blue;
+  margin: 30px auto 10px auto;
+  /* border-style: solid 2px blue; */
+  background-color: var(--darker-blue);
+  
+  
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; 
+
+  -moz-box-shadow: 0 0 10px var(--light-blue);
+  -webkit-box-shadow: 0 0 10px var(--light-blue);
+  box-shadow: 0 0 10px var(--light-blue);
 }
 
 #demoCanvas {
@@ -93,22 +120,72 @@ p, ul, li, ol {
   font-size: 90%;
 }
 
-
-.link {
-  color: white;
+#hints {
+  width: 40%;
+  margin-right: 130px;
+  float: right;
 }
 
-.movesList {
-  float: left;
-  width: 49%;
-} 
+.Merge{
+  cursor: s-resize;
+ }
+
+.Swap{
+ cursor: all-scroll;
+}
 
 #greatJob {
   font-size: 150%;
   color: orange;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+.movesList {
+  float: left;
+  width: 49%;
+} 
+
+/*************** Footer *****************/
+#footer {
+  width: 100%;
+  position:absolute;
+  bottom:0;
+  height:40px;
+  text-align: center;
+  font-size: 80%;
+  color: var(--light-blue);
 }
+
+#footer>p>a {
+  color: var(--light-blue);
+  margin: 10px;
+}
+
+.footerlink {
+  color: var(--light-blue);
+  margin: 10px;
+}
+
+/*************** Not Found *****************/
+
+.notFound {
+  text-align: center;
+}
+
+.notFound>img {
+  margin: 40px auto 40px auto;
+  display: block;
+  width: 200px;
+}
+.notFound>h2 {
+  margin-top: 70px;
+}
+
+.notFound>h2 {
+  margin-top: 70px;
+}
+
+
+
+
+
