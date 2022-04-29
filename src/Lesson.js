@@ -52,9 +52,6 @@ class Lesson extends React.Component {
    * @see {@link https://reactjs.org/docs/react-component.html#componentdidmount|React.Component#componentDidMount}
    */
   componentDidMount = () => {
-
-    
-
     this.initializeArray();
     this.sort(this.sortType, this.programArray);
     this.init();

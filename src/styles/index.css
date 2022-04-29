@@ -7,6 +7,7 @@
   --darker-blue: #162E46;
   /* --darkest-blue: #1C2541;*/
   --darkest-blue-green: #13293D; /* used for most icons */
+  /* --main-background-color: yellow; */
   /* https://webaim.org/resources/contrastchecker/ */
 }
 
@@ -18,32 +19,33 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   cursor: default;
-  background-color: var(--dark-blue);
+  /* background-color: var(--dark-blue); */
+ /* background-color: var(--main-background-color); */
 }
 
 h1 {
-  color: var(--very-light-blue);
+  /*color: var(--very-light-blue);*/
   width: 100%;
   text-align: center;
 }
 
 h2 {
-  color: var(--light-blue);
+  /*color: var(--light-blue);*/
   width: 100%;
   text-align: center;
   margin: 0px;
 }
 h3 {
-  color: var(--light-blue);
+  /*color: var(--light-blue);*/
   margin: 0px;
 }
 p, ul, li, ol {
-  color: var(--light-blue);
+  /*color: var(--light-blue);*/
   margin: 0px;
 }
 
 .link {
-  color: white;
+  /*color: white;*/
 }
 
 .center { text-align: center; }
@@ -72,15 +74,16 @@ li {
   margin: auto;
   padding: 10px;
   /* border-style: solid 2px blue; */
-  background-color: var(--darker-blue);
+  /* background-color: var(--darker-blue); */
    
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px; 
 
+  /* 
   -moz-box-shadow: 0 0 10px var(--light-blue);
   -webkit-box-shadow: 0 0 10px var(--light-blue);
-  box-shadow: 0 0 10px var(--light-blue);
+  box-shadow: 0 0 10px var(--light-blue); */
 }
 
 #toolbox{
@@ -88,16 +91,17 @@ li {
   padding: 10px;
   margin: 30px auto 10px auto;
   /* border-style: solid 2px blue; */
-  background-color: var(--darker-blue);
+  /* background-color: var(--darker-blue); */
   
   
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px; 
 
+  /* 
   -moz-box-shadow: 0 0 10px var(--light-blue);
   -webkit-box-shadow: 0 0 10px var(--light-blue);
-  box-shadow: 0 0 10px var(--light-blue);
+  box-shadow: 0 0 10px var(--light-blue); */
 }
 
 #demoCanvas {
@@ -153,16 +157,16 @@ li {
   height:40px;
   text-align: center;
   font-size: 80%;
-  color: var(--light-blue);
+  /* color: var(--light-blue); */
 }
 
 #footer>p>a {
-  color: var(--light-blue);
+  /* color: var(--light-blue); */
   margin: 10px;
 }
 
 .footerlink {
-  color: var(--light-blue);
+  /* color: var(--light-blue); */
   margin: 10px;
 }
 

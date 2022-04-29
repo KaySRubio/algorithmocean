@@ -1,0 +1,51 @@
+/* Colors
+  very-light-blue: #E5ECF3
+  light-blue: #C5D5E4
+  med-blue: #2F71B3
+  dark-blue: #16324F
+  darker-blue: #162E46
+  darkest-blue: #1C2541
+  darkest-blue-green: #13293D used for most icons 
+*/
+
+.theme-light {
+  --small-text: #16324F;
+  --big-text: #162E46;
+  --main-background: #C5D5E4;
+  --box: #E5ECF3;
+}
+
+.theme-dark {
+  --main-background: #16324F;
+  --box: #162E46;
+  --big-text: #E5ECF3;
+  --small-text: #C5D5E4;
+}
+
+/*
+:root {
+  --main-background: #16324F;
+  --box: #162E46;
+  --big-text: #E5ECF3;
+  --small-text: #C5D5E4;
+} */
+
+body {
+  background-color: var(--main-background);
+}
+
+#activity, #toolbox {
+  background-color: var(--box);
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+}
+
+h1 {
+  color: var(--big-text);
+}
+
+p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink {
+  color: var(--small-text);
+  /* color: white; */
+}
