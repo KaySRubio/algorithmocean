@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './styles/colors.css';
 import { setTheme } from './utils/themes';
 
 function Toggle() {
