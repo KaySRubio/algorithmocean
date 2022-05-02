@@ -5,6 +5,8 @@ import Toolbox from './Toolbox';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
 import { useLocation } from 'react-router-dom';
+import swap from './img/swap1.png';
+import swapcur from './img/swap.cur';
 // import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
 // import AccessibilityModule from '@curriculumAssociates/createjs-accessibility';
 // import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; // does not work, babel error unresolvable
@@ -39,6 +41,7 @@ class Lesson extends React.Component {
     // Color variables
     this.darkblue = '#16324F';
     this.lightblue = '#E5ECF3';
+    this.medblue = '#2F71B3';
     
     // this.triangleLightBlue = 'rgba(229, 236, 243, 1)';
     // this.triangleDarkBlue = 'rgba(22, 50, 79, 1)';
@@ -654,7 +657,11 @@ class Lesson extends React.Component {
                   ))}
                 </ol>
                 </div>}
-                { !this.state.answerSubmitted && <canvas id="demoCanvas" width="400px" height="135px"></canvas> }
+                { !this.state.answerSubmitted && <canvas 
+                  
+                  id="demoCanvas" 
+                  width="400px" 
+                  height="135px"></canvas> }
 
                 { !this.state.answerSubmitted && <div id="hints" className="center">
                   <h3>Hint:</h3>
@@ -674,5 +681,8 @@ class Lesson extends React.Component {
   }
 
 }
-
+// style="cursor: url({cur}),url({swapcur}), all-scroll;"
+// style="cursor: url('../img/swap1.png'),url('../img/swap.cur'), all-scroll;"
+// style={{cursor: swap, 'all-scroll'}}
+// style={{marginRight: spacing + 'em'}}
 export default Lesson;

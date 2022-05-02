@@ -47,6 +47,76 @@ p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink {
 }
 
 
+.toolboxButton {
+  background-color: #C5D5E4;
+  border-radius: 5px;
+
+  font-size: 15px;
+  color: #16324F;
+  margin-right: 20px;
+  border: 2px solid #E5ECF3;
+  padding: 4px 8px 4px 1px;
+  /* padding: 6px 8px 6px 8px;*/
+  -moz-box-shadow: inset 0 0 10px #E5ECF3;
+  -webkit-box-shadow: inset 0 0 10px #E5ECF3;
+  box-shadow: inset 0 0 10px #E5ECF3;
+}
+
+.toolboxButton:hover {
+  border: 2px solid #C5D5E4;
+}
+
+.toolboxButton:focus {
+  -moz-box-shadow: inset 0 0 5px #16324F;
+  -webkit-box-shadow: inset 0 0 5px #16324F;
+  box-shadow: inset 0 0 5px #16324F;
+  border: 2px solid #C5D5E4;
+  
+}
+
+/*
+.toolboxButton {
+  background-color: var(--small-text);
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  color: var(--main-background);
+  margin-right: 20px;
+  border: 2px solid var(--big-text);
+  padding: 6px 8px 6px 8px;
+  -moz-box-shadow: inset 0 0 10px var(--big-text);
+  -webkit-box-shadow: inset 0 0 10px var(--big-text);
+  box-shadow: inset 0 0 10px var(--big-text);
+}
+
+.toolboxButton:hover {
+  border: 2px solid var(--small-text);
+}
+
+.toolboxButton:focus {
+  -moz-box-shadow: inset 0 0 5px var(--main-background);
+  -webkit-box-shadow: inset 0 0 5px var(--main-background);
+  box-shadow: inset 0 0 5px var(--main-background);
+  border: 2px solid var(--small-text);
+}
+
+*/
+
+.toolboxButton>img {
+  float: left;
+  width: 20px;
+  margin: 0px 5px 0px 0px;
+  /* filter: brightness(10%); */
+  /*
+  -webkit-filter: yellow;
+  filter: yellow; */
+  /* filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%); */
+  /* filter: saturate(yellow, 5); */
+  /* color: red; */
+}
+
+
+
 
 body {
   margin: 0;
@@ -91,8 +161,6 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-
 
 ul {
   margin: 0px;
@@ -172,7 +240,9 @@ li {
  }
 
 .Swap{
- cursor: all-scroll;
+ /* cursor: all-scroll; monkey */
+ /* cursor: url('../img/swap1.png'),url('../img/swap.cur'), all-scroll;*/
+
 }
 
 #greatJob {
