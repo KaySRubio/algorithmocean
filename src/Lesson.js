@@ -5,8 +5,32 @@ import Toolbox from './Toolbox';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
 import { useLocation } from 'react-router-dom';
-import swap from './img/swap1.png';
-import swapcur from './img/swap.cur';
+
+import anem from './img/anem.png';
+import anemsmile from './img/anemsmile.png';
+import yellowjelly from './img/yellowjelly.png';
+import yellowjellysmile from './img/yellowjellysmile.png';
+import starfish from './img/starfish.png';
+import starfishsmile from './img/starfishsmile.png';
+/* Additional characters to bring in if program more lessons
+import seahorse from './img/seahorse.png';
+import seahorsesmile from './img/seahorsesmile.png';
+import pinkjelly from './img/pinkjelly.png';
+import pinkjellysmile from './img/pinkjellysmile.png';
+import squid from './img/squid.png';
+import squidsmile from './img/squidsmile.png';
+import hermitcrab from './img/hermitcrab.png';
+import hermitcrabsmile from './img/hermitcrabsmile.png';
+import sanddollar from './img/sanddollar.png';
+import sanddollarsmile from './img/sanddollarsmile.png';
+import ray from './img/ray.png';
+import raysmile from './img/raysmile.png';
+*/
+
+import swapc1 from './img/swapc6.png';
+import markc from './img/markc.png';
+import insertc from './img/insertc4.png';
+// Turning off CAM for now since cannot resolve babel dependency errors in the module
 // import AccessibilityModule from 'CurriculumAssociates/createjs-accessibility';
 // import AccessibilityModule from '@curriculumAssociates/createjs-accessibility';
 // import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; // does not work, babel error unresolvable
@@ -53,6 +77,7 @@ class Lesson extends React.Component {
       showSubmit: false, // controls when the submit button will appear when array is sorted
       answerSubmitted: false, // controls when submission feedback appears
       hints: '', // hint messages will appear on screen to help user
+      answerCorrect: false, // controls what submission feedback looks like
     };
   }
 
@@ -592,9 +617,27 @@ class Lesson extends React.Component {
   handleSubmit() {
     // set state of answerSubmitted to true to re-render DOM and show submissionFeedback
     this.setState( { operation: 'None', answerSubmitted: true} );
-
-
+    this.setState({ answerCorrect: this.UserVsProgram() });
   }
+
+  UserVsProgram() {
+    // console.log("userMoves: ", this.props.userMoves);
+    // console.log("programMoves: ", this.props.programMoves);
+
+    if (this.state.userStack.length !== this.programStack.length) return false;
+    let i;
+    for(i = 0; i < this.state.userStack.length; i++) {
+      if( this.state.userStack[i][0] !== this.programStack[i][0]) return false;
+      if( this.state.userStack[i][1] !== this.programStack[i][1]) return false;
+      if( this.state.userStack[i][2] !== this.programStack[i][2]) return false;
+    }
+
+    console.log("Great job");
+
+
+    return true;
+  }
+
 
   undoLastMove() {
     if (this.userSP > 0) {
@@ -631,6 +674,60 @@ class Lesson extends React.Component {
     }
   }
 
+  /**
+   * Method to set the cursor that appears on the activity region depending upon which operation is being used
+   * If operation not set, returns a string that will lead the browser to use the default cursor
+   * @returns object
+   */
+  cursor() {
+    if (this.state.operation === 'Swap') return swapc1;
+    else if (this.state.operation === 'Insert') return insertc;
+    else if (this.state.operation === 'markSorted') return markc;
+    else return 'N/A';
+  }
+
+  /**
+   * Method to change what critter displays on page for different sorts, and update it to smile when answer is correct
+   * @returns object that contains both a reference to the image and the image-specific alt text
+  */
+  critter() {
+    let critterWithText = {}; // 
+
+    if (this.sortType === 'Bubble') {
+      if (this.state.answerCorrect) {
+        critterWithText.critter = anemsmile;
+        critterWithText.altText = "An anemone with green body and pink tentacles that is smiling";
+      }
+      else {
+        critterWithText.critter = anem;
+        critterWithText.altText = "An anemone with green body and pink tentacles";
+      }
+    }
+    else if (this.sortType === 'Insertion') {
+      if (this.state.answerCorrect) {
+        critterWithText.critter = yellowjellysmile;
+        critterWithText.altText = "A yellow jellyfish that is smiling";
+      }
+      else {
+        critterWithText.critter = yellowjelly;
+        critterWithText.altText = "A yellow jellyfish";
+      }
+    }
+    else {
+      if (this.state.answerCorrect) {
+        critterWithText.critter = starfishsmile;
+        critterWithText.altText = "A red starfish that is smiling";
+      }
+      else {
+        critterWithText.critter = starfish;
+        critterWithText.altText = "A red starfish";
+      }
+    }
+
+    return critterWithText;
+  }
+
+
   /* Structure of stack of moves to be printed should be:
      item[0] = Operation (e.g., 'Insert' or 'Swap')
      item[1] = Operand1
@@ -641,7 +738,9 @@ class Lesson extends React.Component {
     return (
         <div className="lesson">
             <Navbar/>
-            <div className={this.state.operation} id="activity">
+            <div 
+              style={{cursor: `url(${this.cursor()}), default`}}
+              className={this.state.operation} id="activity">
               <h1>Sort from left to right, smallest to biggest using {this.sortType} Sort</h1>
               { !this.state.answerSubmitted && <div className="center" id="yourMoves">
                 <h3>Your moves:</h3>
@@ -656,33 +755,50 @@ class Lesson extends React.Component {
                     </li>
                   ))}
                 </ol>
-                </div>}
-                { !this.state.answerSubmitted && <canvas 
+              </div>}
+              { !this.state.answerSubmitted && <canvas 
                   
-                  id="demoCanvas" 
-                  width="400px" 
-                  height="135px"></canvas> }
+                id="demoCanvas" 
+                width="400px" 
+                height="135px"></canvas> }
 
-                { !this.state.answerSubmitted && <div id="hints" className="center">
-                  <h3>Hint:</h3>
-                  <p>{this.state.hints}</p>
-                </div> }
+              { !this.state.answerSubmitted && <div id="hints" className="center">
+                <h3>Hint:</h3>
+                <p>{this.state.hints}</p>
+              </div> }
+              <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>
 
-                { this.state.answerSubmitted && <SubmissionFeedback 
-                  onClick={this.toolboxClickHandler}
-                  array={this.array}
-                  userMoves={this.state.userStack}
-                  programMoves={this.programStack}
-                />}
+
+              { this.state.answerSubmitted && <SubmissionFeedback 
+                array={this.array}
+                userMoves={this.state.userStack}
+                programMoves={this.programStack}
+              /> }
+              { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
+              
+              
             </div>
-            {!this.state.answerSubmitted && <Toolbox onClick={this.toolboxClickHandler} showSubmit={this.state.showSubmit} sortType={this.sortType}/>}
+            {!this.state.answerSubmitted && <Toolbox 
+              activeTool={this.state.operation}
+              onClick={this.toolboxClickHandler} 
+              showSubmit={this.state.showSubmit} 
+              sortType={this.sortType} 
+            />}
         </div>
       );
   }
 
 }
-// style="cursor: url({cur}),url({swapcur}), all-scroll;"
-// style="cursor: url('../img/swap1.png'),url('../img/swap.cur'), all-scroll;"
-// style={{cursor: swap, 'all-scroll'}}
-// style={{marginRight: spacing + 'em'}}
+
+
+/* 
+
+              { this.state.answerSubmitted && <SubmissionFeedback 
+                onClick={this.toolboxClickHandler}
+                array={this.array}
+                userMoves={this.state.userStack}
+                programMoves={this.programStack}
+              /> }
+
+              */
 export default Lesson;

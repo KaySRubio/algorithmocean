@@ -4,23 +4,23 @@ import PropTypes from 'prop-types';
 class SubmissionFeedback extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    /* this.state = { 
       answerCorrect: false, // controls what submission feedback looks like
-    };
+    }; */
   }
 
   static get propTypes() {
     return {
-      onClick: PropTypes.func,
       userMoves: PropTypes.array,
       programMoves: PropTypes.array,
       array: PropTypes.array,
     };
   }
 
+  /* 
   componentDidMount = () => {
     this.setState({ answerCorrect: this.UserVsProgram() });
-  }
+  } 
 
   UserVsProgram() {
     console.log("userMoves: ", this.props.userMoves);
@@ -39,6 +39,7 @@ class SubmissionFeedback extends React.Component {
 
     return true;
   }
+  */
 
 
   render(){
@@ -74,13 +75,16 @@ class SubmissionFeedback extends React.Component {
             ))}
           </ol>
         </div>
-        { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
+        
       </div>
     );
   }
 }
 
 /* 
+
+{ this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
+
 
           <ol className="movesList">
             {this.props.userMoves.map((item, index) => (

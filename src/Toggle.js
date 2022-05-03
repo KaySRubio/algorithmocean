@@ -1,5 +1,12 @@
+
+
+
+/* NOT IN USE ANYMORE? */
+
 import React, { useEffect, useState } from 'react';
 import { setTheme } from './utils/themes';
+import toggle1 from './img/toggle1.png';
+import toggle2 from './img/toggle2.png';
 
 function Toggle() {
   const [togClass, setTogClass] = useState('light');
@@ -15,7 +22,9 @@ function Toggle() {
     }
   }
   
+  // running when component mounts or updates, kinda like componentDidMount/componentDidUpdate for a functional component
   useEffect(() => {
+
     if (localStorage.getItem('theme') === 'theme-light') {
         setTogClass('light')
     } else if (localStorage.getItem('theme') === 'theme-dark') {
@@ -24,13 +33,14 @@ function Toggle() {
   }, [theme])
 
   return (
-        <div className="container--toggle">
-           <input type="checkbox" id="toggle" className="toggle--checkbox" onClick={handleOnClick} />
-            <label htmlFor="toggle" className="toggle--label">
-                <span className="toggle--label-background"></span>
-            </label>
-        </div>
-    )
+    <div>
+        
+        <button id="toggleButton" onClick={handleOnClick}>
+          { togClass==='light' && <img src={toggle2} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
+          { togClass==='dark' && <img src={toggle1} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
+        </button>
+    </div>
+  )
 }
 
 export default Toggle;
