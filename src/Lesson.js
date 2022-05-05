@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stage, Shape, Container, Text, Ticker } from '@createjs/easeljs';
-import Navbar from './Navbar';
+
 import Toolbox from './Toolbox';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
@@ -65,7 +65,7 @@ class Lesson extends React.Component {
     // Color variables
     this.darkblue = '#16324F';
     this.lightblue = '#E5ECF3';
-    this.medblue = '#2F71B3';
+    this.medblue = '#2D6BA9';
     
     // this.triangleLightBlue = 'rgba(229, 236, 243, 1)';
     // this.triangleDarkBlue = 'rgba(22, 50, 79, 1)';
@@ -737,7 +737,6 @@ class Lesson extends React.Component {
   render(){
     return (
         <div className="lesson">
-            <Navbar/>
             <div 
               style={{cursor: `url(${this.cursor()}), default`}}
               className={this.state.operation} id="activity">
@@ -766,7 +765,6 @@ class Lesson extends React.Component {
                 <h3>Hint:</h3>
                 <p>{this.state.hints}</p>
               </div> }
-              <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>
 
 
               { this.state.answerSubmitted && <SubmissionFeedback 
@@ -775,7 +773,7 @@ class Lesson extends React.Component {
                 programMoves={this.programStack}
               /> }
               { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
-              
+              <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>
               
             </div>
             {!this.state.answerSubmitted && <Toolbox 

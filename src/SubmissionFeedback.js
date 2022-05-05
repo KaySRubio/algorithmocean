@@ -44,10 +44,10 @@ class SubmissionFeedback extends React.Component {
 
   render(){
     return (
-      <div>
+      <div id="feedback">
         <h2>Original Array</h2>
         <p className="center">[{this.props.array.join(', ')}]</p>
-        <div className="movesList">
+        <div id="movesListLeft" className="movesList">
           <h2>Your Moves</h2>
           <ol>
             {this.props.userMoves.map((item, index) => (
@@ -61,7 +61,7 @@ class SubmissionFeedback extends React.Component {
             ))}
           </ol>
         </div>
-        <div className="movesList">
+        <div id="movesListRight" className="movesList">
           <h2>Program Moves</h2>
           <ol>
             {this.props.programMoves.map((item, index) => (

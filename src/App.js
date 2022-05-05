@@ -9,6 +9,7 @@ import Lesson from './Lesson';
 import NotFound from './NotFound';
 import { keepTheme } from './utils/themes';
 import { useEffect } from 'react';
+import Navbar from './Navbar';
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
     <Router>
     <div className="App">
       <div className="content">
+        <Navbar/>
         <Switch>
           <Route exact path="/">
             <Home />
