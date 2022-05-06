@@ -4,6 +4,9 @@ import swap from './img/swap1.png';
 import undo from './img/undo1.png';
 import insert from './img/insert1.png';
 import mark from './img/mark1.png';
+import hint from './img/hint1.png';
+import video from './img/video1.png';
+import questionMark from './img/q.png';
 
 
 class Toolbox extends React.Component {
@@ -58,6 +61,32 @@ class Toolbox extends React.Component {
             <img src={undo} alt="Undo symbol that looks an arrow pointing backwards."/>
             Undo
           </button>
+          <button 
+            className='toolboxButton' 
+            id='video' 
+            onClick={this.props.onClick}
+          >
+            <img src={video} alt="Undo symbol that looks an arrow pointing backwards."/>
+            Show me a video
+          </button>
+          <button 
+            className='toolboxButton' 
+            id='help' 
+            onClick={this.props.onClick}
+          >
+            <img src={questionMark} alt="Undo symbol that looks an arrow pointing backwards."/>
+            Help
+          </button>
+
+          <button 
+            className='toolboxButton' 
+            id='hint' 
+            onClick={this.props.onClick}
+          >
+            <img src={hint} alt="Undo symbol that looks an arrow pointing backwards."/>
+            Give me a hint
+          </button>
+
           {this.props.showSubmit && <button 
             className='toolboxButton' 
             id='submit'

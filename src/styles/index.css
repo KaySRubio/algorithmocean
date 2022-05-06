@@ -31,13 +31,6 @@ body {
   background-color: var(--main-background);
 }
 
-#activity, #toolbox {
-  background-color: var(--box);
-  -moz-box-shadow: 0 0 10px var(--small-text);
-  -webkit-box-shadow: 0 0 10px var(--small-text);
-  box-shadow: 0 0 10px var(--small-text);
-}
-
 h1 {
   color: var(--big-text);
 }
@@ -195,8 +188,14 @@ li {
   text-align: center;
 }
 /*************** Lesson Page *****************/
-#activity {
+.lesson {
+  position: relative;
+  width: 1020px;
+  height: 650px;
+  margin: 0px auto 20px auto;
+}
 
+#activity {
   width: 1000px;
   height: 500px;
   margin: auto;
@@ -207,6 +206,11 @@ li {
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px; 
+
+  background-color: var(--box);
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
 
   /* 
   -moz-box-shadow: 0 0 10px var(--light-blue);
@@ -238,26 +242,46 @@ li {
 }
 
 #hints {
-
   width: 500px;
   height: 130px;
   float: left;
 }
 
-.critter{
-  float: right;
+.critter {
+  position: absolute;
   width: 200px;
+  top: 400px;
+  left: 800px;
 }
 
-.Merge{
-  cursor: s-resize;
- }
-
-.Swap{
- /* cursor: all-scroll; monkey */
- /* cursor: url('../img/swap1.png'),url('../img/swap.cur'), all-scroll;*/
-
+#videoModal {
+  position: absolute;
+  width: 1020px;
+  height: 640px;
+  top: 0px;
+  left: 0px;
+  margin: 0px;
+  background-color: black;
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; 
 }
+
+
+.closeButton {
+  float: right;
+}
+
+iframe {
+  width: 1020px;
+  height: 590px;
+  border: none;
+  
+}
+
 
 #feedback {
   float: right;
@@ -272,10 +296,7 @@ li {
 
 
 .movesList {
-
-
   margin: 20px 40px 0px 20px;
-
 } 
 
 #movesListLeft {
@@ -293,9 +314,21 @@ li {
   width: 1000px;
   padding: 10px;
   margin: 30px auto 10px auto;
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px; 
+
+  background-color: var(--box);
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+
+}
+
+#toolbox>h2 {
+  width: 100%;
+  margin: 0px 0px 10px 0px;
 }
 
 .toolboxButton {
@@ -331,7 +364,9 @@ li {
   border: 2px solid #C5D5E4;
 }
 
-
+.largeQ {
+  font-size: 150%;
+}
 
 
 /*************** Footer *****************/

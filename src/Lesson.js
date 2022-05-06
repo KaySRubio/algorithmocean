@@ -2,6 +2,8 @@ import React from 'react';
 import { Stage, Shape, Container, Text, Ticker } from '@createjs/easeljs';
 
 import Toolbox from './Toolbox';
+import HelpModal from './HelpModal';
+import VideoModal from './VideoModal';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
 import { useLocation } from 'react-router-dom';
@@ -78,6 +80,8 @@ class Lesson extends React.Component {
       answerSubmitted: false, // controls when submission feedback appears
       hints: '', // hint messages will appear on screen to help user
       answerCorrect: false, // controls what submission feedback looks like
+      showVideoModal: false, // controls if the video modal appears
+      showHelpModal: false, // controls if the help modal appears
     };
   }
 
@@ -607,6 +611,17 @@ class Lesson extends React.Component {
         operation: event.target.id, 
         hints: this.insertHint
       });
+    } else if (event.target.id === 'video') {
+      this.setState({ showVideoModal: true });
+      console.log("video");
+    } else if (event.target.id === 'help') {
+      this.setState({ showHelpModal: true });
+    } else if (event.target.id === 'hint') {
+      console.log("hint");
+    } else if (event.target.id === 'closeVideo') {
+      this.setState({ showVideoModal: false });
+    } else if (event.target.id === 'closeHelp') {
+      this.setState({ showHelpModal: false });
     } else {
       console.warn("Error! Invalid tool selected from the toolbox.");
     }
@@ -766,14 +781,12 @@ class Lesson extends React.Component {
                 <p>{this.state.hints}</p>
               </div> }
 
-
               { this.state.answerSubmitted && <SubmissionFeedback 
                 array={this.array}
                 userMoves={this.state.userStack}
                 programMoves={this.programStack}
               /> }
               { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
-              <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>
               
             </div>
             {!this.state.answerSubmitted && <Toolbox 
@@ -782,6 +795,15 @@ class Lesson extends React.Component {
               showSubmit={this.state.showSubmit} 
               sortType={this.sortType} 
             />}
+            { this.state.showVideoModal && <VideoModal
+              onClick={this.toolboxClickHandler} 
+              sortType={this.sortType}
+             /> }
+            {this.state.showHelpModal && <HelpModal 
+              onClick={this.toolboxClickHandler} 
+            />}
+
+            { !this.state.showVideoModal && <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>}
         </div>
       );
   }
@@ -791,12 +813,6 @@ class Lesson extends React.Component {
 
 /* 
 
-              { this.state.answerSubmitted && <SubmissionFeedback 
-                onClick={this.toolboxClickHandler}
-                array={this.array}
-                userMoves={this.state.userStack}
-                programMoves={this.programStack}
-              /> }
 
               */
 export default Lesson;
