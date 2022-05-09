@@ -7,6 +7,7 @@ import mark from './img/mark1.png';
 import hint from './img/hint1.png';
 import video from './img/video1.png';
 import questionMark from './img/q.png';
+import checkmark from './img/checkmark.png';
 
 
 class Toolbox extends React.Component {
@@ -17,7 +18,7 @@ class Toolbox extends React.Component {
   static get propTypes() {
     return {
       onClick: PropTypes.func,
-      showSubmit: PropTypes.bool,
+      enableSubmit: PropTypes.bool,
       sortType: PropTypes.string,
       activeTool: PropTypes.string, // Used to help button that's activeTool have inner shadow
     };
@@ -63,19 +64,19 @@ class Toolbox extends React.Component {
           </button>
           <button 
             className='toolboxButton' 
-            id='video' 
-            onClick={this.props.onClick}
-          >
-            <img src={video} alt="Undo symbol that looks an arrow pointing backwards."/>
-            Show me a video
-          </button>
-          <button 
-            className='toolboxButton' 
             id='help' 
             onClick={this.props.onClick}
           >
             <img src={questionMark} alt="Undo symbol that looks an arrow pointing backwards."/>
             Help
+          </button>
+          <button 
+            className='toolboxButton' 
+            id='video' 
+            onClick={this.props.onClick}
+          >
+            <img src={video} alt="Undo symbol that looks an arrow pointing backwards."/>
+            Show me a video
           </button>
 
           <button 
@@ -87,11 +88,16 @@ class Toolbox extends React.Component {
             Give me a hint
           </button>
 
-          {this.props.showSubmit && <button 
+          <button 
             className='toolboxButton' 
             id='submit'
+            disabled={!this.props.enableSubmit}
+            aria-disabled={!this.props.enableSubmit}
             onClick={this.props.onClick}
-            >Submit</button>}
+            >
+            <img src={checkmark} alt="A checkmark in a box."/>
+              Submit
+            </button>
       </aside>
     );
   }

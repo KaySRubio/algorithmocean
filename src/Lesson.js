@@ -76,7 +76,7 @@ class Lesson extends React.Component {
     this.state = { 
       operation: this.defaultOperation, // Holds operation for user, with a default value, and updated by user clicks in ToolBox
       userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
-      showSubmit: false, // controls when the submit button will appear when array is sorted
+      enableSubmit: false, // controls when the submit button will appear when array is sorted
       answerSubmitted: false, // controls when submission feedback appears
       hints: '', // hint messages will appear on screen to help user
       answerCorrect: false, // controls what submission feedback looks like
@@ -436,7 +436,9 @@ class Lesson extends React.Component {
     // show submit button when the userArray is sorted 
     if (  this.arrayEquals(this.userArray, this.programArray) ) { 
       console.log("Array is sorted yay!"); 
-      this.setState({ showSubmit: true });
+      this.setState({ enableSubmit: true });
+      document.getElementById('submit').setAttribute("style", "animation: grow 0.5s ease-in-out 2"); // Run small animation to make submit button noticeable
+
       this.setState({ hints: this.submitHint });
     }
   }
@@ -594,7 +596,7 @@ class Lesson extends React.Component {
 
   // Click event on toolbox button will call setOperation which will 
   // set the operation state variable to the id of the button that was clicked 
-    toolboxClickHandler = (event) => {
+  toolboxClickHandler = (event) => {
     if (event.target.id === 'submit') {
       this.handleSubmit();
     } else if (event.target.id === 'undo') {
@@ -626,6 +628,10 @@ class Lesson extends React.Component {
       console.warn("Error! Invalid tool selected from the toolbox.");
     }
 
+  }
+
+  closeModal = () => {
+    this.setState({ showHelpModal: false });
   }
 
   // Submit event
@@ -792,7 +798,7 @@ class Lesson extends React.Component {
             {!this.state.answerSubmitted && <Toolbox 
               activeTool={this.state.operation}
               onClick={this.toolboxClickHandler} 
-              showSubmit={this.state.showSubmit} 
+              enableSubmit={this.state.enableSubmit} 
               sortType={this.sortType} 
             />}
             { this.state.showVideoModal && <VideoModal
@@ -801,6 +807,8 @@ class Lesson extends React.Component {
              /> }
             {this.state.showHelpModal && <HelpModal 
               onClick={this.toolboxClickHandler} 
+              sortType={this.sortType}
+              closeModal={this.closeModal}
             />}
 
             { !this.state.showVideoModal && <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>}
