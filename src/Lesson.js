@@ -38,7 +38,7 @@ import insertc from './img/insertc4.png';
 // import { AccessibilityModule } from '@curriculumassociates/createjs-accessibility/src'; // does not work, babel error unresolvable
 
 /**
- * Lesson component holds the activity region which includes a title, canvas, moves list, and hints
+ * Lesson component holds the activity region which includes a title, canvas, moves list
  * Currently programmed for Linear Sorts (Bubble, Selection, Insertion) with two possible operations (Swap / Insert)
  * Also renders a separate Toolbox component
  */
@@ -57,12 +57,7 @@ class Lesson extends React.Component {
     this.programArray = []; // parallel array of numbers program will sort
     this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
 
-    // Hint messages
-    this.swapHint = 'To swap two numbers, click on the square containing a number, then click on a second square containing a number. When the array is sorted a "Submit" button will appear in the Toolbox.';
-    this.insertHint = 'To insert a number into a different place in the array, click on a square containing a number then click on one of the triangles where you would like it to be inserted. When the array is sorted a "Submit" button will appear in the Toolbox.';
-    this.markSortedHint1 = 'Tip:  You can mark what elements you have already sorted to help you keep track of your progress using the Mark Sorted tool in the Toolbox.';
-    this.markSortedHint2 = 'To mark squares as sorted, click on them. When you are done, remember to select a different tool to keep sorting.';
-    this.submitHint = 'The array is sorted, but you can still undo/redo moves as needed. When you are done, click Submit in the Toolbox.';
+    
 
     // Color variables
     this.darkblue = '#16324F';
@@ -81,7 +76,7 @@ class Lesson extends React.Component {
       hints: '', // hint messages will appear on screen to help user
       answerCorrect: false, // controls what submission feedback looks like
       showVideoModal: false, // controls if the video modal appears
-      showHelpModal: false, // controls if the help modal appears
+      showHelpModal: true, // controls if the help modal appears
     };
   }
 
@@ -94,12 +89,6 @@ class Lesson extends React.Component {
     this.initializeArray();
     this.sort(this.sortType, this.programArray);
     this.init();
-    // set the initial hint
-    if (this.sortType === 'Insertion') {
-      this.setState({ hints: this.insertHint });
-    } else {
-      this.setState({ hints: this.swapHint });
-    }
   }
 
   // Global variables
@@ -412,11 +401,6 @@ class Lesson extends React.Component {
   runOperation(){
     this.userSP++; // increment the stack pointer
 
-    // Update the help message if they were able to successfully do an operation to give an additional tip
-    if(this.userSP === 1) {
-      this.setState({ hints: this.markSortedHint1 });
-    }
-
     switch (this.state.operation) {
       case 'Swap':
         this.swap();
@@ -438,8 +422,6 @@ class Lesson extends React.Component {
       console.log("Array is sorted yay!"); 
       this.setState({ enableSubmit: true });
       document.getElementById('submit').setAttribute("style", "animation: grow 0.5s ease-in-out 2"); // Run small animation to make submit button noticeable
-
-      this.setState({ hints: this.submitHint });
     }
   }
 
@@ -602,17 +584,11 @@ class Lesson extends React.Component {
     } else if (event.target.id === 'undo') {
       this.undoLastMove();
     } else if (event.target.id === 'markSorted') {
-      this.setState({ hints: this.markSortedHint2, operation: event.target.id });
+      this.setState({ operation: event.target.id });
     } else if (event.target.id === 'Swap'){
-      this.setState({ 
-        operation: event.target.id, 
-        hints: this.swapHint
-      });
+      this.setState({ operation: event.target.id });
     } else if (event.target.id === 'Insert'){
-      this.setState({ 
-        operation: event.target.id, 
-        hints: this.insertHint
-      });
+      this.setState({ operation: event.target.id });
     } else if (event.target.id === 'video') {
       this.setState({ showVideoModal: true });
       console.log("video");
@@ -782,10 +758,7 @@ class Lesson extends React.Component {
                 width="400px" 
                 height="135px"></canvas> }
 
-              { !this.state.answerSubmitted && <div id="hints" className="center">
-                <h3>Hint:</h3>
-                <p>{this.state.hints}</p>
-              </div> }
+
 
               { this.state.answerSubmitted && <SubmissionFeedback 
                 array={this.array}
