@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import video from './img/video1.png';
+import incorrectX from './img/incorrectX.png';
+import correctCheck from './img/correctCheck.png';
 
 class SubmissionFeedback extends React.Component {
   constructor(props) {
@@ -7,6 +10,8 @@ class SubmissionFeedback extends React.Component {
     /* this.state = { 
       answerCorrect: false, // controls what submission feedback looks like
     }; */
+
+    console.log("correct?", this.props.correct);
   }
 
   static get propTypes() {
@@ -14,6 +19,9 @@ class SubmissionFeedback extends React.Component {
       userMoves: PropTypes.array,
       programMoves: PropTypes.array,
       array: PropTypes.array,
+      sortType: PropTypes.string,
+      correct: PropTypes.bool,
+      onClick: PropTypes.func,
     };
   }
 
@@ -45,7 +53,9 @@ class SubmissionFeedback extends React.Component {
   render(){
     return (
       <div id="feedback">
-        <h2>Original Array</h2>
+        <h1>{this.props.sortType} Sort</h1>
+        <p className='center'>Sort from left to right, smallest to biggest</p>
+        <br />
         <p className="center">[{this.props.array.join(', ')}]</p>
         <div id="movesListLeft" className="movesList">
           <h2>Your Moves</h2>
@@ -56,7 +66,7 @@ class SubmissionFeedback extends React.Component {
               >
                 {item[0]} {item[1]}
                 {item[0]==='Insert' ? ' before ' : ' and '}
-                {item[2]}: [{item[3].join(', ')}] 
+                {item[2]}
               </li>
             ))}
           </ol>
@@ -75,14 +85,32 @@ class SubmissionFeedback extends React.Component {
             ))}
           </ol>
         </div>
-        
+        {this.props.correct ? 
+          <div id="correctFeedback">
+            <h3 className="center" id="greatJob">Great job!</h3>
+            <img src={correctCheck} className="feedbackImg" alt="Green checkmark for answer correct."/>
+          </div> :
+          
+          <div id="incorrectFeedback">
+            <img src={incorrectX} className="feedbackImg" alt="Red X mark for incorrect answer."/>
+            <button 
+              className='toolboxButton' 
+              id='video' 
+              onClick={this.props.onClick}
+            >
+            <img src={video} alt="Video camera symbol."/>
+            Learn more here
+            </button>
+          </div>
+        }
       </div>
     );
   }
 }
 
-/* 
 
+/* 
+{item[2]}: [{item[3].join(', ')}] 
 { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
 
 

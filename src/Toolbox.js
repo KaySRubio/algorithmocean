@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import swap from './img/swap1.png';
-import undo from './img/undo1.png';
+import undo from './img/undo2.png';
 import insert from './img/insert1.png';
 import mark from './img/mark1.png';
 import hint from './img/hint1.png';
@@ -67,7 +67,7 @@ class Toolbox extends React.Component {
             id='help' 
             onClick={this.props.onClick}
           >
-            <img src={questionMark} alt="Undo symbol that looks an arrow pointing backwards."/>
+            <img src={questionMark} alt="Question mark symbol."/>
             Help
           </button>
           <button 
@@ -75,7 +75,7 @@ class Toolbox extends React.Component {
             id='video' 
             onClick={this.props.onClick}
           >
-            <img src={video} alt="Undo symbol that looks an arrow pointing backwards."/>
+            <img src={video} alt="Video camera symbol."/>
             Show me a video
           </button>
 
@@ -84,7 +84,7 @@ class Toolbox extends React.Component {
             id='hint' 
             onClick={this.props.onClick}
           >
-            <img src={hint} alt="Undo symbol that looks an arrow pointing backwards."/>
+            <img src={hint} alt="Lightbulb for hints."/>
             Give me a hint
           </button>
 

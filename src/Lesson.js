@@ -56,7 +56,8 @@ class Lesson extends React.Component {
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
     this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
-
+    this.canvasWidth = this.length * 52.5; // Set the width of the canvas depending on number of elements in array
+    
     
 
     // Color variables
@@ -99,7 +100,7 @@ class Lesson extends React.Component {
   textSquares = []; // Array to hold CreateJS text squares which will be accessed in various places
   userSP = 0; // Stack Pointer, will point to top of the stack and be used to remove move during undo operation
   programSP = 0; // program Stack Pointer
-  maxNumberOfOperations = 20;
+  maxNumberOfOperations = 18;
 
 
   // Initialize an array of 6 elements with random numbers [10-100]
@@ -295,7 +296,7 @@ class Lesson extends React.Component {
 
             // don't allow more moves if they've hit 20
     if ( this.userSP >= this.maxNumberOfOperations ) {
-      alert("You should not need more than 20 operations");
+      alert("You should not need more than 18 operations");
       if (this.operandContainers[0]) this.operandContainers[0].y=0;
       if (this.operandContainers[1]) this.operandContainers[1].y=0;
       this.stage.update();
@@ -725,7 +726,9 @@ class Lesson extends React.Component {
   }
 
 
-  /* Structure of stack of moves to be printed should be:
+  /* React render method
+  
+     Structure of stack of moves to be printed should be:
      item[0] = Operation (e.g., 'Insert' or 'Swap')
      item[1] = Operand1
      item[2] = Operand2
@@ -734,40 +737,43 @@ class Lesson extends React.Component {
   render(){
     return (
         <div className="lesson">
-            <div 
-              style={{cursor: `url(${this.cursor()}), default`}}
-              className={this.state.operation} id="activity">
-              <h1>Sort from left to right, smallest to biggest using {this.sortType} Sort</h1>
-              { !this.state.answerSubmitted && <div className="center" id="yourMoves">
-                <h3>Your moves:</h3>
-                {this.state.userStack>0} <ol>
-                  {this.state.userStack.map((item, index) => (
-                    <li key={index}
-                      className="movesListItem"
-                    >
-                      {item[0]} {item[1]} 
-                      {item[0]==='Insert' ? ' before ' : ' and '}
-                      {item[2]}: [{item[3].join(', ')}] 
-                    </li>
-                  ))}
-                </ol>
-              </div>}
-              { !this.state.answerSubmitted && <canvas 
-                  
+          <div 
+            style={{cursor: `url(${this.cursor()}), default`}}
+            id="activity">
+            { !this.state.answerSubmitted && <div className={this.state.operation} id="sortSection">
+              <h1>{this.sortType} Sort</h1>
+              <p className='center'>Sort from left to right, smallest to biggest</p>
+              <canvas 
                 id="demoCanvas" 
-                width="400px" 
-                height="135px"></canvas> }
+                width={this.canvasWidth} 
+                height="135px">
+              </canvas>
+            </div> }
+            { !this.state.answerSubmitted && <div className={ this.state.operation} id="yourMoves">
+              <h2 className="center">Your moves</h2>
+              {this.state.userStack>0} <ol>
+                {this.state.userStack.map((item, index) => (
+                  <li key={index}
+                    className="movesListItem"
+                  >
+                    {item[0]} {item[1]} 
+                    {item[0]==='Insert' ? ' before ' : ' and '}
+                    {item[2]}: [{item[3].join(', ')}] 
+                  </li>
+                ))}
+              </ol>
+            </div> }
 
-
-
-              { this.state.answerSubmitted && <SubmissionFeedback 
-                array={this.array}
-                userMoves={this.state.userStack}
-                programMoves={this.programStack}
-              /> }
-              { this.state.answerCorrect && <h3 className="center" id="greatJob">Great job!</h3>}
-              
-            </div>
+            { this.state.answerSubmitted && <SubmissionFeedback 
+              array={this.array}
+              userMoves={this.state.userStack}
+              programMoves={this.programStack}
+              sortType={this.sortType} 
+              correct={this.state.answerCorrect}
+              onClick={this.toolboxClickHandler} 
+            /> }
+            
+          </div>
             {!this.state.answerSubmitted && <Toolbox 
               activeTool={this.state.operation}
               onClick={this.toolboxClickHandler} 
@@ -788,7 +794,6 @@ class Lesson extends React.Component {
         </div>
       );
   }
-
 }
 
 

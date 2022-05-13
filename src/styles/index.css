@@ -31,67 +31,6 @@
 
 body {
   background-color: var(--main-background);
-}
-
-h1 {
-  color: var(--big-text);
-}
-
-p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink {
-  color: var(--small-text);
-  /* color: white; */
-}
-
-
-
-
-
-
-/*
-.toolboxButton {
-  background-color: var(--small-text);
-  border-radius: 5px;
-  border: none;
-  font-size: 15px;
-  color: var(--main-background);
-  margin-right: 20px;
-  border: 2px solid var(--big-text);
-  padding: 6px 8px 6px 8px;
-  -moz-box-shadow: inset 0 0 10px var(--big-text);
-  -webkit-box-shadow: inset 0 0 10px var(--big-text);
-  box-shadow: inset 0 0 10px var(--big-text);
-}
-
-.toolboxButton:hover {
-  border: 2px solid var(--small-text);
-}
-
-.toolboxButton:focus {
-  -moz-box-shadow: inset 0 0 5px var(--main-background);
-  -webkit-box-shadow: inset 0 0 5px var(--main-background);
-  box-shadow: inset 0 0 5px var(--main-background);
-  border: 2px solid var(--small-text);
-}
-
-*/
-
-.toolboxButton>img {
-  float: left;
-  width: 20px;
-  margin: 0px 5px 0px 0px;
-  /* filter: brightness(10%); */
-  /*
-  -webkit-filter: yellow;
-  filter: yellow; */
-  /* filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(130deg) brightness(95%) contrast(80%); */
-  /* filter: saturate(yellow, 5); */
-  /* color: red; */
-}
-
-
-
-
-body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -104,28 +43,28 @@ body {
 }
 
 h1 {
-  /*color: var(--very-light-blue);*/
+  color: var(--big-text);
   width: 100%;
   text-align: center;
 }
 
 h2 {
-  /*color: var(--light-blue);*/
+  font-size: 120%;
   width: 100%;
   text-align: center;
   margin: 0px;
 }
+
 h3 {
-  /*color: var(--light-blue);*/
-  margin: 0px;
-}
-p, ul, li, ol {
-  /*color: var(--light-blue);*/
   margin: 0px;
 }
 
-.link {
-  /*color: white;*/
+p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink {
+  color: var(--small-text);
+}
+
+p, ul, li, ol {
+  margin: 0px;
 }
 
 .center { text-align: center; }
@@ -148,13 +87,11 @@ li {
 #toggleButton {
   border: none;
   background-color: var(--main-background);
-
 }
 
 .navbar {
   padding: 10px;
   height: 60px;
-
 }
 
 #logo {
@@ -163,7 +100,6 @@ li {
   width: 140px;
   margin: 0px;
 }
-
 
 .navbarlink {
   float: right;
@@ -189,7 +125,8 @@ li {
   margin: 100px auto 200px auto;
   text-align: center;
 }
-/*************** Lesson Page *****************/
+/*************** Lesson Page: General *****************/
+
 .lesson {
   position: relative;
   width: 1020px;
@@ -198,13 +135,73 @@ li {
 }
 
 #activity {
-  width: 1000px;
-  height: 500px;
+  width: 1020px;
+  height: 435px;
   margin: auto;
+}
+
+#sortSection, #yourMoves, #feedback {
   padding: 10px;
-  /* border-style: solid 2px blue; */
-  /* background-color: var(--darker-blue); */
-   
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; 
+  background-color: var(--box);
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+}
+
+.critter {
+  position: absolute;
+  width: 200px;
+  top: 390px;
+  left: 830px;
+}
+
+/*************** Lesson Page: sortSection *****************/
+
+#sortSection {
+  width: 580px;
+  float: left;
+  margin-right: 20px;
+  height: 415px;
+}
+
+#activity>h1 {
+  margin: 10px;
+}
+
+#demoCanvas {
+  display: block;
+  margin: 50px auto 0px auto;
+}
+
+/*************** Lesson Page: yourMoves *****************/
+
+
+#yourMoves {
+  width: 380px;
+  height: 415px;
+  float: left;
+  font-size: 90%;
+}
+#yourMoves>h2 {
+  margin: 30px 0px 20px 0px;
+}
+
+#hints {
+  width: 500px;
+  height: 130px;
+  float: left;
+}
+
+/*************** Lesson Page: Toolbox *****************/
+
+#toolbox{
+  width: 1000px;
+  padding: 10px;
+  margin: 20px auto 10px auto;
+
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px; 
@@ -214,52 +211,147 @@ li {
   -webkit-box-shadow: 0 0 10px var(--small-text);
   box-shadow: 0 0 10px var(--small-text);
 
+}
+
+#toolbox>h2 {
+  width: 100%;
+  margin: 0px 0px 10px 0px;
+}
+
+.toolboxButton {
+  background-color: #C5D5E4;
+  border-radius: 5px;
+  font-size: 15px;
+  color: #16324F;
+  margin-right: 20px;
+  border: 2px solid #C5D5E4;
+  padding: 4px 8px 4px 1px;
+  -moz-box-shadow: inset 0 0 10px #E5ECF3;
+  -webkit-box-shadow: inset 0 0 10px #E5ECF3;
+  box-shadow: inset 0 0 10px #E5ECF3;
+}
+
+.toolboxButton>img {
+  float: left;
+  width: 20px;
+  margin: 0px 5px 0px 0px;
+}
+
+.toolboxButton:hover {
+  -moz-box-shadow: inset 0 0 5px #16324F;
+  -webkit-box-shadow: inset 0 0 5px #16324F;
+  box-shadow: inset 0 0 5px #16324F;
+}
+
+.activeTool {
+  -moz-box-shadow: inset 0 0 5px #16324F;
+  -webkit-box-shadow: inset 0 0 5px #16324F;
+  box-shadow: inset 0 0 5px #16324F;
+  border: 2px solid #C5D5E4;
+}
+
+.toolboxButton:disabled {
+  /* a2b0bd
+  818c96 */
+  background-color: #a2b0bd;
+  border: 2px solid #a2b0bd;
+  
+  -moz-box-shadow: inset 0 0 5px #a2b0bd;
+  -webkit-box-shadow: inset 0 0 5px #a2b0bd;
+  box-shadow: inset 0 0 5px #a2b0bd;
+
+}
+
+/* If the activeTool matches the tool's ID give it an inner shadow
+   so it's visually obvious that this is the active tool */
+#Swap.Swap, #markSorted.markSorted, #Insert.Insert{
+  -moz-box-shadow: inset 0 0 5px #16324F;
+  -webkit-box-shadow: inset 0 0 5px #16324F;
+  box-shadow: inset 0 0 5px #16324F;
+  border: 2px solid #C5D5E4;
+}
+
+.largeQ {
+  font-size: 150%;
+}
+/*************** Lesson Page: Feedback *****************/
+
+#feedback {
+
   /* 
-  -moz-box-shadow: 0 0 10px var(--light-blue);
-  -webkit-box-shadow: 0 0 10px var(--light-blue);
-  box-shadow: 0 0 10px var(--light-blue); */
-}
-
-#demoCanvas {
-  margin: 50px 0px 25px 40px;
-
-  /* width: 1000px;
-  height: 100px;*/
-  /* margin: 10px;*/
-  /* border-style: solid;
-  border-width: 2px;
-  border-color: green; */
-  /* background-color: #000922; */
-  /* cursor: all-scroll;*/
-  /* cursor: url(https://www.schoolservice.com/image/cache/data/product/469-800x800.jpg), auto; */
-}
-
-#yourMoves {
-  width: 390px;
-  height: 400px;
-  float: left;
-  margin-right: 40px;
-  font-size: 90%;
-
-}
-
-#hints {
-  width: 500px;
-  height: 130px;
-  float: left;
-}
-
-.critter {
   position: absolute;
-  width: 200px;
-  top: 400px;
-  left: 800px;
+  width: 1020px;
+  height: 640px;
+  top: 0px;
+  left: 0px;
+*/
+  margin: 10px;
+  width: 980px;
+  height: 540px;
+  background-color: var(--box);
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  
 }
+#correctFeedback {
+  position: absolute;
+  top: 470px;
+  left: 360px;
+}
+
+#greatJob {
+  margin-top: 20px;
+  font-size: 300%;
+  color: #6bb478;
+  float: left;
+}
+
+#incorrectFeedback{
+  position: absolute;
+  top: 470px;
+  left: 360px;
+}
+
+#incorrectFeedback>button {
+  border: 8px solid #e38282;
+  animation: grow 0.5s ease-in-out 2;
+  float: left;
+  margin-top: 20px;
+}
+
+.feedbackImg {
+  width: 100px;
+  float: left;
+}
+
+
+.movesList {
+  margin: 20px 40px 0px 20px;
+} 
+
+#movesListLeft {
+  float: left;
+  width: 220px;
+  margin: 20px 0px 0px 250px;
+}
+#movesListRight {
+  float: right;
+  width: 220px;
+  margin: 20px 250px 0px 20px;
+}
+
+
+
+/*************** Lesson Page: Modals *****************/
 
 #videoModal {
   position: absolute;
   width: 1020px;
-  height: 640px;
+  height: 590px;
   top: 0px;
   left: 0px;
   margin: 0px;
@@ -276,7 +368,7 @@ li {
   position: absolute;
   width: 500px;
   height: 120px;
-  top: 300px;
+  top: 270px;
   left: 250px;
   background-color: #f7c654;
   border-radius: 10px;
@@ -388,109 +480,6 @@ iframe {
   border: none;
   
 }
-
-
-#feedback {
-  float: right;
-  width: 100%;
-  
-}
-
-#greatJob {
-  font-size: 150%;
-  color: orange;
-}
-
-
-.movesList {
-  margin: 20px 40px 0px 20px;
-} 
-
-#movesListLeft {
-  float: left;
-  width: 400px;
-  margin: 20px 0px 0px 20px;
-}
-#movesListRight {
-  float: right;
-  width: 25ç0px;
-  margin: 20px 80px 0px 20px;
-}
-
-#toolbox{
-  width: 1000px;
-  padding: 10px;
-  margin: 30px auto 10px auto;
-
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px; 
-
-  background-color: var(--box);
-  -moz-box-shadow: 0 0 10px var(--small-text);
-  -webkit-box-shadow: 0 0 10px var(--small-text);
-  box-shadow: 0 0 10px var(--small-text);
-
-}
-
-#toolbox>h2 {
-  width: 100%;
-  margin: 0px 0px 10px 0px;
-}
-
-.toolboxButton {
-  background-color: #C5D5E4;
-  border-radius: 5px;
-  font-size: 15px;
-  color: #16324F;
-  margin-right: 20px;
-  border: 2px solid #E5ECF3;
-  padding: 4px 8px 4px 1px;
-  -moz-box-shadow: inset 0 0 10px #E5ECF3;
-  -webkit-box-shadow: inset 0 0 10px #E5ECF3;
-  box-shadow: inset 0 0 10px #E5ECF3;
-}
-
-.toolboxButton:hover {
-  border: 2px solid #C5D5E4;
-}
-
-.activeTool {
-  -moz-box-shadow: inset 0 0 5px #16324F;
-  -webkit-box-shadow: inset 0 0 5px #16324F;
-  box-shadow: inset 0 0 5px #16324F;
-  border: 2px solid #C5D5E4;
-}
-
-.toolboxButton:disabled {
-
-  /* a2b0bd
-  818c96 */
-  background-color: #a2b0bd;
-  border: 2px solid #a2b0bd;
-  
-  -moz-box-shadow: inset 0 0 5px #a2b0bd;
-  -webkit-box-shadow: inset 0 0 5px #a2b0bd;
-  box-shadow: inset 0 0 5px #a2b0bd;
-
-/* monkey */
-
-
-}
-
-/* If the activeTool matches the tool's ID give it an inner shadow
-   so it's visually obvious that this is the active tool */
-#Swap.Swap, #markSorted.markSorted, #Insert.Insert{
-  -moz-box-shadow: inset 0 0 5px #16324F;
-  -webkit-box-shadow: inset 0 0 5px #16324F;
-  box-shadow: inset 0 0 5px #16324F;
-  border: 2px solid #C5D5E4;
-}
-
-.largeQ {
-  font-size: 150%;
-}
-
 
 /*************** Footer *****************/
 #footer {
