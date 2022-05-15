@@ -120,11 +120,269 @@ li {
 }
 
 /*************** Home Page *****************/
-#temphome {
-  width: 500px;
-  margin: 100px auto 200px auto;
+
+.homeRowDark {
+  background-color: #16324F;
+  width: 100%;
+}
+
+.homeRowLight {
+  background-color: #E5ECF3;
+  width: 100%;
+}
+
+h1.homeRowDark {
+  color: #E5ECF3;
+  font-size: 300%;
+}
+
+p.homeRowDark, h2.homeRowDark, h3.homeRowDark, h4.homeRowDark, p.homeRowDark>.link {
+  color: #C5D5E4;
+}
+
+h2.homeRowLight {
+  color: #1C2541;
+}
+
+p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
+  color: #16324F
+}
+
+.innerRow {
+  width: 1100px;
+
+  margin: 0px auto 0px auto;
+}
+
+#innerRow1 {
+  height: 375px;
+}
+
+#row1col1 {
+  float: left;
+  width: 600px;
+  padding: 30px 50px 0px 50px;
+}
+
+#row1col2 {
+  float: left;
+  width: 390px;
+  position: relative;
+}
+
+.naut {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.hoverWrapper:hover .hoverShow {
+  display: block;
+}
+ 
+.hoverWrapper .hoverShow {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+ }
+
+#innerRow2 {
+  height: 310px;
+}
+
+ .col1of3 {
+   width: 29.33%;
+   float: left;
+   padding: 40px 2% 0px 2%;
+ }
+
+ .col1of3>img {
+   display: block;
+   margin: 10px auto 20px auto;
+ }
+ .col1of3>h3 {
+   margin: 0px 5px 10px 5px;
+   text-align: center;
+ }
+
+ .col1of3>p {
   text-align: center;
 }
+
+#innerRow3 {
+  height: 220px;
+}
+
+#row3col1 {
+  float: left;
+  width: 390px;
+
+}
+
+#homeNumbers {
+  margin: 90px auto 0px auto;
+}
+
+#homeSwap {
+  margin: 0px 0px 0px 150px;
+  float: left;
+}
+
+#row3col2 {
+  float: left;
+  width: 600px;
+  padding: 40px 0px 0px 50px;
+}
+
+#row3col2>h2 {
+  margin-bottom: 20px;
+  font-size: 200%;
+}
+
+#row3col2>p {
+  text-align: center;
+}
+
+#innerRow4 {
+  height: 220px;
+}
+
+#row4col1 {
+  width: 180px;
+  float: left;
+
+  position: relative;
+  padding: 80px 25px 0px 25px;
+  
+}
+#row4col1>p {
+  text-align: center;
+}
+
+#homeBumpyBorder {
+  width: 190px;
+  position: absolute;
+  top: 0px;
+  left: 18px;
+}
+
+#row4col2 {
+ width: 610px; 
+ float: left;
+ padding: 20px 50px 0px 50px;
+}
+
+
+#row4col2>h2 {
+  margin: 20px 0px 20px 0px;
+  font-size: 200%;
+}
+
+#row4col2>p {
+  text-align: center;
+}
+
+#row4col3 {
+  width: 145px;
+  float: left;
+
+}
+#homeTeacher {
+  width: 140px;
+  margin: 20px 0px 0px 0px;
+}
+
+#innerRow5 {
+  height: 300px;
+
+}
+
+#row5col1 {
+  width: 150px;
+  float: left;
+  
+  background-color: #C5D5E4;
+  padding: 20px;
+  -webkit-animation: borderBlink 1s step-end infinite;    
+  animation: borderBlink 1s step-end infinite;   
+}
+#row5col1>h2 {
+  font-size: 200%;
+  background-color: #C5D5E4;
+
+}
+
+@keyframes borderBlink {
+  from, to {    
+    border: none;
+    margin: 40px 90px 0px 30px;
+  }    
+  50% {    
+    border: 7px solid #C5D5E4;
+    margin: 33px 83px 0px 23px;
+  } 
+}
+
+#row5col1>.link {
+  color: #16324F;
+  font-size: 150%;
+}
+
+#row5col2 {
+  width: 650px;
+  float: left;
+  margin: 10px;
+  border: 2px solid #C5D5E4;
+  padding: 20px;
+}
+#row5col2>h2 {
+  font-size: 200%;
+}
+
+table {
+  margin: 20px 0px 0px 0px;
+  width: 630px;
+}
+
+td {
+  padding: 5px 30px 5px 30px;
+  width: 150px;
+
+}
+
+#innerRow6 {
+  height: 460px;
+}
+
+#innerRow6>h2 {
+  font-size: 200%;
+  margin: 30px 0px 10px 0px;
+}
+
+#innerRow6>.col1of3>img{
+  width: 180px;
+  display: block;
+  margin: 20px 50px 20px 50px;
+}
+
+#innerRow6>.col1of3{
+  background-color: #1C2541;
+  width: 270px;
+  margin: 20px 30px;
+  height: 290px;
+  padding: 15px;
+}
+
+/*
+#innerRow6>.col1of3>p{
+  margin: 20px 0px 20px 0px;
+} */
+
+
+
+
+
 /*************** Lesson Page: General *****************/
 
 .lesson {

@@ -41,6 +41,9 @@ class Navbar extends React.Component {
           { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
         </div>
         <Link className="link navbarlink" to="/">Home</Link>
+        <Link className="link navbarlink" to="/contact">Contact</Link>
+        <Link className="link navbarlink" to="/login">Login</Link>
+        <Link className="link navbarlink" to="/createaccount">Create Account</Link>
         <button id="toggleButton" onClick={this.handleOnClick}>
           { this.state.theme==='theme-light' && <img src={toggle2} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
           { this.state.theme==='theme-dark' && <img src={toggle1} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
