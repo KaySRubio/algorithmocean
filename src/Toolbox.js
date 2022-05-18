@@ -4,7 +4,7 @@ import swap from './img/swap1.png';
 import undo from './img/undo2.png';
 import insert from './img/insert1.png';
 import mark from './img/mark1.png';
-import hint from './img/hint1.png';
+// import hint from './img/hint1.png'; // removed hints button for now
 import video from './img/video1.png';
 import questionMark from './img/q.png';
 import checkmark from './img/checkmark.png';
@@ -21,6 +21,7 @@ class Toolbox extends React.Component {
       enableSubmit: PropTypes.bool,
       sortType: PropTypes.string,
       activeTool: PropTypes.string, // Used to help button that's activeTool have inner shadow
+      isQuiz: PropTypes.bool,
     };
   }
 
@@ -70,23 +71,16 @@ class Toolbox extends React.Component {
             <img src={questionMark} alt="Question mark symbol."/>
             Help
           </button>
-          <button 
+          { !this.props.isQuiz && <button 
             className='toolboxButton' 
             id='video' 
             onClick={this.props.onClick}
           >
             <img src={video} alt="Video camera symbol."/>
             Show me a video
-          </button>
+          </button> }
 
-          <button 
-            className='toolboxButton' 
-            id='hint' 
-            onClick={this.props.onClick}
-          >
-            <img src={hint} alt="Lightbulb for hints."/>
-            Give me a hint
-          </button>
+
 
           <button 
             className='toolboxButton' 
@@ -102,6 +96,17 @@ class Toolbox extends React.Component {
     );
   }
 }
+
+/* Removed hints button for now
+          <button 
+            className='toolboxButton' 
+            id='hint' 
+            onClick={this.props.onClick}
+          >
+            <img src={hint} alt="Lightbulb for hints."/>
+            Give me a hint
+          </button>
+*/
 
 export default Toolbox;
 

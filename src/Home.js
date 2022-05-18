@@ -6,8 +6,8 @@ import peopleCheering from './img/peopleCheering.png';
 import endless from './img/endless.png';
 import numbers from './img/numbers1.png';
 import swapc from './img/swapc6.png';
-import bumpyBorder from './img/bumpyBorder1.png';
-import teacher from './img/teacher.png';
+import bumpyBorder from './img/splat3.png';
+import teacher from './img/teacher3.png';
 import portrait from './img/portraitPlaceholder.png';
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
         <div className='innerRow' id="innerRow1">
           <div id='row1col1'>
             <h1 className='homeRowDark'>Plunge into learning algorithms</h1>
-            <h2 className='homeRowDark'>Revolutionizing how algorithms are taught<br />for people who learn by DOING.</h2>
+            <p id='slogan' className='homeRowDark'>Revolutionizing how algorithms are taught<br />for people who learn by DOING.</p>
           </div>
           <div id='row1col2' className='hoverWrapper'>
             <img src={naut} className='naut' alt="A nautilus sea creature with a spiral shell, an eye, and several tentacles."/>
@@ -64,51 +64,52 @@ const Home = () => {
           <div id='row5col1'>
             <h2 className='homeRowLight'>Try one!</h2>
             <br />
-            <Link className="link" to="/lesson/bubble">Bubble Sort</Link>
+            <Link className="link" to="/demo-lesson/bubble">Bubble Sort</Link>
             <br />
             <br />
-            <Link className="link" to="/lesson/insertion">Insertion Sort</Link>
+            <Link className="link" to="/demo-lesson/insertion">Insertion Sort</Link>
             <br />
             <br />
-            <Link className="link" to="/lesson/selection">Selection Sort</Link>
+            <Link className="link" to="/demo-lesson/selection">Selection Sort</Link>
           </div>
           <div id='row5col2'>
             <h2 className='homeRowLight'>Coming Soon</h2>
             <table>
-              <tr>
-                <td>Mergesort</td>
-                <td>Huffman Coding</td>
-                <td>Knapsack Problem</td>
-              </tr>
-              <tr>
-                <td>Quicksort</td>
-                <td>Optimal Binary Search Tree</td>
-                <td>Traveling Salesperson</td>
-              </tr>
-              <tr>
-                <td>Heapsort</td>
-                <td>Minimum Spanning Tree</td>
-                <td>Assembly Line</td>
-              </tr>
-              <tr>
-                <td>Dijkstra Shortest Path</td>
-                <td></td>
-                <td></td>
-              </tr>
+            <tbody>
+                <tr>
+                  <td>Mergesort</td>
+                  <td>Huffman Coding</td>
+                  <td>Knapsack Problem</td>
+                </tr>
+                <tr>
+                  <td>Quicksort</td>
+                  <td>Optimal Binary Search Tree</td>
+                  <td>Traveling Salesperson</td>
+                </tr>
+                <tr>
+                  <td>Heapsort</td>
+                  <td>Minimum Spanning Tree</td>
+                  <td>Assembly Line</td>
+                </tr>
+                <tr>
+                  <td>Dijkstra Shortest Path</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <div className='homeRowLight'>
+      <div className='homeRowDark'>
         <div className='innerRow' id="innerRow4">
           <div id='row4col1'>
-            <img id='homeBumpyBorder' src={bumpyBorder} alt="A bumpy border around the text to highlight it."/>
-            <p className='homeRowLight'>Teacher accounts coming soon!</p>
+            <img id='homeBumpyBorder' src={bumpyBorder} alt="The text teacher accounts coming soon inside a border"/>
           </div>
           <div id='row4col2'>
-            <h2 className='homeRowLight'>Teachers</h2>
-            <p className='homeRowLight'>Supplement your intro to algorithms courses with AlgorithmOcean! It&apos;s easy to create a class and assign lessons and quizzes. Fun facts about how algorithms in nature and science keep students engaged.</p>
+            <h2 className='homeRowDark'>Teachers</h2>
+            <p className='homeRowDark'>Supplement your intro to algorithms courses with AlgorithmOcean! It&apos;s easy to create a class and assign lessons and quizzes. Fun facts about how algorithms in nature and science keep students engaged.</p>
           </div>
           <div id='row4col3'>
             <img id='homeTeacher' src={teacher} alt="An icon representing a teacher teaching."/>
@@ -116,9 +117,9 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='homeRowDark'>
+      <div className='homeRowLight'>
         <div className='innerRow' id="innerRow6">
-          <h2>What Users Say</h2>
+          <h2 className='homeRowLight'>What Users Say</h2>
           <div className='col1of3'>
             <p>User quote here</p>
             <p>User quote here</p>

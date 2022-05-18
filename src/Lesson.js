@@ -52,6 +52,12 @@ class Lesson extends React.Component {
     // this.sortType = 'Insertion'; // todo - set sortType from URL after home page links are programmed
     if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; } // Set length of array based on sort Type
     else { this.defaultOperation = 'Swap'; this.length = 6; }
+    
+    if (window.location.pathname.includes('demo')) this.isDemo = true;
+    else this.isDemo = false;
+
+    this.isQuiz = false; // default for isQuiz is false, but will make conditional later
+
     this.array = []; // original array of unsorted numbers will not change
     this.userArray = []; // parallel array of numbers user will sort
     this.programArray = []; // parallel array of numbers program will sort
@@ -750,7 +756,7 @@ class Lesson extends React.Component {
               </canvas>
             </div> }
             { !this.state.answerSubmitted && <div className={ this.state.operation} id="yourMoves">
-              <h2 className="center">Your moves</h2>
+              <h2>Your moves</h2>
               {this.state.userStack>0} <ol>
                 {this.state.userStack.map((item, index) => (
                   <li key={index}
@@ -764,7 +770,7 @@ class Lesson extends React.Component {
               </ol>
             </div> }
 
-            { this.state.answerSubmitted && <SubmissionFeedback 
+            { this.state.answerSubmitted && !this.isQuiz && <SubmissionFeedback 
               array={this.array}
               userMoves={this.state.userStack}
               programMoves={this.programStack}
@@ -776,18 +782,20 @@ class Lesson extends React.Component {
           </div>
             {!this.state.answerSubmitted && <Toolbox 
               activeTool={this.state.operation}
-              onClick={this.toolboxClickHandler} 
+              isQuiz = {this.isQuiz}
               enableSubmit={this.state.enableSubmit} 
+              onClick={this.toolboxClickHandler} 
               sortType={this.sortType} 
             />}
             { this.state.showVideoModal && <VideoModal
               onClick={this.toolboxClickHandler} 
               sortType={this.sortType}
              /> }
-            {this.state.showHelpModal && <HelpModal 
+            {this.state.showHelpModal && !this.state.showVideoModal && <HelpModal 
+              closeModal={this.closeModal}
+              isQuiz = {this.isQuiz}
               onClick={this.toolboxClickHandler} 
               sortType={this.sortType}
-              closeModal={this.closeModal}
             />}
 
             { !this.state.showVideoModal && <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>}

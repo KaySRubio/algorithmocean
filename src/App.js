@@ -31,10 +31,7 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/demo">
-            <Demo />
-          </Route>
-          <Route path="/lesson">
+          <Route path="/demo-lesson">
             <Lesson />
           </Route>
           <Route path="*">
