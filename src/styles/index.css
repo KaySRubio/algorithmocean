@@ -640,7 +640,6 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
     height: 220px;
   }
 
-  /* monkey */
   #row4col1 {
     width: 14%;
     float: left;
@@ -678,7 +677,6 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
     height: 220px;
   }
 
-  /* monkey */
   #row4col1 {
     width: 25%;
     float: left;
@@ -716,7 +714,6 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
     height: 300px;
   }
 
-  /* monkey */
   #row4col1 {
     width: 100%;
     float: left;
@@ -1013,8 +1010,6 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 
 }
 
-
-
 #innerRow6>h2 {
   margin: 0px 0px 10px 0px;
 }
@@ -1022,6 +1017,176 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 #innerRow6>.col1of3>p {
   color: #C5D5E4;
 }
+
+/*************** Login Page *****************/
+/* monkey */
+.loginModal, .createAccountModal {
+  width: 720px; /* 400 */
+  background-color: var(--box);
+  margin: 20px auto 20px auto;
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+}
+
+.loginModal {
+  height: 480px; /* 267 */
+}
+
+.createAccountModal {
+  height: 510px; /* 267 */
+}
+
+.createAccountModal>.col1of2 {
+  background-color: #162E46;
+  height: 510px;
+}
+
+
+.col1of2 {
+  width: 360px;
+  float: left;
+}
+
+.leftSidePic {
+  width: 100%;
+}
+
+.loginModal>.col2of2 {
+  float: left;
+  width: 280px;
+  padding: 60px 40px 20px 40px;
+}
+
+.createAccountModal>.col2of2 {
+  float: left;
+  width: 280px;
+  padding: 20px 20px 20px 40px;
+}
+
+
+
+
+.loginTitle {
+  text-align: center;
+  margin: 0px 0px 40px 0px;
+  font-size: 140%;
+}
+
+.signupTitle {
+  text-align: center;
+  font-size: 140%;
+  margin: 0px 0px 20px 0px;
+}
+
+.textInputSmall {
+  margin: 20px auto 0px auto;
+  display: block;
+  border-top: 1px solid var(--box);
+  border-left: 1px solid var(--box);
+  border-right: 1px solid var(--box);
+  border-bottom: 1px solid var(--small-text);
+  font-size: 100%;
+  background-color: var(--box);
+  color: var(--small-text);
+  outline: none;
+  padding: 2px;
+}
+
+.textInput{
+  margin: 20px auto 5px auto;
+  display: block;
+  border-top: 2px solid var(--box);
+  border-left: 2px solid var(--box);
+  border-right: 2px solid var(--box);
+  border-bottom: 2px solid var(--small-text);
+  font-size: 120%;
+  background-color: var(--box);
+  color: var(--small-text);
+  outline: none;
+  padding: 2px;
+}
+
+.textInput::placeholder, .textInputSmall::placeholder {
+  color: var(--small-text);
+}
+
+#accountTypeQ {
+  margin: 20px 20px 10px 53px;
+}
+
+#selectState {
+  margin: 20px 0px 0px 53px;
+}
+
+select {
+  width: 180px;
+  margin: 0px 0px 0px 53px;
+}
+
+/* 
+input[type=text]:focus {
+  border: 2px solid yellow;
+} */
+.textInput[type=text]:focus {
+  border: 2px solid var(--small-text);
+  outline: none;
+}
+
+.textInputSmall[type=text]:focus {
+  border: 1px solid var(--small-text);
+  outline: none;
+}
+
+.loginButton {
+  border: none;
+  background-color: var(--small-text);
+  color: var(--box);
+  font-size: 120%;
+  padding: 10px 20px 10px 20px;
+  border-radius: 2px;
+  margin: 60px auto 50px auto;
+  display: block;
+}
+
+.createAccountButton {
+  border: none;
+  background-color: var(--small-text);
+  color: var(--box);
+  font-size: 120%;
+  padding: 10px 20px 10px 20px;
+  border-radius: 2px;
+  margin: 30px auto 20px auto;
+  display: block;
+}
+
+#forgotPasswordLink {
+  font-size: 80%;
+  margin: 0px 20px 0px 0px;
+  width: 200px;
+  text-align: right;
+  float: right;
+}
+
+.smallText {
+  font-size: 80%;
+  width: 100%;
+  text-align: center;
+  margin: 0px 0px 10px 0px;
+}
+
+.signup {
+  text-align: left;
+  margin: 110px;
+}
+
+#dontHaveOne {
+  width: 250px;
+  margin: 0px 0px 0px 20px;
+}
+
+
+
 
 /*************** Lesson Page: General *****************/
 

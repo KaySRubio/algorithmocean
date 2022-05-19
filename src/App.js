@@ -5,6 +5,7 @@ import Home from './Home';
 import CreateAccount from './CreateAccount';
 import Login from './Login.js';
 import Demo from './Demo';
+import ForgotPassword from './ForgotPassword';
 import Lesson from './Lesson';
 import NotFound from './NotFound';
 import { keepTheme } from './utils/themes';
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/forgotpassword">
+            <ForgotPassword />
           </Route>
           <Route path="/demo-lesson">
             <Lesson />
