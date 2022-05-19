@@ -1,9 +1,25 @@
 import * as React from 'react';
 import scuba from './img/scuba.png';
-import { Link } from 'react-router-dom';
 
-const CreateAccount = () => {
-  return (
+class CreateAccount extends React.Component {
+
+
+  displayClassCode = (value) => {
+    const classCode = document.getElementById('classCode');
+    const dontHaveOne = document.getElementById('dontHaveOne');
+
+    if (value === 'student') {
+      classCode.setAttribute('class', 'notHidden');
+      dontHaveOne.setAttribute('class', 'notHidden');
+    }
+    else {
+      classCode.setAttribute('class', 'hidden');
+      dontHaveOne.setAttribute('class', 'hidden');
+    }
+    
+  }
+  render(){
+    return (
     <div className="createAccountModal">
       <div className='col1of2'>
         <img src={scuba} className="leftSidePic" alt="A scuba diver in the ocean among some fish, rocks, and seaweed. The scuba diver is holding a clipboard and looking at a fish."/>
@@ -24,12 +40,12 @@ const CreateAccount = () => {
             <input className='textInputSmall' placeholder='Password *' type="text" name="password" size="20" maxLength="30" required aria-required="true"/>
           </p>
           <p id='accountTypeQ'>Account Type *<br />
-            <input type="radio" name="accountType" value="student" required aria-required="true"/>Student
-            <input type="radio" name="accountType" value="teacher" required aria-required="true"/>Teacher
+            <input type="radio" name="accountType" value="student" required onChange={e => this.displayClassCode(e.target.value)}/>Student
+            <input type="radio" name="accountType" value="teacher" required onChange={e => this.displayClassCode(e.target.value)}/>Teacher
           </p>
 
           <p id='selectState'>State/Territory *</p>
-          <select required aria-required="true">
+          <select defaultValue="MA" required aria-required="true">
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
             <option value="AS">American Samoa</option>
@@ -90,11 +106,11 @@ const CreateAccount = () => {
             <option value="OUTSIDEUS">Outside the US</option>
           </select>	
 
-          <p>
+          <p id='classCode' className='hidden'>
             <input className='textInputSmall' placeholder='Class Code' type="text" name="classCode" size="20" maxLength="30" />
           </p>
-          <p className="smallText" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
-
+          <p className="smallText hidden" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
+          
           <input className='createAccountButton' type="submit" name="login" value="Create Account" />
 
         </form>
@@ -102,7 +118,7 @@ const CreateAccount = () => {
       </div>
 
     </div>
-  );
+  );}
 }
 
 /* Taking out for now to keep it short 
