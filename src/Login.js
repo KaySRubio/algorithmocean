@@ -1,9 +1,11 @@
 import * as React from 'react';
 import submarine from './img/submarine.png';
 import { Link } from 'react-router-dom';
+import { validateFormElement } from './utils/utils';
 
 const Login = () => {
 
+  
 
   return (
     <div className="loginModal">
@@ -14,10 +16,30 @@ const Login = () => {
         <h1 className="loginTitle"><strong>Login to AlgorithmOcean</strong></h1>
         <form action="" method="get">
           <p>
-            <input className='textInput' placeholder='Email' type="text" name="email" size="20" maxLength="30" required aria-required="true"/>
+            <input 
+              className='textInput' 
+              placeholder='Email' 
+              type="email" 
+              name="email"
+              onChange={validateFormElement}
+              size="20" 
+              maxLength="30" 
+              required 
+              aria-required="true"/>
           </p>
           <p>
-            <input className='textInput' placeholder='Password' type="text" name="password" size="20" maxLength="30" required aria-required="true"/>
+            <input
+              aria-required="true"
+              className='textInput'
+              maxLength="30"
+              minLength='8'
+              name="password"
+              onChange={validateFormElement}
+              placeholder='Password'
+              required 
+              size="20" 
+              type='password'
+              />
           </p>
           <Link className="link" id="forgotPasswordLink" to="/forgotpassword">Forgot Password</Link>
           <input className='loginButton' type="submit" name="login" value="Login" />

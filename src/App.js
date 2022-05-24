@@ -17,6 +17,7 @@ function App() {
     keepTheme();
   })
 
+
   return (
     <Router>
     <div className="App">
@@ -27,7 +28,8 @@ function App() {
             <Home />
           </Route>
           <Route path="/createaccount">
-            <CreateAccount />
+            <CreateAccount 
+            />
           </Route>
           <Route path="/login">
             <Login />

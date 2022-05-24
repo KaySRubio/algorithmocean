@@ -1,8 +1,8 @@
 import * as React from 'react';
 import scuba from './img/scuba.png';
+import { validateFormElement } from './utils/utils';
 
 class CreateAccount extends React.Component {
-
 
   displayClassCode = (value) => {
     const classCode = document.getElementById('classCode');
@@ -28,17 +28,69 @@ class CreateAccount extends React.Component {
         <h1 className="signupTitle">Create Account</h1>
         <form action="" method="get">
           <p>
-            <input className='textInputSmall' placeholder='First Name *' type="text" name="firstname" size="20" maxLength="30" required aria-required="true"/>
+            <input 
+              className='textInputSmall' 
+              placeholder='First Name *' 
+              type="text" 
+              name="firstname"
+              onChange={validateFormElement}
+              size="20" 
+              maxLength="30"
+              required 
+              aria-required="true"
+            />
           </p>
           <p>
-            <input className='textInputSmall' placeholder='Last Name *' type="text" name="lastname" size="20" maxLength="30" required aria-required="true"/>
+            <input 
+              className='textInputSmall' 
+              placeholder='Last Name *' 
+              type="text" 
+              name="lastname"
+              onChange={validateFormElement}
+              size="20" 
+              maxLength="30" 
+              required 
+              aria-required="true"
+            />
           </p>
           <p>
-            <input className='textInputSmall' placeholder='Email *' type="text" name="email" size="20" maxLength="30" required aria-required="true"/>
+            <input 
+              aria-required="true"
+              className='textInputSmall'
+              maxLength="30"
+              minLength='8'
+              name="email" 
+              onChange={validateFormElement}
+              placeholder='Email *'
+              required 
+              size="20"  
+              type="email" 
+            />
           </p>
           <p>
-            <input className='textInputSmall' placeholder='Password *' type="text" name="password" size="20" maxLength="30" required aria-required="true"/>
+            <input 
+              aria-required="true"
+              className='textInputSmall'
+              id='createPassword'
+              maxLength="30" 
+              name="password"
+              onChange={validateFormElement}
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              placeholder='Password *'
+              required 
+              size="20"
+              title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+              type="password"
+              
+            />
           </p>
+          <div id="passwordRequirements" className='hidden'>
+            <p>Password must contain:</p>
+            <p id="pwdletter" className="invalid">&nbsp;A <b>lowercase</b> letter</p>
+            <p id="pwdcapital" className="invalid">&nbsp;A <b>capital (uppercase)</b> letter</p>
+            <p id="pwdnumber" className="invalid">&nbsp;A <b>number</b></p>
+            <p id="pwdlength" className="invalid">&nbsp;Minimum <b>8 characters</b></p>
+          </div>
           <p id='accountTypeQ'>Account Type *<br />
             <input type="radio" name="accountType" value="student" required onChange={e => this.displayClassCode(e.target.value)}/>Student
             <input type="radio" name="accountType" value="teacher" required onChange={e => this.displayClassCode(e.target.value)}/>Teacher
@@ -107,7 +159,13 @@ class CreateAccount extends React.Component {
           </select>	
 
           <p id='classCode' className='hidden'>
-            <input className='textInputSmall' placeholder='Class Code' type="text" name="classCode" size="20" maxLength="30" />
+            <input 
+              className='textInputSmall' 
+              placeholder='Class Code' 
+              type="text" 
+              name="classCode" 
+              size="20" 
+              maxLength="30" />
           </p>
           <p className="smallText hidden" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
           

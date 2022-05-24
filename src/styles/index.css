@@ -1032,12 +1032,13 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 }
 
 .createAccountModal {
-  height: 510px; /* 267 */
+  height: 570px; /* 267 */
 }
 
 .createAccountModal>.col1of2 {
   background-color: #162E46;
   height: 510px;
+  margin-top: 60px;
 }
 
 
@@ -1061,9 +1062,6 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   width: 280px;
   padding: 20px 20px 20px 40px;
 }
-
-
-
 
 .loginTitle {
   text-align: center;
@@ -1091,7 +1089,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   padding: 2px;
 }
 
-.textInput{
+.textInput {
   margin: 20px auto 5px auto;
   display: block;
   border-top: 2px solid var(--box);
@@ -1103,6 +1101,35 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   color: var(--small-text);
   outline: none;
   padding: 2px;
+}
+
+#passwordRequirements {
+  padding-left: 55px;
+}
+#passwordRequirements>p {
+  font-size: 70%;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  content: '\2713';
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  content: '\2716';
+}
+
+.checkText:invalid {
+  background-color: #fffbcc;
 }
 
 .textInput::placeholder, .textInputSmall::placeholder {
