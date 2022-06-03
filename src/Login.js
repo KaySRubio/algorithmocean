@@ -2,10 +2,31 @@ import * as React from 'react';
 import submarine from './img/submarine.png';
 import { Link } from 'react-router-dom';
 import { validateFormElement } from './utils/utils';
+import axios from "axios";
 
 const Login = () => {
 
-  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Get account information that was entered in the form
+    const credentials = {};
+    credentials.username = document.getElementById('emailField').value;
+    credentials.password = document.getElementById('createPassword').value;
+
+    
+    /*
+    // Send to the server
+    axios.post("/api/customusers/", newAccount )
+    // axios.post("/api/accounts/", newAccount )
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+        .catch(err => console.log(err));
+    */
+
+  }
 
   return (
     <div className="loginModal">
@@ -14,23 +35,26 @@ const Login = () => {
       </div>
       <div className='col2of2'>
         <h1 className="loginTitle"><strong>Login to AlgorithmOcean</strong></h1>
-        <form action="" method="get">
+        <form action="" method="get" onSubmit={handleSubmit}>
           <p>
-            <input 
-              className='textInput' 
-              placeholder='Email' 
-              type="email" 
+            <input
+              aria-required="true"
+              className='textInput'
+              id='emailField'
+              maxLength="30" 
               name="email"
               onChange={validateFormElement}
-              size="20" 
-              maxLength="30" 
+              placeholder='Email'
               required 
-              aria-required="true"/>
+              size="20" 
+              type="email"
+            />
           </p>
           <p>
             <input
               aria-required="true"
               className='textInput'
+              id='createPassword'
               maxLength="30"
               minLength='8'
               name="password"

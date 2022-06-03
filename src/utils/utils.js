@@ -6,6 +6,7 @@ export function validateFormElement(evt) {
   el.classList.add('checkText');
 
   if(el.id === 'createPassword') {
+    // Show the box telling the user if their password meets requirements
     const requirementsBox = document.getElementById("passwordRequirements");
     const letter = document.getElementById("pwdletter");
     const capital = document.getElementById("pwdcapital");

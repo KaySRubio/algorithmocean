@@ -1,14 +1,51 @@
 import * as React from 'react';
 import scuba from './img/scuba.png';
 import { validateFormElement } from './utils/utils';
+import axios from "axios";
 
 class CreateAccount extends React.Component {
+  constructor(props) {
+
+    const axios = require('axios').default;
+    axios.defaults.baseURL = 'http://localhost:8000/';
+
+    super(props);
+    
+    
+    this.state = { 
+      operation: this.defaultOperation, // Holds operation for user, with a default value, and updated by user clicks in ToolBox
+    };
+    
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Get account information that was entered in the form
+    const newAccount = {};
+    newAccount.first_name = document.getElementById('firstNameField').value;
+    newAccount.last_name = document.getElementById('lastNameField').value;
+    newAccount.email = document.getElementById('emailField').value;
+    newAccount.password = document.getElementById('createPassword').value;
+    newAccount.username = document.getElementById('emailField').value;
+    newAccount.accountType = document.querySelector('input[name="accountType"]:checked').value;
+    newAccount.classCode = document.getElementById('classCodeField').value;
+    
+    // Send to the server
+    axios.post("/api/customusers/", newAccount )
+    // axios.post("/api/accounts/", newAccount )
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+        .catch(err => console.log(err));
+  }
 
   displayClassCode = (value) => {
     const classCode = document.getElementById('classCode');
     const dontHaveOne = document.getElementById('dontHaveOne');
 
-    if (value === 'student') {
+    if (value === '1') {
       classCode.setAttribute('class', 'notHidden');
       dontHaveOne.setAttribute('class', 'notHidden');
     }
@@ -16,8 +53,8 @@ class CreateAccount extends React.Component {
       classCode.setAttribute('class', 'hidden');
       dontHaveOne.setAttribute('class', 'hidden');
     }
-    
   }
+
   render(){
     return (
     <div className="createAccountModal">
@@ -26,37 +63,40 @@ class CreateAccount extends React.Component {
       </div>
       <div className='col2of2'>
         <h1 className="signupTitle">Create Account</h1>
-        <form action="" method="get">
+        <form action="" method="get" onSubmit={this.handleSubmit}>
           <p>
             <input 
-              className='textInputSmall' 
-              placeholder='First Name *' 
-              type="text" 
+              aria-required="true"
+              className='textInputSmall'
+              id='firstNameField'
+              maxLength="30"
               name="firstname"
               onChange={validateFormElement}
-              size="20" 
-              maxLength="30"
+              placeholder='First Name *' 
               required 
-              aria-required="true"
+              size="20" 
+              type="text" 
             />
           </p>
           <p>
-            <input 
+            <input
+              aria-required="true"
               className='textInputSmall' 
-              placeholder='Last Name *' 
-              type="text" 
+              id='lastNameField'
+              maxLength="30"
               name="lastname"
               onChange={validateFormElement}
-              size="20" 
-              maxLength="30" 
-              required 
-              aria-required="true"
+              placeholder='Last Name *'
+              required
+              size="20"
+              type="text" 
             />
           </p>
           <p>
             <input 
               aria-required="true"
               className='textInputSmall'
+              id='emailField'
               maxLength="30"
               minLength='8'
               name="email" 
@@ -81,7 +121,6 @@ class CreateAccount extends React.Component {
               size="20"
               title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
               type="password"
-              
             />
           </p>
           <div id="passwordRequirements" className='hidden'>
@@ -92,12 +131,48 @@ class CreateAccount extends React.Component {
             <p id="pwdlength" className="invalid">&nbsp;Minimum <b>8 characters</b></p>
           </div>
           <p id='accountTypeQ'>Account Type *<br />
-            <input type="radio" name="accountType" value="student" required onChange={e => this.displayClassCode(e.target.value)}/>Student
-            <input type="radio" name="accountType" value="teacher" required onChange={e => this.displayClassCode(e.target.value)}/>Teacher
+            <input id='studentRadio' type="radio" name="accountType" value="1" required onChange={e => this.displayClassCode(e.target.value)}/>Student
+            <input id='teacherRadio' type="radio" name="accountType" value="2" required onChange={e => this.displayClassCode(e.target.value)}/>Teacher
+          </p>
+          <p id='classCode' className='hidden'>
+            <input 
+              className='textInputSmall' 
+              id='classCodeField'
+              maxLength="30"
+              name="classCode" 
+              placeholder='Class Code'
+              size="20"
+              type="text" 
+              />
+          </p>
+          <p className="smallText hidden" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
+          
+          <input className='createAccountButton' type="submit" name="login" value="Create Account" />
+
+        </form>
+
+      </div>
+
+    </div>
+  );}
+}
+
+/* Taking out for now to keep it short 
+
+          <p>
+            <input className='textInputSmall' placeholder='School or University *' type="text" name="school" size="20" maxLength="30" />
+          </p>
+          <p>
+            <input className='textInputSmall' placeholder='City *' type="text" name="city" size="20" maxLength="30" required aria-required="true"/>
           </p>
 
-          <p id='selectState'>State/Territory *</p>
-          <select defaultValue="MA" required aria-required="true">
+                    <p id='selectState'>State/Territory *</p>
+          <select
+            aria-required="true"
+            id='stateField'
+            defaultValue="MA" 
+            required 
+            >
             <option value="AL">Alabama</option>
             <option value="AK">Alaska</option>
             <option value="AS">American Samoa</option>
@@ -157,36 +232,6 @@ class CreateAccount extends React.Component {
             <option value="WY">Wyoming</option>
             <option value="OUTSIDEUS">Outside the US</option>
           </select>	
-
-          <p id='classCode' className='hidden'>
-            <input 
-              className='textInputSmall' 
-              placeholder='Class Code' 
-              type="text" 
-              name="classCode" 
-              size="20" 
-              maxLength="30" />
-          </p>
-          <p className="smallText hidden" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
-          
-          <input className='createAccountButton' type="submit" name="login" value="Create Account" />
-
-        </form>
-
-      </div>
-
-    </div>
-  );}
-}
-
-/* Taking out for now to keep it short 
-
-          <p>
-            <input className='textInputSmall' placeholder='School or University *' type="text" name="school" size="20" maxLength="30" />
-          </p>
-          <p>
-            <input className='textInputSmall' placeholder='City *' type="text" name="city" size="20" maxLength="30" required aria-required="true"/>
-          </p>
 
 */
  
