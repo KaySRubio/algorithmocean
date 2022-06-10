@@ -6,11 +6,12 @@ import axios from "axios";
 class CreateAccount extends React.Component {
   constructor(props) {
 
+    /* this code works but due to csrf errors upon login attempts, disabling all back end features
     const axios = require('axios').default;
     axios.defaults.baseURL = 'http://localhost:8000/';
+    */
 
     super(props);
-    
     
     this.state = { 
       operation: this.defaultOperation, // Holds operation for user, with a default value, and updated by user clicks in ToolBox
@@ -20,6 +21,8 @@ class CreateAccount extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    console.log("It is possible to send user data to back end hosted by django, but not possible to login due to csrf errors and django-react incompatibility. Back end not programmed");
+    /* this code works but due to csrf errors upon login attempts, disabling all back end features
     
     // Get account information that was entered in the form
     const newAccount = {};
@@ -39,6 +42,7 @@ class CreateAccount extends React.Component {
         console.log(res.data);
       })
         .catch(err => console.log(err));
+      */
   }
 
   displayClassCode = (value) => {
@@ -63,7 +67,7 @@ class CreateAccount extends React.Component {
       </div>
       <div className='col2of2'>
         <h1 className="signupTitle">Create Account</h1>
-        <form action="" method="get" onSubmit={this.handleSubmit}>
+        <form action="" method="post" onSubmit={this.handleSubmit}>
           <p>
             <input 
               aria-required="true"

@@ -11,6 +11,7 @@ import NotFound from './NotFound';
 import { keepTheme } from './utils/themes';
 import { useEffect } from 'react';
 import Navbar from './Navbar';
+import Token from './Token';
 
 function App() {
   useEffect(() => {
@@ -40,6 +41,11 @@ function App() {
           <Route path="/demo-lesson">
             <Lesson />
           </Route>
+
+          <Route path="/token">
+            <Token />
+          </Route>
+
           <Route path="*">
             <NotFound />
           </Route>
