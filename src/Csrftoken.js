@@ -41,8 +41,9 @@ class Csrftoken extends React.Component {
   // and the browser already saved it
   getCookie(name) {
     let cookieValue = null;
+    console.log('getCookie method is running in Csrftoken and this is document.cookie: ', document.cookie);
     if (document.cookie && document.cookie !== '') {
-      console.log('getCookie method is running and this is document.cookie: ', document.cookie);
+      console.log('attempting to get ', name, ' from cooke');
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i].trim();
