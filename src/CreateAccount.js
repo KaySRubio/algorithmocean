@@ -33,7 +33,8 @@ class CreateAccount extends React.Component {
     newAccount.classCode = document.getElementById('classCodeField').value;
     
     // Send to the server
-    axios.post("/api/customusers/", newAccount )
+    axios.post("/customusers/", newAccount )
+    // axios.post("/api/customusers/", newAccount )
     // axios.post("/api/accounts/", newAccount )
       .then(res => {
         console.log(res);
