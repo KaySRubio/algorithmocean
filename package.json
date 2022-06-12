@@ -1,6 +1,10 @@
 {
   "name": "learn-algorithms",
+  "description": "An interactive app that teaches algorithms",
   "version": "0.1.0",
+  "engines": {
+    "node": "16.15.0"
+  },
   "private": true,
   "author": {
     "name": "Kay Rubio",
