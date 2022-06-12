@@ -60,7 +60,8 @@ const Login = () => {
     //fetch('/help/', {
       credentials: 'include',
       method: 'POST',
-      mode: 'same-origin',
+      // mode: 'same-origin',
+      mode: 'cors',
       headers: {
         'Accept': 'application/json',
         //'Content-Type': 'application/json',
