@@ -28,7 +28,8 @@ class Csrftoken extends React.Component {
 
   // Method to retrieve the csrf token from the server via fetch request
   async getCsrfToken() {
-    const response = await fetch(`/csrf/`, {
+    const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
+    //const response = await fetch(`/csrf/`, {
       credentials: 'include',
     });
     const data = await response.json();

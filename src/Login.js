@@ -20,16 +20,17 @@ const Login = () => {
 
     console.log('credentials: ', user);
 
-    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info */
+    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info 
     axios.defaults.withCredentials = true
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-    
+    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/'; */
+
     // axios.post("/api/v1/users/auth/login/", user )
     // axios.post("/accounts/login/", user ) // server is sending back a login page, which isn't what we want
     
     // replace the '@' with %40 in the username
-    const username2 = user.username.replace('@', '%40');
+    // const username2 = user.username.replace('@', '%40');
 
  
     //let string = 'csrfmiddlewaretoken='+csrftoken+'&username='+username2+'&password='+user.password;
@@ -54,7 +55,8 @@ const Login = () => {
     /* Alternate method to send the same info using fetch */
     //csrftoken = getCookie('csrftoken');
 
-    fetch('/authenticateUser/', {
+    fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', {
+    //fetch('/authenticateUser/', {
     //fetch('/help/', {
       credentials: 'include',
       method: 'POST',
