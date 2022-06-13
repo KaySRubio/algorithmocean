@@ -19,7 +19,15 @@ class Csrftoken extends React.Component {
     console.log('if csrftoken was found in cookie, returning:', _csrftoken);
     // if it doesn't exist in browser cookies yet, request from the server
     if(_csrftoken === null){
-      _csrftoken = this.getCsrfToken();
+      let _csrftokenObject = this.getCsrfToken();
+      // the getCsrfToken requests it from the server, and returns a json object, so need to get the inside string
+      // monkey
+      console.log('_csrftokenObject: ', _csrftokenObject);
+      console.log('_csrftokenObject.result: ', _csrftokenObject.result);
+      _csrftoken = _csrftokenObject.result;
+
+
+
       
       //_csrftoken = this.getCookie('csrftoken'); // used in development, but not working in production because browser not setting cookie
       console.log('csrftoken wasnt found in cookie so requested from server, returning:', _csrftoken);
