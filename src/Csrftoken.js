@@ -9,31 +9,31 @@ class Csrftoken extends React.Component {
     this.state = { 
       csrftoken: 'x'
     }; 
-    
+
   }
+
+
 
   componentDidMount() {
     // Try to get it from a cookie if it already exists in browser cookies
     let _csrftoken = this.getCookie('csrftoken');
     
     console.log('if csrftoken was found in cookie, returning:', _csrftoken);
+
+    if(_csrftoken !== null) this.setState({ csrftoken: _csrftoken });
     // if it doesn't exist in browser cookies yet, request from the server
-    if(_csrftoken === null){
-      let _csrftokenObject = this.getCsrfToken();
+    else {
+      //let _csrftokenObject = this.getCsrfToken();
+      this.getCsrfToken();
       // the getCsrfToken requests it from the server, and returns a json object, so need to get the inside string
       // monkey
-      console.log('_csrftokenObject: ', _csrftokenObject);
-      console.log('_csrftokenObject.result: ', _csrftokenObject.result);
-      _csrftoken = _csrftokenObject.result;
+      // console.log('_csrftokenObject: ', _csrftokenObject);
+      // console.log('_csrftokenObject.result: ', _csrftokenObject.result);
+      // _csrftoken = _csrftokenObject.result;
 
-
-
-      
       //_csrftoken = this.getCookie('csrftoken'); // used in development, but not working in production because browser not setting cookie
-      console.log('csrftoken wasnt found in cookie so requested from server, returning:', _csrftoken);
+      // console.log('csrftoken wasnt found in cookie so requested from server, returning:', _csrftoken);
     }
-    // Update the token value in the DOM now that it has been found
-    if(_csrftoken !== null) this.setState({ csrftoken: _csrftoken });
   }
 
   // Method to retrieve the csrf token from the server via fetch request
@@ -48,7 +48,10 @@ class Csrftoken extends React.Component {
       .then(res => {
         console.log(res);
         console.log(res.data);
-        _csrfToken = res.data;
+        _csrfToken = res.data.result;
+        if (_csrfToken !== undefined && _csrfToken !== null) this.setState({ csrftoken: _csrfToken });
+
+        //return _csrfToken;
       })
         .catch(err => console.log(err));
     
@@ -62,7 +65,6 @@ class Csrftoken extends React.Component {
     let _csrfToken = data.csrfToken;
     
     */
-    return _csrfToken;
   } 
 
   // Method to get the csrf token value from a cookie if the server already sent it
