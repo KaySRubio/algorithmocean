@@ -32,14 +32,16 @@ class Csrftoken extends React.Component {
 
     const axios = require('axios').default;
     axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
-    axios.get("/csrf/",)
-    /*
+    axios.get("/csrf/", {withCredentials:true})
+    // Browser is not setting the cookie, so try to catch it?
       .then(res => {
+
+        
         console.log(res);
         console.log(res.data);
       })
         .catch(err => console.log(err));
-    */
+    
 
     /* Working in development to set the csrf token in a cookie, but not working in production
     const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
