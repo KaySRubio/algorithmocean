@@ -19,26 +19,28 @@ class Csrftoken extends React.Component {
     console.log('if csrftoken was found in cookie, returning:', _csrftoken);
     // if it doesn't exist in browser cookies yet, request from the server
     if(_csrftoken === null){
-      this.getCsrfToken();
-      _csrftoken = this.getCookie('csrftoken');
+      _csrftoken = this.getCsrfToken();
+      
+      //_csrftoken = this.getCookie('csrftoken'); // used in development, but not working in production because browser not setting cookie
       console.log('csrftoken wasnt found in cookie so requested from server, returning:', _csrftoken);
     }
     // Update the token value in the DOM now that it has been found
-    this.setState({ csrftoken: _csrftoken });
+    if(_csrftoken !== null) this.setState({ csrftoken: _csrftoken });
   }
 
   // Method to retrieve the csrf token from the server via fetch request
   async getCsrfToken() {
+    let _csrfToken = null;
 
+    /* Workaround for production */
     const axios = require('axios').default;
     axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
     axios.get("/csrf/", {withCredentials:true})
-    // Browser is not setting the cookie, so try to catch it?
+    // Browser is not setting the cookie in production, so passed it through response body
       .then(res => {
-
-        
         console.log(res);
         console.log(res.data);
+        _csrfToken = res.data;
       })
         .catch(err => console.log(err));
     
@@ -50,8 +52,9 @@ class Csrftoken extends React.Component {
     });
     const data = await response.json();
     let _csrfToken = data.csrfToken;
-    return _csrfToken;
+    
     */
+    return _csrfToken;
   } 
 
   // Method to get the csrf token value from a cookie if the server already sent it
@@ -60,7 +63,7 @@ class Csrftoken extends React.Component {
     let cookieValue = null;
     console.log('getCookie method is running in Csrftoken and this is document.cookie: ', document.cookie);
     if (document.cookie && document.cookie !== '') {
-      console.log('attempting to get ', name, ' from cooke');
+      console.log('attempting to get ', name, ' from cookie');
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i].trim();
