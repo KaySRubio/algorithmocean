@@ -12,6 +12,10 @@ const Login = () => {
     e.preventDefault();
 
     let csrftoken = getCookie('csrftoken');
+    if(csrftoken === null) {
+      csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      console.log('csrftoken wasnt in a cookie so retrieved from the DOM: ', csrftoken );
+    }
 
     const user = {};
     // user.csrftoken = csrftoken;
