@@ -1,5 +1,6 @@
 // Attempted to get django to work with react, but could not resolve csrf errors so this is not currently in use
 import * as React from 'react';
+import axios from "axios";
 
 class Csrftoken extends React.Component {
   constructor(props) {
@@ -28,6 +29,19 @@ class Csrftoken extends React.Component {
 
   // Method to retrieve the csrf token from the server via fetch request
   async getCsrfToken() {
+
+    const axios = require('axios').default;
+    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
+    axios.get("/csrf/",)
+    /*
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+        .catch(err => console.log(err));
+    */
+
+    /* Working in development to set the csrf token in a cookie, but not working in production
     const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
     //const response = await fetch(`/csrf/`, {
       credentials: 'include',
@@ -35,6 +49,7 @@ class Csrftoken extends React.Component {
     const data = await response.json();
     let _csrfToken = data.csrfToken;
     return _csrfToken;
+    */
   } 
 
   // Method to get the csrf token value from a cookie if the server already sent it
