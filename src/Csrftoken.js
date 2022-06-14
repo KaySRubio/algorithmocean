@@ -40,7 +40,7 @@ class Csrftoken extends React.Component {
   async getCsrfToken() {
     let _csrfToken = null;
 
-    /* Workaround for Production 
+    /* Workaround for Production  */
     const axios = require('axios').default;
     axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
     axios.get("/csrf/", {withCredentials:true})
@@ -49,14 +49,17 @@ class Csrftoken extends React.Component {
         console.log(res);
         console.log(res.data);
         _csrfToken = res.data.result;
-        if (_csrfToken !== undefined && _csrfToken !== null) this.setState({ csrftoken: _csrfToken });
+        if (_csrfToken !== undefined && _csrfToken !== null) {
+          this.setState({ csrftoken: _csrfToken });
+          document.cookie = "csrftoken="+_csrfToken;
+        }
 
         //return _csrfToken;
       })
         .catch(err => console.log(err));
-    */
+    
 
-    /* Working in development to set the csrf token in a cookie, but not working in production */
+    /* Working in development to set the csrf token in a cookie, but not working in production
     // const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
     const response = await fetch(`/csrf/`, {
       credentials: 'include',
@@ -64,7 +67,7 @@ class Csrftoken extends React.Component {
     const data = await response.json();
     //_csrfToken = data.csrfToken;
     document.cookie = "csrftoken="+data.csrfToken;
-  } 
+  }  */
 
   // Method to get the csrf token value from a cookie if the server already sent it
   // and the browser already saved it

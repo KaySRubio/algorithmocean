@@ -73,13 +73,12 @@ import Csrftoken from './Csrftoken';
 
 
 
-    //fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
-    fetch('/authenticateUser/', { // Development
-    //fetch('/help/', {
+    fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
+    // fetch('/authenticateUser/', { // Development
       credentials: 'include',
       method: 'POST',
-      mode: 'same-origin', // Development
-      // mode: 'cors', // Production
+      // mode: 'same-origin', // Development
+      mode: 'cors', // Production
       headers: {
         'Accept': 'application/json',
         //'Content-Type': 'application/json',
@@ -105,7 +104,8 @@ import Csrftoken from './Csrftoken';
         localStorage.setItem('accountType', data.result.accountType);
         let a = localStorage.getItem('username');
         console.log('in local storage: ', a);
-        window.location.replace('http://localhost:3000/dashboard');
+        window.location.replace('http://localhost:3000/dashboard'); // Development
+        // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
       }
     }
     /*.then(res => {
