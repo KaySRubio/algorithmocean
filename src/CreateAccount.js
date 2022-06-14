@@ -8,8 +8,8 @@ class CreateAccount extends React.Component {
 
 
     const axios = require('axios').default;
-    //axios.defaults.baseURL = 'http://localhost:8000/';
-    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
+    axios.defaults.baseURL = 'http://localhost:8000/';  // Development
+    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
 
     super(props);
     

@@ -1018,7 +1018,6 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 }
 
 /*************** Login and Create Account Pages *****************/
-/* monkey */
 .loginModal, .createAccountModal {
   background-color: var(--box);
   margin: 20px auto 20px auto;
@@ -1029,6 +1028,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 
 .loginModal {
   height: 480px; /* 267 */
+  position: relative;
 }
 
 .createAccountModal {
@@ -1041,6 +1041,18 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   margin-top: 60px;
 }
 
+.invalidCredentials {
+  width: 100%;
+  padding-top: 20px;
+  position: absolute;
+  /*left: 0px;
+  top: 0px;*/
+}
+
+.invalidCredentials>p {
+  color: red;
+  text-align: center;
+}
 
 .col1of2 {
   width: 360px;

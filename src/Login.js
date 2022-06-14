@@ -5,13 +5,24 @@ import { validateFormElement } from './utils/utils';
 import axios from "axios";
 import Csrftoken from './Csrftoken';
 
-const Login = () => {
+//const Login = () => {
+  class Login extends React.Component {
+    constructor(props) {
+      super(props);
+  
+      this.state = { 
+        invalidCredentials: false,
+      };
+      
+    } 
 
-  const handleSubmit = (e) => {
+
+
+  handleSubmit = (e) => {
 
     e.preventDefault();
 
-    let csrftoken = getCookie('csrftoken');
+    let csrftoken = this.getCookie('csrftoken');
     if(csrftoken === null) {
       csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       console.log('csrftoken wasnt in a cookie so retrieved from the DOM: ', csrftoken );
@@ -59,13 +70,16 @@ const Login = () => {
     /* Alternate method to send the same info using fetch */
     //csrftoken = getCookie('csrftoken');
 
-    fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', {
-    //fetch('/authenticateUser/', {
+
+
+
+    //fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
+    fetch('/authenticateUser/', { // Development
     //fetch('/help/', {
       credentials: 'include',
       method: 'POST',
-      // mode: 'same-origin',
-      mode: 'cors',
+      mode: 'same-origin', // Development
+      // mode: 'cors', // Production
       headers: {
         'Accept': 'application/json',
         //'Content-Type': 'application/json',
@@ -75,26 +89,50 @@ const Login = () => {
       //body: JSON.stringify(user)
       body: string
     })
-    //.then(res => res.json())
+    .then(res => res.json())
     .then(data => {
-      if (data.key) {
+      console.log('data.result', data.result)
+
+      if (data.result === 'NOT logged in') {
+        localStorage.clear();
+        this.setState({ invalidCredentials: true });
+      } else {
+        localStorage.setItem('username', data.result.username);
+        localStorage.setItem('first_name', data.result.first_name);
+        localStorage.setItem('last_name', data.result.last_name);
+        localStorage.setItem('is_active', data.result.is_active);
+        localStorage.setItem('classCode', data.result.classCode);
+        localStorage.setItem('accountType', data.result.accountType);
+        let a = localStorage.getItem('username');
+        console.log('in local storage: ', a);
+        window.location.replace('http://localhost:3000/dashboard');
+      }
+    }
+    /*.then(res => {
+      console.log(res.json().Object.result);*/
+    /*
+    .then(data => {
+      console.log(data); */
+      
+      /*if (data.key) {
         console.log('logged in with data: ', data);
         localStorage.clear();
         localStorage.setItem('token', data.key);
         //window.location.replace('http://localhost:3000/dashboard');
-      } else {
-        console.log('not logged in?');
+      } else { */
+        //console.log('not logged in?'); 
         /*
         setEmail('');
         setPassword('');
         localStorage.clear();
         setErrors(true); */
-      }
-    });
+      //}
+    //}
+    );
         
   }
   
-  function getCookie(name) {
+  getCookie(name) {
     let cookieValue = null;
     console.log('getCookie method is running in Login and this is document.cookie: ', document.cookie);
     if (document.cookie && document.cookie !== '') {
@@ -110,58 +148,59 @@ const Login = () => {
     return cookieValue;
   }
   
-
-  return (
-    <div className="loginModal">
-      <div className='col1of2'>
-        <img src={submarine} className="leftSidePic" alt="A submarine in the ocean floating above 5 fish and some seaweed"/>
-      </div>
-      <div className='col2of2'>
-        <h1 className="loginTitle"><strong>Login to AlgorithmOcean</strong></h1>
-        <form action="/" method="post" onSubmit={handleSubmit}>
-          <Csrftoken />
-          
-          <p>
-            <input
-              aria-required="true"
-              className='textInput'
-              id='emailField'
-              maxLength="30" 
-              name="email"
-              onChange={validateFormElement}
-              placeholder='Email'
-              required 
-              size="20" 
-              type="email"
-            />
-          </p>
-          <p>
-            <input
-              aria-required="true"
-              className='textInput'
-              id='passwordField'
-              maxLength="30"
-              minLength='8'
-              name="password"
-              onChange={validateFormElement}
-              placeholder='Password'
-              required 
-              size="20" 
-              type='password'
+  render(){
+    return (
+      <div className="loginModal">
+        {this.state.invalidCredentials && <div className='invalidCredentials'><p>Invalid username or password, please try again or contact your account administrator</p></div> }
+        <div className='col1of2'>
+          <img src={submarine} className="leftSidePic" alt="A submarine in the ocean floating above 5 fish and some seaweed"/>
+        </div>
+        <div className='col2of2'>
+          <h1 className="loginTitle"><strong>Login to AlgorithmOcean</strong></h1>
+          <form action="/" method="post" onSubmit={this.handleSubmit}>
+            <Csrftoken />
+            
+            <p>
+              <input
+                aria-required="true"
+                className='textInput'
+                id='emailField'
+                maxLength="30" 
+                name="email"
+                onChange={validateFormElement}
+                placeholder='Email'
+                required 
+                size="20" 
+                type="email"
               />
-          </p>
-          <Link className="link" id="forgotPasswordLink" to="/forgotpassword">Forgot Password</Link>
-          <input className='loginButton' type="submit" name="login" value="Login" />
+            </p>
+            <p>
+              <input
+                aria-required="true"
+                className='textInput'
+                id='passwordField'
+                maxLength="30"
+                minLength='8'
+                name="password"
+                onChange={validateFormElement}
+                placeholder='Password'
+                required 
+                size="20" 
+                type='password'
+                />
+            </p>
+            <Link className="link" id="forgotPasswordLink" to="/forgotpassword">Forgot Password</Link>
+            <input className='loginButton' type="submit" name="login" value="Login" />
+            
+          </form>
           
-        </form>
-        
-        <p className="smallText">New to Algorithm Ocean?</p>
-        <Link className="link signup" to="/createaccount">Sign Up</Link>
+          <p className="smallText">New to Algorithm Ocean?</p>
+          <Link className="link signup" to="/createaccount">Sign Up</Link>
+
+        </div>
 
       </div>
-
-    </div>
-  );
+  );}
 }
  
 /*         { this.state.theme === 'theme-light' && <img src={wave1} className="logowave" title="dark blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }

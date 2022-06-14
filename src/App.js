@@ -1,23 +1,22 @@
 // import { ReactDOM } from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Footer from './Footer';
-import Home from './Home';
-import CreateAccount from './CreateAccount';
-import Login from './Login.js';
-import Demo from './Demo';
-import ForgotPassword from './ForgotPassword';
-import Lesson from './Lesson';
-import NotFound from './NotFound';
 import { keepTheme } from './utils/themes';
-import { useEffect } from 'react';
+import { useEffect } from 'react';import CreateAccount from './CreateAccount';
+import Dashboard from './Dashboard';
+import Demo from './Demo';
+import Footer from './Footer';
+import ForgotPassword from './ForgotPassword';
+import Home from './Home';
+import Lesson from './Lesson';
+import Login from './Login.js';
 import Navbar from './Navbar';
+import NotFound from './NotFound';
 import Token from './Token';
 
 function App() {
   useEffect(() => {
     keepTheme();
   })
-
 
   return (
     <Router>
@@ -45,7 +44,9 @@ function App() {
           <Route path="/token">
             <Token />
           </Route>
-
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
           <Route path="*">
             <NotFound />
           </Route>
