@@ -58,7 +58,6 @@ class Csrftoken extends React.Component {
       })
         .catch(err => console.log(err));
     
-
     /* Working in development to set the csrf token in a cookie, but not working in production
     // const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
     const response = await fetch(`/csrf/`, {
@@ -66,8 +65,11 @@ class Csrftoken extends React.Component {
     });
     const data = await response.json();
     //_csrfToken = data.csrfToken;
-    document.cookie = "csrftoken="+data.csrfToken;
-  }  */
+    document.cookie = "csrftoken="+data.csrfToken; */
+
+
+  } 
+  
 
   // Method to get the csrf token value from a cookie if the server already sent it
   // and the browser already saved it
