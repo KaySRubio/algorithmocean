@@ -98,7 +98,6 @@ li {
   padding: none;
 }
 
-
 .dropdown {
   float: right;
   background-color: var(--main-background);
@@ -174,6 +173,16 @@ li {
     float: right;
     position: relative;
     margin: 10px;
+  }
+
+
+  .navbarButton {
+    border: none;
+    background-color: var(--main-background);
+    font-size: 100%;
+    font-weight: normal;
+    text-decoration: underline;
+    color: var(--small-text);
   }
 
   .logowave {
@@ -1024,11 +1033,11 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   -moz-box-shadow: 0 0 10px var(--small-text);
   -webkit-box-shadow: 0 0 10px var(--small-text);
   box-shadow: 0 0 10px var(--small-text);
+  position: relative;
 }
 
 .loginModal {
   height: 480px; /* 267 */
-  position: relative;
 }
 
 .createAccountModal {
@@ -1041,7 +1050,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   margin-top: 60px;
 }
 
-.invalidCredentials {
+.invalidCredentials, .successMsg {
   width: 100%;
   padding-top: 20px;
   position: absolute;
@@ -1052,6 +1061,12 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 .invalidCredentials>p {
   color: red;
   text-align: center;
+}
+
+.successMsg>p {
+  color: green;
+  text-align: center;
+  font-weight: bold;
 }
 
 .col1of2 {
@@ -1072,7 +1087,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 .createAccountModal>.col2of2 {
   float: left;
   width: 280px;
-  padding: 20px 20px 20px 40px;
+  padding: 60px 20px 20px 40px;
 }
 
 .loginTitle {
@@ -1619,6 +1634,111 @@ iframe {
   
 }
 
+/*************** Dashboard *****************/
+.dashboard {
+  padding: 40px;
+  width: 820px;
+  margin: auto;
+}
+
+#dashboardWelcome {
+  font-size: 200%;
+  font-weight: bold;
+}
+
+.dashboardHeading {
+  width: 300px;
+  float: left;
+
+}
+
+.dashboardHeading>h1 {
+  text-align: left;
+  font-size: 100%;
+}
+
+#dashboardImg {
+  width: 100px;
+  float: right;
+}
+
+.dashboardSection {
+  background-color: var(--box);
+  border: 2px solid var(--small-text);
+  margin: 20px 0px 20px 0px;
+  float: left;
+}
+
+#dashboardAssignments {
+  width: 800px;
+}
+
+#dashboardPractice {
+  width: 430px;
+  padding: 0px 0px 15px 0px;
+}
+
+.dashboardSectionTitle {
+  background-color: var(--small-text);
+  padding: 5px 10px 5px 10px;
+  height: 28px;
+}
+
+.dashboardSectionTitle>h2 {
+  color: var(--main-background);
+  text-align: left;
+  float: left;
+  width: 200px;
+}
+.dashboardSectionTitle>label {
+  text-align: right;
+  float: right;
+  color: var(--main-background);
+}
+
+.dashboardSectionTitle>input {
+  float: right;
+  /* border: 4px solid var(--main-background); */
+}
+
+.dashboardSection>p {
+  text-align: center;
+  margin: 10px;
+}
+.dashboardSection>table {
+  border-collapse: collapse;
+  width: 400px;
+  margin: 10px 15px 10px 15px;
+}
+
+
+.dashboardSection>table>tbody{
+
+}
+
+.tableCol2 {
+  width: 60px;
+}
+
+.dashboardSection>table>tbody>tr {
+  border-bottom: 1px solid var(--small-text);
+  
+}
+
+.dashboardSection>table>tbody>tr>th {
+  text-align: left;
+  color: var(--small-text);
+  
+  border-bottom: 2px solid var(--small-text);
+  margin: 0px;
+  padding: 10px 10px 0px 10px;
+}
+
+.dashboardSection>table>tbody>tr>td {
+  color: var(--small-text);
+  padding: 10px 10px 0px 10px;
+  
+}
 /*************** Footer *****************/
 #footer {
   width: 100%;

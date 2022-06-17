@@ -8,39 +8,54 @@ class CreateAccount extends React.Component {
 
 
     const axios = require('axios').default;
-    // axios.defaults.baseURL = 'http://localhost:8000/';  // Development
-    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
+    axios.defaults.baseURL = 'http://localhost:8000/';  // Development
+    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
 
     super(props);
     
     this.state = { 
       operation: this.defaultOperation, // Holds operation for user, with a default value, and updated by user clicks in ToolBox
+      error: false,
+      accountCreated: false,
     };
+    this.errorMsg = '';
     
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
+    this.setState({ error: false });
+    this.setState({ accountCreated: false });
     
     // Get account information that was entered in the form
     const newAccount = {};
-    newAccount.first_name = document.getElementById('firstNameField').value;
-    newAccount.last_name = document.getElementById('lastNameField').value;
-    newAccount.email = document.getElementById('emailField').value;
+    newAccount.first_name = document.getElementById('firstNameField').value; // temporarily commenting out for django
+    newAccount.last_name = document.getElementById('lastNameField').value; // temporarily commenting out for django
+    newAccount.email = document.getElementById('emailField').value; // temporarily commenting out for django
     newAccount.password = document.getElementById('createPassword').value;
     newAccount.username = document.getElementById('emailField').value;
-    newAccount.accountType = document.querySelector('input[name="accountType"]:checked').value;
-    newAccount.classCode = document.getElementById('classCodeField').value;
+    newAccount.accountType = document.querySelector('input[name="accountType"]:checked').value; // temporarily commenting out for django
+    newAccount.classCode = document.getElementById('classCodeField').value; // temporarily commenting out for django
     
     // Send to the server
     axios.post("/customusers/", newAccount )
     // axios.post("/api/customusers/", newAccount )
     // axios.post("/api/accounts/", newAccount )
       .then(res => {
-        console.log(res);
-        console.log(res.data);
+        // console.log('res: ', res);
+        // console.log('res.data', res.data);
+        this.setState({ accountCreated: true });
+        //setTimeout(() => {window.location.replace('http://localhost:3000/login');}, 2000)
       })
-        .catch(err => console.log(err));
+        .catch(err => {
+          // console.log('err: ', err);
+          let rawError = JSON.stringify(err.response.data);
+          if (rawError === "{\"username\":[\"A user with that username already exists.\"]}") {
+            this.errorMsg = "Error! A user with that email already exists";
+          } else this.errorMsg = rawError;
+          this.setState({ error: true });
+        });
+        
       
   }
 
@@ -61,12 +76,15 @@ class CreateAccount extends React.Component {
   render(){
     return (
     <div className="createAccountModal">
+      {this.state.error && <div className='invalidCredentials'><p>{this.errorMsg}</p></div> }
+      {this.state.accountCreated && <div className='successMsg'><p>Success! Your account has been created. Please go to login page.</p></div> }
       <div className='col1of2'>
         <img src={scuba} className="leftSidePic" alt="A scuba diver in the ocean among some fish, rocks, and seaweed. The scuba diver is holding a clipboard and looking at a fish."/>
       </div>
       <div className='col2of2'>
         <h1 className="signupTitle">Create Account</h1>
         <form action="" method="post" onSubmit={this.handleSubmit}>
+        
           <p>
             <input 
               aria-required="true"
@@ -76,7 +94,6 @@ class CreateAccount extends React.Component {
               name="firstname"
               onChange={validateFormElement}
               placeholder='First Name *' 
-              required 
               size="20" 
               type="text" 
             />
@@ -95,6 +112,7 @@ class CreateAccount extends React.Component {
               type="text" 
             />
           </p>
+
           <p>
             <input 
               aria-required="true"
@@ -133,6 +151,9 @@ class CreateAccount extends React.Component {
             <p id="pwdnumber" className="invalid">&nbsp;A <b>number</b></p>
             <p id="pwdlength" className="invalid">&nbsp;Minimum <b>8 characters</b></p>
           </div>
+
+
+
           <p id='accountTypeQ'>Account Type *<br />
             <input id='studentRadio' type="radio" name="accountType" value="1" required onChange={e => this.displayClassCode(e.target.value)}/>Student
             <input id='teacherRadio' type="radio" name="accountType" value="2" required onChange={e => this.displayClassCode(e.target.value)}/>Teacher
@@ -149,6 +170,8 @@ class CreateAccount extends React.Component {
               />
           </p>
           <p className="smallText hidden" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
+
+
           
           <input className='createAccountButton' type="submit" name="login" value="Create Account" />
 
@@ -160,6 +183,15 @@ class CreateAccount extends React.Component {
   );}
 }
 
+/*
+
+
+
+
+
+
+
+*/
 /* Taking out for now to keep it short 
 
           <p>
