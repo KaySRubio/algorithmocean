@@ -14,8 +14,8 @@ class Dashboard extends React.Component {
     const first_name = localStorage.getItem('first_name');
     console.log('first_name', first_name);
     if (first_name === null || first_name === undefined || first_name === 'undefined') {
-      window.location.replace('http://localhost:3000/login'); // Development
-      // window.location.replace('https://stormy-sierra-07970.herokuapp.com/login'); // Production
+      // window.location.replace('http://localhost:3000/login'); // Development
+      window.location.replace('https://stormy-sierra-07970.herokuapp.com/login'); // Production
     }
     this.setState({ first_name: first_name });
   }

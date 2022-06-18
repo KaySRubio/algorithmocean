@@ -66,8 +66,8 @@ class Navbar extends React.Component {
 
   logout = () => {
     localStorage.clear(); // for now logging out just clears out account info from local storage. In future may send logout to django
-    window.location.replace('http://localhost:3000/'); // Development
-    // window.location.replace('https://stormy-sierra-07970.herokuapp.com/'); // Production
+    // window.location.replace('http://localhost:3000/'); // Development
+    window.location.replace('https://stormy-sierra-07970.herokuapp.com/'); // Production
   }
 
   render(){
@@ -77,7 +77,7 @@ class Navbar extends React.Component {
           { this.state.theme==='theme-light' && <button id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgDark} className="hamburg" alt="A menu button"/></button> }
           { this.state.theme==='theme-dark' && <button id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgLight} className="hamburg" alt="A menu button"/></button> }
           <div id='phoneDropdown' className='hidden' >
-            { this.state.loggedIn && <Link className="link navbarlink phoneDropdownLink" to="/dashboard">Student Dashboard</Link>}
+            { this.state.loggedIn && <Link className="link navbarlink phoneDropdownLink" to="/dashboard">Dashboard</Link>}
             { this.state.loggedIn && <br /> }
             <Link className="link navbarlink phoneDropdownLink" to="/">Home</Link>
             <br />
@@ -125,7 +125,7 @@ class Navbar extends React.Component {
           
           
           <Link className="link navbarlink" to="/">Home</Link>
-          { this.state.loggedIn && <Link className="link navbarlink" to="/dashboard">Student Dashboard</Link>}
+          { this.state.loggedIn && <Link className="link navbarlink" to="/dashboard">Dashboard</Link>}
         </div>
 
         <button id="toggleButton" onClick={this.handleOnClick}>
