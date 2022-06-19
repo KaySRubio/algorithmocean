@@ -62,8 +62,10 @@ class Csrftoken extends React.Component {
             console.log('Browser set csrf token by itself: ', csrftokenBrowser);
           } else {
             console.log('Browser did not set csrf token, token still: ', csrftokenBrowser);
-            // console.log('Browser did not set csrf token, token still: ', csrftokenBrowser, ' so manually setting token');
-            // document.cookie = "csrftoken="+_csrfToken+';SameSite=None;Secure';
+            console.log('Browser did not set csrf token, token still: ', csrftokenBrowser, ' so manually setting token');
+            document.cookie = "csrftoken="+_csrfToken+'; SameSite=None; Secure';
+            document.cookie = "user=Kay; secure"; // experiment
+            document.cookie = "hello=Judy; SameSite=None;"; // experiment
             // document.cookie = "csrftoken="+_csrfToken;
           }
 
