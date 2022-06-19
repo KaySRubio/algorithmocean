@@ -111,8 +111,9 @@ import Csrftoken from './Csrftoken';
         localStorage.setItem('accountType', data.result.accountType);
         let a = localStorage.getItem('username');
         console.log('in local storage: ', a);
+        console.log("logged in");
         // window.location.replace('http://localhost:3000/dashboard'); // Development
-        window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
+        // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
       } else {
         this.setState({ serverError: true });
       }
