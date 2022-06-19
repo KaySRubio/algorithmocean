@@ -46,7 +46,6 @@ class Csrftoken extends React.Component {
 
     /* Workaround for Production */
     const axios = require('axios').default;
-    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
     axios.get("https://algorithmoceanbackend.herokuapp.com/csrf/", {withCredentials:true}) // Production
     // axios.get("/csrf/", {withCredentials:true}) // Development
     // Browser is not setting the cookie in production, so passed it through response body
@@ -56,6 +55,16 @@ class Csrftoken extends React.Component {
         _csrfToken = res.data.result;
         if (_csrfToken !== undefined && _csrfToken !== null) {
           this.setState({ csrftoken: _csrfToken });
+
+          // Give the browser a chance to set it by itself, and see if that worked
+          let csrftokenBrowser = this.getCookie('csrftoken');
+          if (csrftokenBrowser !== undefined && csrftokenBrowser !== null) {
+            console.log('Browser set csrf token by itself: ', csrftokenBrowser);
+          } else {
+            console.log('Browser did not set csrf token, token still: ', csrftokenBrowser, ' so manually setting token');
+            document.cookie = "csrftoken="+_csrfToken+'; SameSite=None; Secure';
+          }
+
           document.cookie = "csrftoken="+_csrfToken;
         }
 
