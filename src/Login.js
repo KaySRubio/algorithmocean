@@ -71,7 +71,10 @@ import Csrftoken from './Csrftoken';
     .then(data => {
       // console.log('data.result', data.result)
       console.log('data.result', data);
-      if (data.result === 'NOT logged in') {
+      if (data.result === undefined || data.result === 'undefined'){
+        this.tryAxios(csrftoken, string);
+      }
+      else if (data.result === 'NOT logged in') {
         console.log("invalid credentials");
         localStorage.clear();
         this.setState({ invalidCredentials: true });
