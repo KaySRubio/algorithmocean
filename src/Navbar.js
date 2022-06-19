@@ -104,7 +104,6 @@ class Navbar extends React.Component {
           { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
         </div>
         <div id='menu'>
-          { !this.state.loggedIn && <Link className="link navbarlink" to="/login">Login</Link>}
           { this.state.loggedIn && <button className="navbarButton navbarlink" onClick={this.logout}>Logout</button>}
           <Link className="link navbarlink" to="/contact">Contact</Link>
           { !this.state.loggedIn && <Link className="link navbarlink" to="/login">Login</Link>}

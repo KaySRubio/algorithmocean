@@ -12,6 +12,7 @@ import Csrftoken from './Csrftoken';
   
       this.state = { 
         invalidCredentials: false,
+        serverError: false,
       };
       
     } 
@@ -35,11 +36,11 @@ import Csrftoken from './Csrftoken';
 
     console.log('credentials: ', user);
 
-    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info 
+    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info */
     axios.defaults.withCredentials = true
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/'; */
+    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
 
     // axios.post("/api/v1/users/auth/login/", user )
     // axios.post("/accounts/login/", user ) // server is sending back a login page, which isn't what we want
@@ -49,29 +50,33 @@ import Csrftoken from './Csrftoken';
 
  
     //let string = 'csrfmiddlewaretoken='+csrftoken+'&username='+username2+'&password='+user.password;
-    let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
+    // let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
 
     //username='john', password='secret'
 
     // console.log('string:', string);
     
-    /*
-    // axios.post("/authenticateUser/", user )
+    console.log("Attempting to use axios to login");
+
+    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", user )
+    // headers: {"X-CSRFToken": csrfToken},
     // axios.post("/authenticateUser/", string )
-    axios.post("/accounts/login/", user )
+    // axios.post("/accounts/login/", user )
     // axios.get("/help/")
       .then(res => {
         console.log(res);
         console.log(res.data);
       })
         .catch(err => console.log(err));
-    */
+    
 
     /* Alternate method to send the same info using fetch */
     //csrftoken = getCookie('csrftoken');
 
 
     let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
+
+    console.log("Attempting to fetch now manually adding the cookie to the header");
 
     fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
     // fetch('/authenticateUser/', { // Development
@@ -96,7 +101,8 @@ import Csrftoken from './Csrftoken';
       if (data.result === 'NOT logged in') {
         localStorage.clear();
         this.setState({ invalidCredentials: true });
-      } else {
+      } else if (data.result.username !== undefined) {
+        console.log('logged in');
         localStorage.setItem('username', data.result.username);
         localStorage.setItem('first_name', data.result.first_name);
         localStorage.setItem('last_name', data.result.last_name);
@@ -107,6 +113,8 @@ import Csrftoken from './Csrftoken';
         console.log('in local storage: ', a);
         // window.location.replace('http://localhost:3000/dashboard'); // Development
         window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
+      } else {
+        this.setState({ serverError: true });
       }
     }
     /*.then(res => {
@@ -153,6 +161,7 @@ import Csrftoken from './Csrftoken';
     return (
       <div className="loginModal">
         {this.state.invalidCredentials && <div className='invalidCredentials'><p>Invalid username or password, please try again or contact your account administrator</p></div> }
+        {this.state.serverError && <div className='invalidCredentials'><p>Sorry, something went wrong! Please check with your system administrator</p></div> }
         <div className='col1of2'>
           <img src={submarine} className="leftSidePic" alt="A submarine in the ocean floating above 5 fish and some seaweed"/>
         </div>
