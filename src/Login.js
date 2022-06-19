@@ -91,8 +91,8 @@ import Csrftoken from './Csrftoken';
         'X-CSRFToken': csrftoken,
         'cookie': csrftokenCookieForSafari // New for safari
       },
-      //body: JSON.stringify(user)
-      body: string
+      body: JSON.stringify(user)
+      //body: string
     })
     .then(res => res.json())
     .then(data => {
