@@ -36,39 +36,7 @@ import Csrftoken from './Csrftoken';
 
     console.log('credentials: ', user);
 
-    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info 
-    axios.defaults.withCredentials = true
-    axios.defaults.xsrfCookieName = 'csrftoken'
-    axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
-
-    // axios.post("/api/v1/users/auth/login/", user )
-    // axios.post("/accounts/login/", user ) // server is sending back a login page, which isn't what we want
     
-    // replace the '@' with %40 in the username
-    // const username2 = user.username.replace('@', '%40');
-
- 
-    //let string = 'csrfmiddlewaretoken='+csrftoken+'&username='+username2+'&password='+user.password;
-    
-
-    //username='john', password='secret'
-
-    // console.log('string:', string);
-    
-    console.log("Attempting to use axios to login");
-
-    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", user )
-    // headers: {"X-CSRFToken": csrfToken},
-    // axios.post("/authenticateUser/", string )
-    // axios.post("/accounts/login/", user )
-    // axios.get("/help/")
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      })
-        .catch(err => console.log(err));
-    */
 
     /* Alternate method to send the same info using fetch */
     //csrftoken = getCookie('csrftoken');
@@ -115,7 +83,7 @@ import Csrftoken from './Csrftoken';
         // window.location.replace('http://localhost:3000/dashboard'); // Development
         // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
       } else {
-        this.setState({ serverError: true });
+        this.tryAxios(csrftoken, user);
       }
     }
     /*.then(res => {
@@ -129,7 +97,8 @@ import Csrftoken from './Csrftoken';
         localStorage.clear();
         localStorage.setItem('token', data.key);
         //window.location.replace('http://localhost:3000/dashboard');
-      } else { */
+      } else { 
+        */
         //console.log('not logged in?'); 
         /*
         setEmail('');
@@ -142,6 +111,65 @@ import Csrftoken from './Csrftoken';
         
   }
   
+  tryAxios(csrftoken, user) {
+    console.log("trying to login via an axios request with csrftoken: ", csrftoken);
+
+    // Use axios to send the csrf token in header, csrf cookie, as well as user login info 
+    axios.defaults.withCredentials = true;
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
+
+    // axios.post("/api/v1/users/auth/login/", user )
+    // axios.post("/accounts/login/", user ) // server is sending back a login page, which isn't what we want
+    
+    // replace the '@' with %40 in the username
+    // const username2 = user.username.replace('@', '%40');
+
+ 
+    //let string = 'csrfmiddlewaretoken='+csrftoken+'&username='+username2+'&password='+user.password;
+    
+
+    //username='john', password='secret'
+
+    // console.log('string:', string);
+    
+    console.log("Attempting to use axios to login");
+
+    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", user )
+    // headers: {"X-CSRFToken": csrfToken},
+    // axios.post("/authenticateUser/", string )
+    // axios.post("/accounts/login/", user )
+    // axios.get("/help/")
+      .then(res => {
+        console.log(res);
+      })
+      .then(data => {
+        console.log('data.result', data.result)
+        console.log('logged in');
+        localStorage.setItem('username', data.result.username);
+        localStorage.setItem('first_name', data.result.first_name);
+        localStorage.setItem('last_name', data.result.last_name);
+        localStorage.setItem('is_active', data.result.is_active);
+        localStorage.setItem('classCode', data.result.classCode);
+        localStorage.setItem('accountType', data.result.accountType);
+        let a = localStorage.getItem('username');
+        console.log('in local storage: ', a);
+        console.log("logged in");
+        // window.location.replace('http://localhost:3000/dashboard'); // Development
+        // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
+      })
+        .catch(err => {
+          console.log(err);
+          this.setState({ serverError: true });
+          // localStorage.clear();
+
+        })
+    
+
+  }
+
   getCookie(name) {
     let cookieValue = null;
     console.log('getCookie method is running in Login and this is document.cookie: ', document.cookie);
