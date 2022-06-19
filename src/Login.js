@@ -44,8 +44,9 @@ import Csrftoken from './Csrftoken';
 
     // let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
 
-    console.log("Attempting to fetch now manually adding the cookie to the header");
+    
     let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
+    console.log("Fetch Request with ", string);
     fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
     // fetch('/authenticateUser/', { // Development
       credentials: 'include',
@@ -62,11 +63,16 @@ import Csrftoken from './Csrftoken';
       // body: JSON.stringify(user)
       body: string
     })
-    .then(res => res.json())
+    .then(res => {
+      console.log('res: ', res);
+      res.json();
+      console.log('ran res.json()');
+      })
     .then(data => {
-      console.log('data.result', data.result)
-
+      // console.log('data.result', data.result)
+      console.log('data.result', data);
       if (data.result === 'NOT logged in') {
+        console.log("invalid credentials");
         localStorage.clear();
         this.setState({ invalidCredentials: true });
       } else if (data.result.username !== undefined) {
@@ -83,7 +89,7 @@ import Csrftoken from './Csrftoken';
         // window.location.replace('http://localhost:3000/dashboard'); // Development
         // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
       } else {
-        this.tryAxios(csrftoken, user);
+        this.tryAxios(csrftoken, string);
       }
     }
     /*.then(res => {
@@ -111,7 +117,7 @@ import Csrftoken from './Csrftoken';
         
   }
   
-  tryAxios(csrftoken, user) {
+  tryAxios(csrftoken, string) {
     console.log("trying to login via an axios request with csrftoken: ", csrftoken);
 
     // Use axios to send the csrf token in header, csrf cookie, as well as user login info 
@@ -137,7 +143,7 @@ import Csrftoken from './Csrftoken';
     
     console.log("Attempting to use axios to login");
 
-    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", user )
+    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", string)
     // headers: {"X-CSRFToken": csrfToken},
     // axios.post("/authenticateUser/", string )
     // axios.post("/accounts/login/", user )
