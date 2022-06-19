@@ -20,7 +20,10 @@ class Csrftoken extends React.Component {
     
     console.log('if csrftoken was found in cookie, returning:', _csrftoken);
 
-    if(_csrftoken !== null) this.setState({ csrftoken: _csrftoken });
+    if(_csrftoken !== null && _csrftoken !== "undefined") {
+      console.log('_csrftoken was found');
+      this.setState({ csrftoken: _csrftoken });
+    }
     // if it doesn't exist in browser cookies yet, request from the server
     else {
       //let _csrftokenObject = this.getCsrfToken();
@@ -39,11 +42,13 @@ class Csrftoken extends React.Component {
   // Method to retrieve the csrf token from the server via fetch request
   async getCsrfToken() {
     let _csrfToken = null;
+    console.log('csrfToken was not found in cookie so performing request to get it from the server');
 
-    /* Workaround for Production  */
+    /* Workaround for Production */
     const axios = require('axios').default;
-    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
-    axios.get("/csrf/", {withCredentials:true})
+    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
+    axios.get("https://algorithmoceanbackend.herokuapp.com/csrf/", {withCredentials:true}) // Production
+    // axios.get("/csrf/", {withCredentials:true}) // Development
     // Browser is not setting the cookie in production, so passed it through response body
       .then(res => {
         console.log(res);
@@ -58,15 +63,15 @@ class Csrftoken extends React.Component {
       })
         .catch(err => console.log(err));
     
-    /* Working in development to set the csrf token in a cookie, but not working in production
+    /* BACKUP CODE FOR DEVELOPMENT IF AXIOS ISN'T WORKING 
     // const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
     const response = await fetch(`/csrf/`, {
       credentials: 'include',
     });
     const data = await response.json();
     //_csrfToken = data.csrfToken;
-    document.cookie = "csrftoken="+data.csrfToken; 
-    */
+    document.cookie = "csrftoken="+data.csrfToken; */
+    
 
   } 
   

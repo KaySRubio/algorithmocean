@@ -65,15 +65,19 @@ import Csrftoken from './Csrftoken';
     })
     .then(res => {
       console.log('res: ', res);
-      if (!res.ok) {this.tryAxios(csrftoken, string);}
-      res.data && console.log('res.data before turning into json: ', res.data);
-      res.json();
-      res.data && console.log('res.data after turning it into json: ', res.data);
-      res.data.result && console.log('res.data.result: ', res.data.result);
+      
+      if (!res.ok) {
+        res.status && console.log('res.status: ', res.status);
+        this.tryAxios(csrftoken, string);
+      }
+      
+      return res.json();
+
       })
     .then(data => {
-      // console.log('data.result', data.result)
-      console.log('data.result', data);
+      data && console.log('data', data);
+      data.result && console.log('data.result', data.result)
+      
       // if (data.result === undefined || data.result === 'undefined'){
       //   this.tryAxios(csrftoken, string);
       // }
@@ -91,13 +95,13 @@ import Csrftoken from './Csrftoken';
         localStorage.setItem('accountType', data.result.accountType);
         let a = localStorage.getItem('username');
         console.log('in local storage: ', a);
-        console.log("logged in");
         // window.location.replace('http://localhost:3000/dashboard'); // Development
         // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
       } else {
         this.tryAxios(csrftoken, string);
       }
     }
+    // .catch( err => console.error(`Fetch problem: ${err.message}`) 
     /*.then(res => {
       console.log(res.json().Object.result);*/
     /*
