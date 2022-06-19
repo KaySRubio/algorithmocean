@@ -71,7 +71,7 @@ import Csrftoken from './Csrftoken';
     //csrftoken = getCookie('csrftoken');
 
 
-
+    let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
 
     fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
     // fetch('/authenticateUser/', { // Development
@@ -83,7 +83,8 @@ import Csrftoken from './Csrftoken';
         'Accept': 'application/json',
         //'Content-Type': 'application/json',
         'Content-Type': 'text/html; charset=utf-8',
-        'X-CSRFToken': csrftoken
+        'X-CSRFToken': csrftoken,
+        'cookie': csrftokenCookieForSafari // New for safari
       },
       //body: JSON.stringify(user)
       body: string
