@@ -50,7 +50,7 @@ import Csrftoken from './Csrftoken';
 
  
     //let string = 'csrfmiddlewaretoken='+csrftoken+'&username='+username2+'&password='+user.password;
-    // let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
+    
 
     //username='john', password='secret'
 
@@ -77,7 +77,7 @@ import Csrftoken from './Csrftoken';
     // let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
 
     console.log("Attempting to fetch now manually adding the cookie to the header");
-
+    let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
     fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
     // fetch('/authenticateUser/', { // Development
       credentials: 'include',
@@ -91,8 +91,8 @@ import Csrftoken from './Csrftoken';
         'X-CSRFToken': csrftoken,
         // 'cookie': csrftokenCookieForSafari // New for safari but does not work
       },
-      body: JSON.stringify(user)
-      //body: string
+      // body: JSON.stringify(user)
+      body: string
     })
     .then(res => res.json())
     .then(data => {
