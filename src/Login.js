@@ -65,16 +65,19 @@ import Csrftoken from './Csrftoken';
     })
     .then(res => {
       console.log('res: ', res);
+      if (!res.ok) {this.tryAxios(csrftoken, string);}
+      res.data && console.log('res.data before turning into json: ', res.data);
       res.json();
-      console.log('ran res.json()');
+      res.data && console.log('res.data after turning it into json: ', res.data);
+      res.data.result && console.log('res.data.result: ', res.data.result);
       })
     .then(data => {
       // console.log('data.result', data.result)
       console.log('data.result', data);
-      if (data.result === undefined || data.result === 'undefined'){
-        this.tryAxios(csrftoken, string);
-      }
-      else if (data.result === 'NOT logged in') {
+      // if (data.result === undefined || data.result === 'undefined'){
+      //   this.tryAxios(csrftoken, string);
+      // }
+      if (data.result === 'NOT logged in') {
         console.log("invalid credentials");
         localStorage.clear();
         this.setState({ invalidCredentials: true });
