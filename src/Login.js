@@ -36,7 +36,7 @@ import Csrftoken from './Csrftoken';
 
     console.log('credentials: ', user);
 
-    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info */
+    /* Use axios to send the csrf token in header, csrf cookie, as well as user login info 
     axios.defaults.withCredentials = true
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -68,13 +68,13 @@ import Csrftoken from './Csrftoken';
         console.log(res.data);
       })
         .catch(err => console.log(err));
-    
+    */
 
     /* Alternate method to send the same info using fetch */
     //csrftoken = getCookie('csrftoken');
 
 
-    let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
+    // let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
 
     console.log("Attempting to fetch now manually adding the cookie to the header");
 
@@ -89,7 +89,7 @@ import Csrftoken from './Csrftoken';
         //'Content-Type': 'application/json',
         'Content-Type': 'text/html; charset=utf-8',
         'X-CSRFToken': csrftoken,
-        'cookie': csrftokenCookieForSafari // New for safari
+        // 'cookie': csrftokenCookieForSafari // New for safari but does not work
       },
       body: JSON.stringify(user)
       //body: string
