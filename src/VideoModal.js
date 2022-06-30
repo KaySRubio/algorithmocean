@@ -23,14 +23,20 @@ class VideoModal extends React.Component {
 
   render(){
     return (
-      <aside id="videoModal">
-          <button 
-            id='closeVideo' 
-            className="closeButton" 
-            onClick={this.props.onClick} >
-              X
-            </button>
-            <iframe src={this.getVideo()}></iframe> 
+      <aside
+        aria-label='Help Video'
+        id="videoModal"
+        role='region'
+      >
+        <button 
+          id='closeVideo' 
+          className="closeButton" 
+          onClick={this.props.onClick} 
+        >X</button>
+        <iframe 
+          src={this.getVideo()}
+          title='Video Explaining how to do the algorithm'
+        ></iframe> 
       </aside>
     );
   }

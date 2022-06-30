@@ -746,7 +746,12 @@ class Lesson extends React.Component {
           <div 
             style={{cursor: `url(${this.cursor()}), default`}}
             id="activity">
-            { !this.state.answerSubmitted && <div className={this.state.operation} id="sortSection">
+            { !this.state.answerSubmitted && <main 
+              aria-label='activity' 
+              className={this.state.operation}
+              id="sortSection" 
+              role='region' 
+            >
               <h1>{this.sortType} Sort</h1>
               <p className='center'>Sort from left to right, smallest to biggest</p>
               <canvas 
@@ -754,8 +759,13 @@ class Lesson extends React.Component {
                 width={this.canvasWidth} 
                 height="135px">
               </canvas>
-            </div> }
-            { !this.state.answerSubmitted && <div className={ this.state.operation} id="yourMoves">
+            </main> }
+            { !this.state.answerSubmitted && <aside 
+              aria-label='Your moves' 
+              className={ this.state.operation} 
+              id="yourMoves"
+              role='region'
+            >
               <h2>Your moves</h2>
               {this.state.userStack>0} <ol>
                 {this.state.userStack.map((item, index) => (
@@ -764,11 +774,13 @@ class Lesson extends React.Component {
                   >
                     {item[0]} {item[1]} 
                     {item[0]==='Insert' ? ' before ' : ' and '}
-                    {item[2]}: [{item[3].join(', ')}] 
+                    {item[2]}:&nbsp;
+                    <span className='sr-only'> resulting array is </span>
+                    [{item[3].join(', ')}] 
                   </li>
                 ))}
               </ol>
-            </div> }
+            </aside> }
 
             { this.state.answerSubmitted && !this.isQuiz && <SubmissionFeedback 
               array={this.array}

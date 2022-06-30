@@ -81,7 +81,11 @@ class HelpModal extends React.Component {
   render(){
     return (
       <>
-        <aside id="helpModal">
+        <aside
+          aria-label='Directions'
+          id="helpModal"
+          role='region'
+        >
           <h2>Directions</h2>
           <button 
             id='closeHelp' 

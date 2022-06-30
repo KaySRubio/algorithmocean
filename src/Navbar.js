@@ -7,7 +7,7 @@ import toggle1 from './img/toggle1.png';
 import toggle2 from './img/toggle2.png';
 import hamburgDark from './img/hamburgDark.png';
 import hamburgLight from './img/hamburgLight.png';
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 // import { withRouter } from "react-router";
 
 class Navbar extends React.Component {
@@ -25,7 +25,11 @@ class Navbar extends React.Component {
       theme: 'theme-light',
       loggedIn: false,
     }
-
+  }
+  static get propTypes() {
+    return {
+      updateLiveMessage: PropTypes.func,
+    };
   }
 
   componentDidMount = () => {
@@ -67,16 +71,18 @@ class Navbar extends React.Component {
   logout = () => {
     localStorage.clear(); // for now logging out just clears out account info from local storage. In future may send logout to django
     // window.location.replace('http://localhost:3000/'); // Development
+    this.props.updateLiveMessage('You have been logged out. Redirecting to the home page.');
     window.location.replace('https://stormy-sierra-07970.herokuapp.com/'); // Production
   }
 
   render(){
     return (
-      <div className="navbar">
+      <header className="navbar">
         <div className='phone-only'>
           { this.state.theme==='theme-light' && <button id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgDark} className="hamburg" alt="A menu button"/></button> }
           { this.state.theme==='theme-dark' && <button id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgLight} className="hamburg" alt="A menu button"/></button> }
-          <div id='phoneDropdown' className='hidden' >
+          <nav aria-label='Mobile Menu' className='hidden' id='phoneDropdown' role='navigation'>
+
             { this.state.loggedIn && <Link className="link navbarlink phoneDropdownLink" to="/dashboard">Dashboard</Link>}
             { this.state.loggedIn && <br /> }
             <Link className="link navbarlink phoneDropdownLink" to="/">Home</Link>
@@ -95,15 +101,15 @@ class Navbar extends React.Component {
             <br />
             { !this.state.loggedIn && <Link className="link navbarlink phoneDropdownLink" to="/login">Login</Link>}
             { this.state.loggedIn && <button className="navbarButton navbarlink phoneDropdownLink" onClick={this.logout}>Logout</button>}
-          </div>
+          </nav>
         </div>
 
         <div id="logo">
           <p><strong>AlgorithmOcean</strong></p>
-          { this.state.theme === 'theme-light' && <img src={wave1} className="logowave" title="dark blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
-          { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
+          { this.state.theme === 'theme-light' && <img src={wave1} className="logowave" title="dark blue wave" alt="Algorithm Ocean logo that looks like a blue ocean wave"/> }
+          { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that looks like a blue ocean wave"/> }
         </div>
-        <div id='menu'>
+        <nav aria-label='Menu' id='menu' role='navigation'>
           { this.state.loggedIn && <button className="navbarButton navbarlink" onClick={this.logout}>Logout</button>}
           <Link className="link navbarlink" to="/contact">Contact</Link>
           { !this.state.loggedIn && <Link className="link navbarlink" to="/login">Login</Link>}
@@ -125,7 +131,7 @@ class Navbar extends React.Component {
           
           <Link className="link navbarlink" to="/">Home</Link>
           { this.state.loggedIn && <Link className="link navbarlink" to="/dashboard">Dashboard</Link>}
-        </div>
+        </nav>
 
         <button id="toggleButton" onClick={this.handleOnClick}>
           { this.state.theme==='theme-light' && <img src={toggle2} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
@@ -133,7 +139,7 @@ class Navbar extends React.Component {
         </button>
 
         
-      </div>
+      </header>
     );
   }
 }

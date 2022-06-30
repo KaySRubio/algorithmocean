@@ -2,6 +2,7 @@ import * as React from 'react';
 import scuba from './img/scuba.png';
 import { validateFormElement } from './utils/utils';
 import axios from "axios";
+import PropTypes from 'prop-types';
 
 class CreateAccount extends React.Component {
   constructor(props) {
@@ -20,6 +21,12 @@ class CreateAccount extends React.Component {
     };
     this.errorMsg = '';
     
+  }
+
+  static get propTypes() {
+    return {
+      updateLiveMessage: PropTypes.func,
+    };
   }
 
   handleSubmit = (e) => {
@@ -45,18 +52,25 @@ class CreateAccount extends React.Component {
         // console.log('res: ', res);
         // console.log('res.data', res.data);
         this.setState({ accountCreated: true });
-        //setTimeout(() => {window.location.replace('http://localhost:3000/login');}, 2000)
+        this.props.updateLiveMessage('Account created successfully. Please go to login page.');
       })
         .catch(err => {
           // console.log('err: ', err);
-          let rawError = JSON.stringify(err.response.data);
-          if (rawError === "{\"username\":[\"A user with that username already exists.\"]}") {
-            this.errorMsg = "Error! A user with that email already exists";
-          } else this.errorMsg = rawError;
+          let rawError = ''
+          if (err.response.data) {
+            rawError = JSON.stringify(err.response.data);
+          }
+          if (rawError.includes('A user with that username already exists')) {
+            this.errorMsg = 'Error! A user with that email already exists';
+            this.props.updateLiveMessage('Error! A user with that email already exists.'); 
+          } else {
+            this.errorMsg = 'An error has occurred. Please check with your system administrator.';
+            this.props.updateLiveMessage('An error has occurred. Please check with your system administrator.');
+            console.log(rawError);
+          }
           this.setState({ error: true });
         });
         
-      
   }
 
   displayClassCode = (value) => {
@@ -75,19 +89,21 @@ class CreateAccount extends React.Component {
 
   render(){
     return (
-    <div className="createAccountModal">
+    <main className="createAccountModal">
       {this.state.error && <div className='invalidCredentials'><p>{this.errorMsg}</p></div> }
       {this.state.accountCreated && <div className='successMsg'><p>Success! Your account has been created. Please go to login page.</p></div> }
       <div className='col1of2'>
-        <img src={scuba} className="leftSidePic" alt="A scuba diver in the ocean among some fish, rocks, and seaweed. The scuba diver is holding a clipboard and looking at a fish."/>
+        <img src={scuba} className="leftSidePic" id='leftSidePicCreateAccount' alt="A scuba diver in the ocean among some fish, rocks, and seaweed. The scuba diver is holding a clipboard and looking at a fish."/>
       </div>
       <div className='col2of2'>
         <h1 className="signupTitle">Create Account</h1>
         <form action="" method="post" onSubmit={this.handleSubmit}>
-        
+          <p className="smallText">All fields marked with * are required</p>
           <p>
             <input 
+              aria-label='First Name'
               aria-required="true"
+              autoComplete='given-name'
               className='textInputSmall'
               id='firstNameField'
               maxLength="30"
@@ -100,7 +116,9 @@ class CreateAccount extends React.Component {
           </p>
           <p>
             <input
+              aria-label='Last Name'
               aria-required="true"
+              autoComplete='family-name'
               className='textInputSmall' 
               id='lastNameField'
               maxLength="30"
@@ -115,7 +133,9 @@ class CreateAccount extends React.Component {
 
           <p>
             <input 
+              aria-label='Email'
               aria-required="true"
+              autoComplete='email'
               className='textInputSmall'
               id='emailField'
               maxLength="30"
@@ -129,8 +149,10 @@ class CreateAccount extends React.Component {
             />
           </p>
           <p>
-            <input 
+            <input
+              aria-label='Password'
               aria-required="true"
+              autoComplete='new-password'
               className='textInputSmall'
               id='createPassword'
               maxLength="30" 
@@ -146,20 +168,64 @@ class CreateAccount extends React.Component {
           </p>
           <div id="passwordRequirements" className='hidden'>
             <p>Password must contain:</p>
-            <p id="pwdletter" className="invalid">&nbsp;A <b>lowercase</b> letter</p>
-            <p id="pwdcapital" className="invalid">&nbsp;A <b>capital (uppercase)</b> letter</p>
-            <p id="pwdnumber" className="invalid">&nbsp;A <b>number</b></p>
-            <p id="pwdlength" className="invalid">&nbsp;Minimum <b>8 characters</b></p>
+            <p
+              className="invalid" 
+              id="pwdletter" 
+              >
+              <span aria-hidden='true'>&#10006;</span>
+              &nbsp;A <b>lowercase</b> letter
+              <span className='sr-only'>. Your password does not yet meet this requirement. Please update.</span>
+            </p>
+            <p
+              className="invalid"
+              id="pwdcapital" 
+              >
+              <span aria-hidden='true'>&#10006;</span>
+              &nbsp;A <b>capital (uppercase)</b> letter
+              <span className='sr-only'>. Your password does not yet meet this requirement. Please update.</span>
+            </p>
+            <p
+              className="invalid"
+              id="pwdnumber" 
+              >
+              <span aria-hidden='true'>&#10006;</span>
+              &nbsp;A <b>number</b>
+              <span className='sr-only'>. Your password does not yet meet this requirement. Please update.</span>
+            </p>
+            <p
+              className="invalid"
+              id="pwdlength" 
+              >
+              <span aria-hidden='true'>&#10006;</span>
+              &nbsp;Minimum <b>8 characters</b>
+              <span className='sr-only'>. Your password does not yet meet this requirement. Please update.</span>
+            </p>
           </div>
 
-
-
-          <p id='accountTypeQ'>Account Type *<br />
-            <input id='studentRadio' type="radio" name="accountType" value="1" required onChange={e => this.displayClassCode(e.target.value)}/>Student
-            <input id='teacherRadio' type="radio" name="accountType" value="2" required onChange={e => this.displayClassCode(e.target.value)}/>Teacher
-          </p>
+          <fieldset id='accountTypeQ'>
+            <legend>Account Type *</legend>
+            <label htmlFor='studentRadio'>Student</label>
+            <input
+              id='studentRadio'
+              name="accountType"
+              onChange={e => this.displayClassCode(e.target.value)}
+              required 
+              type="radio" 
+              value="1" 
+            /><br />
+            <label htmlFor='teacherRadio'>Teacher</label>
+            <input
+              id='teacherRadio'
+              name="accountType"
+              onChange={e => this.displayClassCode(e.target.value)}
+              required 
+              type="radio" 
+              value="2" 
+            />
+          </fieldset>
           <p id='classCode' className='hidden'>
-            <input 
+            <input
+              aria-label='Class Code'
               className='textInputSmall' 
               id='classCodeField'
               maxLength="30"
@@ -169,7 +235,7 @@ class CreateAccount extends React.Component {
               type="text" 
               />
           </p>
-          <p className="smallText hidden" id="dontHaveOne">If you do not have one, please leave blank. You can always enter one later.</p>
+          <p className="smallText hidden" id="dontHaveOne">If you do not have a class code, please leave blank. You can enter one later.</p>
 
 
           
@@ -179,7 +245,7 @@ class CreateAccount extends React.Component {
 
       </div>
 
-    </div>
+    </main>
   );}
 }
 

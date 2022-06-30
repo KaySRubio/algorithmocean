@@ -123,19 +123,19 @@ const Home = () => {
           <div className='col1of3'>
             <p>User quote here</p>
             <p>User quote here</p>
-            <img src={portrait} id='homeSwap' alt="A symbol for swapping two numbers that looks like a curved U-shaped arrow."/>
+            <img src={portrait} id='homeSwap' alt="Placeholder for a portrait of a person."/>
             <p>Author, Location</p>
           </div>
           <div className='col1of3' >
             <p>User quote here</p>
             <p>User quote here</p>
-            <img src={portrait} id='homeSwap' alt="A symbol for swapping two numbers that looks like a curved U-shaped arrow."/>
+            <img src={portrait} id='homeSwap' alt="Placeholder for a portrait of a person."/>
             <p>Author, Location</p>
           </div>
           <div className='col1of3' >
             <p>User quote here</p>
             <p>User quote here</p>
-            <img src={portrait} id='homeSwap' alt="A symbol for swapping two numbers that looks like a curved U-shaped arrow."/>
+            <img src={portrait} id='homeSwap' alt="Placeholder for a portrait of a person."/>
             <p>Author, Location</p>
           </div>
         </div>

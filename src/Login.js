@@ -4,19 +4,25 @@ import { Link } from 'react-router-dom';
 import { validateFormElement } from './utils/utils';
 import axios from "axios";
 import Csrftoken from './Csrftoken';
+import PropTypes from 'prop-types';
 
 //const Login = () => {
-  class Login extends React.Component {
-    constructor(props) {
-      super(props);
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
   
-      this.state = { 
-        invalidCredentials: false,
-        serverError: false,
-      };
+    this.state = { 
+      invalidCredentials: false,
+      serverError: false,
+    };
       
-    } 
+  } 
 
+  static get propTypes() {
+    return {
+       updateLiveMessage: PropTypes.func,
+    };
+  }
 
 
   handleSubmit = (e) => {
@@ -82,10 +88,12 @@ import Csrftoken from './Csrftoken';
       //   this.tryAxios(csrftoken, string);
       // }
       if (data.result === 'NOT logged in') {
+        this.props.updateLiveMessage('Invalid username or password. Please check your username or password and try again.');
         console.log("invalid credentials");
         localStorage.clear();
         this.setState({ invalidCredentials: true });
       } else if (data.result.username !== undefined) {
+        this.props.updateLiveMessage('You have successfully logged in. Redirecting you to the dashboard.');
         console.log('logged in');
         localStorage.setItem('username', data.result.username);
         localStorage.setItem('first_name', data.result.first_name);
@@ -162,6 +170,7 @@ import Csrftoken from './Csrftoken';
         console.log(res);
       })
       .then(data => {
+        this.props.updateLiveMessage('You have successfully logged in. Redirecting you to the dashboard.');
         console.log('data.result', data.result)
         console.log('logged in');
         localStorage.setItem('username', data.result.username);
@@ -179,6 +188,7 @@ import Csrftoken from './Csrftoken';
         .catch(err => {
           console.log(err);
           this.setState({ serverError: true });
+          this.props.updateLiveMessage('An error has occurred. Please check with your system administrator.');
           // localStorage.clear();
 
         })
@@ -204,7 +214,7 @@ import Csrftoken from './Csrftoken';
   
   render(){
     return (
-      <div className="loginModal">
+      <main className="loginModal">
         {this.state.invalidCredentials && <div className='invalidCredentials'><p>Invalid username or password, please try again or contact your account administrator</p></div> }
         {this.state.serverError && <div className='invalidCredentials'><p>Sorry, something went wrong! Please check with your system administrator</p></div> }
         <div className='col1of2'>
@@ -217,7 +227,9 @@ import Csrftoken from './Csrftoken';
             
             <p>
               <input
+                aria-label='Email'
                 aria-required="true"
+                autoComplete='email'
                 className='textInput'
                 id='emailField'
                 maxLength="30" 
@@ -231,7 +243,9 @@ import Csrftoken from './Csrftoken';
             </p>
             <p>
               <input
+                aria-label='Password'
                 aria-required="true"
+                autoComplete='current-password'
                 className='textInput'
                 id='passwordField'
                 maxLength="30"
@@ -254,7 +268,7 @@ import Csrftoken from './Csrftoken';
 
         </div>
 
-      </div>
+      </main>
   );}
 }
  

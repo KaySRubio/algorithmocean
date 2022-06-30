@@ -64,7 +64,7 @@ h3 {
   margin: 0px;
 }
 
-p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink {
+p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink, legend, label {
   color: var(--small-text);
 }
 
@@ -87,6 +87,20 @@ li {
   margin: 0px;
   padding: 0px;
   text-align: left;
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
 }
 /*************** navbar *****************/
 
@@ -1041,13 +1055,21 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 }
 
 .createAccountModal {
-  height: 570px; /* 267 */
+  height: 580px; /* 267 */
 }
 
+/*
+very-light-blue: #E5ECF3
+light-blue: #C5D5E4 */
+
 .createAccountModal>.col1of2 {
-  background-color: #162E46;
-  height: 510px;
-  margin-top: 60px;
+  background-color: #E5ECF3;
+  height: 580px;
+  margin-top: 0px;
+}
+
+#leftSidePicCreateAccount {
+  margin-top: 100px;
 }
 
 .invalidCredentials, .successMsg {
@@ -1087,7 +1109,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 .createAccountModal>.col2of2 {
   float: left;
   width: 280px;
-  padding: 60px 20px 20px 40px;
+  padding: 40px 20px 0px 40px;
 }
 
 .loginTitle {
@@ -1099,7 +1121,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 .signupTitle {
   text-align: center;
   font-size: 140%;
-  margin: 0px 0px 20px 0px;
+  margin: 0px 0px 0px 0px;
 }
 
 .textInputSmall {
@@ -1142,18 +1164,20 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   color: green;
 }
 
+/*
 .valid:before {
   content: '\2713';
-}
+} */
 
 /* Add a red text color and an "x" icon when the requirements are wrong */
 .invalid {
   color: red;
 }
 
+/*
 .invalid:before {
   content: '\2716';
-}
+} */
 
 .checkText:invalid {
   background-color: #fffbcc;
@@ -1165,7 +1189,11 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
 
 #accountTypeQ {
   margin: 20px 20px 10px 53px;
+  border: none;
+  padding: 0px;
 }
+
+
 
 #selectState {
   margin: 20px 0px 0px 53px;
@@ -1208,7 +1236,7 @@ input[type=text]:focus {
   font-size: 120%;
   padding: 10px 20px 10px 20px;
   border-radius: 2px;
-  margin: 30px auto 20px auto;
+  margin: 20px auto 20px auto;
   display: block;
 }
 
@@ -1452,7 +1480,7 @@ input[type=text]:focus {
 }
 #correctFeedback {
   position: absolute;
-  top: 470px;
+  top: 450px;
   left: 360px;
 }
 
@@ -1465,7 +1493,7 @@ input[type=text]:focus {
 
 #incorrectFeedback{
   position: absolute;
-  top: 470px;
+  top: 450px;
   left: 360px;
 }
 
@@ -1495,6 +1523,13 @@ input[type=text]:focus {
   float: right;
   width: 220px;
   margin: 20px 250px 0px 20px;
+}
+
+.submissionFeedbackReturn {
+  position: absolute;
+  top: 530px;
+  left: 380px;
+  text-align: center;
 }
 
 
