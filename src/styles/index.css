@@ -1321,6 +1321,17 @@ input[type=text]:focus {
   margin: auto;
 }
 
+/* monkey */
+#activityHint {
+  text-align: center;
+  width: 500px;
+  background-color: #f7c654;
+  color: #16324F;
+  padding: 10px;
+  margin: 70px auto 0px auto;
+  border-radius: 10px;
+}
+
 #sortSection, #yourMoves, #feedback {
   padding: 10px;
   border-radius: 5px;

@@ -9,6 +9,7 @@ import hamburgDark from './img/hamburgDark.png';
 import hamburgLight from './img/hamburgLight.png';
 import PropTypes from "prop-types";
 // import { withRouter } from "react-router";
+import { checkIfLoggedIn } from './utils/utils';
 
 class Navbar extends React.Component {
 
@@ -39,13 +40,15 @@ class Navbar extends React.Component {
     });
     // console.log("theme starting as: ", this.state.theme);
 
+    this.setState({ loggedIn: checkIfLoggedIn() });
+    /*
     // Check if they are logged in based on their name being in local storage
     const first_name = localStorage.getItem('first_name');
     console.log('first_name', first_name);
     if (first_name !== null && first_name !== undefined && first_name !== 'undefined') {
       console.log('setting state to loggedIn');
       this.setState({ loggedIn: true });
-    }
+    }*/
 
   }
 
@@ -63,9 +66,13 @@ class Navbar extends React.Component {
   openClosePhoneMenu = () => {
     const phoneDropdown = document.getElementById('phoneDropdown');
     if ( phoneDropdown.getAttribute('class') === 'notHidden' ) {
-      phoneDropdown.setAttribute("class", "hidden");
+      phoneDropdown.setAttribute('class', 'hidden');
+      document.getElementById('menuButton').setAttribute('aria-label', 'Open menu');
+    } else {
+      phoneDropdown.setAttribute('class', 'notHidden');
+      document.getElementById('menuButton').setAttribute('aria-label', 'Close menu');
     }
-    else phoneDropdown.setAttribute("class", "notHidden");
+
   }
 
   logout = () => {
@@ -79,8 +86,8 @@ class Navbar extends React.Component {
     return (
       <header className="navbar">
         <div className='phone-only'>
-          { this.state.theme==='theme-light' && <button id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgDark} className="hamburg" alt="A menu button"/></button> }
-          { this.state.theme==='theme-dark' && <button id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgLight} className="hamburg" alt="A menu button"/></button> }
+          { this.state.theme==='theme-light' && <button aria-label='Open menu' id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgDark} className="hamburg" alt="A menu button"/></button> }
+          { this.state.theme==='theme-dark' && <button aria-label='Open menu' id="menuButton" onClick={this.openClosePhoneMenu}><img src={hamburgLight} className="hamburg" alt="A menu button"/></button> }
           <nav aria-label='Mobile Menu' className='hidden' id='phoneDropdown' role='navigation'>
 
             { this.state.loggedIn && <Link className="link navbarlink phoneDropdownLink" to="/dashboard">Dashboard</Link>}

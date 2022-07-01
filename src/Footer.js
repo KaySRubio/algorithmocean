@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <div id="footer">
+    <footer id="footer">
         <p>&#169; 2022 Kay Rubio</p>
         <p>
           <Link className="footerlink center" to="/privacy">Privacy Policy</Link>
@@ -12,7 +12,7 @@ const Footer = () => {
           <span aria-hidden='true'>&#8226;</span>
           <a className="center" href="mailto:ksweeneyrubio@gmail.com">Contact</a>
         </p>
-    </div>
+    </footer>
   );
 }
  

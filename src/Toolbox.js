@@ -22,6 +22,7 @@ class Toolbox extends React.Component {
       sortType: PropTypes.string,
       activeTool: PropTypes.string, // Used to help button that's activeTool have inner shadow
       isQuiz: PropTypes.bool,
+      hidden: PropTypes.bool,
     };
   }
 
@@ -29,6 +30,7 @@ class Toolbox extends React.Component {
     return (
       <aside 
         aria-label='Toolbox'
+        aria-hidden={this.props.hidden}
         id="toolbox"
         role='region'
       >
@@ -36,10 +38,11 @@ class Toolbox extends React.Component {
           { this.props.sortType === 'Insertion' ? 
           <button
             aria-label='Insert an array element before another array element'
-           
+            aria-pressed={this.props.activeTool === 'Insert' ? true : false}
             className={`toolboxButton ${this.props.activeTool}`}
             id='Insert' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
             <img src={insert} alt=''/>
             Insert
@@ -47,19 +50,22 @@ class Toolbox extends React.Component {
           : 
           <button
             aria-label='Swap array elements'
-            
+            aria-pressed={this.props.activeTool === 'Swap' ? true : false}
             className={`toolboxButton ${this.props.activeTool}`}
             id='Swap' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
             <img src={swap} alt=''/>
             Swap
           </button> }
           <button 
             aria-label='Mark array elements as sorted'
+            aria-pressed={this.props.activeTool === 'markSorted' ? true : false}
             className={`toolboxButton ${this.props.activeTool}`}
             id='markSorted' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
             <img src={mark} alt=''/>
             Mark Sorted
@@ -69,6 +75,7 @@ class Toolbox extends React.Component {
             className='toolboxButton' 
             id='undo' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
             <img src={undo} alt=''/>
             Undo
@@ -78,6 +85,7 @@ class Toolbox extends React.Component {
             className='toolboxButton' 
             id='help' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
             <img src={questionMark} alt=''/>
             Help
@@ -87,6 +95,7 @@ class Toolbox extends React.Component {
             className='toolboxButton' 
             id='video' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
             <img src={video} alt=''/>
             Show me a video
@@ -99,6 +108,7 @@ class Toolbox extends React.Component {
             disabled={!this.props.enableSubmit}
             id='submit'
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
             >
             <img src={checkmark} alt=''/>
               Submit

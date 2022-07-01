@@ -74,11 +74,9 @@ class App extends React.Component {
                 <ForgotPassword />
               </Route>
               <Route path="/demo-lesson">
-                <Lesson />
-              </Route>
-    
-              <Route path="/token">
-                <Token />
+                <Lesson
+                  updateLiveMessage={this.updateLiveMessage}
+                />
               </Route>
               <Route path="/dashboard">
                 <Dashboard />

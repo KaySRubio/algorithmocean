@@ -1,4 +1,11 @@
 
+// Check if they are logged in based on their name being in local storage
+export function checkIfLoggedIn() {
+  const first_name = localStorage.getItem('first_name');
+  if (first_name !== null && first_name !== undefined && first_name !== 'undefined') {
+    return true
+  } else return false
+}
 
 /* validate form elements, including create password field */
 export function validateFormElement(evt) {

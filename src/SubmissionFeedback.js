@@ -4,6 +4,7 @@ import video from './img/video1.png';
 import incorrectX from './img/incorrectX.png';
 import correctCheck from './img/correctCheck.png';
 import { Link } from 'react-router-dom';
+import { checkIfLoggedIn } from './utils/utils';
 
 class SubmissionFeedback extends React.Component {
   constructor(props) {
@@ -13,6 +14,10 @@ class SubmissionFeedback extends React.Component {
     }; */
 
     console.log("correct?", this.props.correct);
+  }
+
+  componentDidMount() {
+    document.getElementById('feedback').focus();
   }
 
   static get propTypes() {
@@ -57,6 +62,7 @@ class SubmissionFeedback extends React.Component {
         aria-label='Feedback After Activity Completion'
         id="feedback"
         role='region'
+        tabIndex='-1'
       >
         <h1>{this.props.sortType} Sort</h1>
         <p className='center'>Sort from left to right, smallest to biggest</p>
@@ -113,14 +119,16 @@ class SubmissionFeedback extends React.Component {
           </div>
           
         }
-        <Link className="link submissionFeedbackReturn" to="/">Return Home</Link>
+        {checkIfLoggedIn() ? 
+          <Link className="link submissionFeedbackReturn" to="/dashboard">Return to Dashboard</Link> :
+          <Link className="link submissionFeedbackReturn" to="/">Return Home</Link>
+        }
         
       </main>
     );
   }
 }
 
-// { this.state.loggedIn && <Link className="link submissionFeedbackReturn" to="/dashboard">Return to Dashboard</Link>}
 
 /* 
 {item[2]}: [{item[3].join(', ')}] 
