@@ -162,7 +162,6 @@ class Lesson extends React.Component {
 
     // If the randomly generated array was almost sorted and only took 2 moves to re-sort, try again
     if(this.programSP < 3){
-      console.log("Too easy");
       // reset SP and programStack, then re-initialize and re-sort array
       this.programSP = 0;
       this.programStack = [];
@@ -183,8 +182,8 @@ class Lesson extends React.Component {
         }
       }
     }
-    console.log("sorted array is: ", array);
-    console.log("program stack is: ", this.programStack);
+    // console.log("sorted array is: ", array);
+    // console.log("program stack is: ", this.programStack);
   }
 
   insertionSort(array) {
@@ -213,8 +212,8 @@ class Lesson extends React.Component {
         this.programStack.push(['Insert', operand1, operand2]);
       }
     }
-    console.log("sorted array is: ", array);
-    console.log("program stack is: ", this.programStack);
+    // console.log("sorted array is: ", array);
+    // console.log("program stack is: ", this.programStack);
   }
   
   selectionSort(array){
@@ -235,9 +234,9 @@ class Lesson extends React.Component {
       }
     }
 
-    console.log("sorted array is: ", array);
-    console.log("program stack is: ", this.programStack);
-    console.log("program stack pointer is: ", this.programSP);
+    // console.log("sorted array is: ", array);
+    // console.log("program stack is: ", this.programStack);
+    // console.log("program stack pointer is: ", this.programSP);
   }
 
   // Initialize the createJS canvas
@@ -430,10 +429,10 @@ class Lesson extends React.Component {
         this.insert();
         break;
       case 'Split':
-        console.log("splitting");
+        console.log('splitting');
         break;
       case 'Merge':
-        console.log('splitting');
+        console.log('merging');
         break;
       default:
         break;
@@ -657,9 +656,6 @@ class Lesson extends React.Component {
       if( this.state.userStack[i][1] !== this.programStack[i][1]) return false;
       if( this.state.userStack[i][2] !== this.programStack[i][2]) return false;
     }
-
-    console.log("Great job");
-
     
     return true;
   }
@@ -803,7 +799,7 @@ class Lesson extends React.Component {
                     {item[0]} {item[1]} 
                     {item[0]==='Insert' ? ' before ' : ' and '}
                     {item[2]}:&nbsp;
-                    <span className='sr-only'> resulting array is </span>
+                    <span className='sr-only'> resulting array is&nbsp;</span>
                     [{item[3].join(', ')}] 
                   </li>
                 ))}

@@ -68,7 +68,7 @@ class SubmissionFeedback extends React.Component {
         <p className='center'>Sort from left to right, smallest to biggest</p>
         <br />
         <p className="center">
-          <span className='sr-only'>Original array was </span>
+          <span className='sr-only'>Original array was&nbsp;</span>
           [{this.props.array.join(', ')}]
         </p>
         <div id="movesListLeft" className="movesList">
@@ -78,7 +78,7 @@ class SubmissionFeedback extends React.Component {
               <li key={index}
                 className="movesListItem"
               >
-                {item[0]} {item[1]}
+                {item[0]}ed {item[1]}
                 {item[0]==='Insert' ? ' before ' : ' and '}
                 {item[2]}
               </li>

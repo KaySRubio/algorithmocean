@@ -171,7 +171,6 @@ function getCookie(name) {
   console.log("document.cookie: ", document.cookie);
   
   if (document.cookie && document.cookie !== '') {
-    console.log('this ran');
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
           var cookie = cookies[i].trim();

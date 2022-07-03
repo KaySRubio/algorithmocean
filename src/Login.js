@@ -258,7 +258,7 @@ class Login extends React.Component {
                 type='password'
                 />
             </p>
-            <Link className="link" id="forgotPasswordLink" to="/forgotpassword">Forgot Password</Link>
+            
             <input className='loginButton' type="submit" name="login" value="Login" />
             
           </form>
@@ -271,6 +271,8 @@ class Login extends React.Component {
       </main>
   );}
 }
+
+// <Link className="link" id="forgotPasswordLink" to="/forgotpassword">Forgot Password</Link>
  
 /*         { this.state.theme === 'theme-light' && <img src={wave1} className="logowave" title="dark blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
         { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }

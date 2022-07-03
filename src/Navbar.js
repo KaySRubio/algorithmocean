@@ -60,7 +60,6 @@ class Navbar extends React.Component {
         setTheme('theme-light');
         this.setState({ theme: 'theme-light' });
     }
-    console.log("updated theme to: ", this.state.theme);
   }
 
   openClosePhoneMenu = () => {
@@ -102,7 +101,8 @@ class Navbar extends React.Component {
             { !this.state.loggedIn && <br /> }
             <Link className="link navbarlink phoneDropdownLink" to="/account">Account</Link>
             <br />
-            <Link className="link navbarlink phoneDropdownLink" to="/contact">Contact</Link>
+            <Link className="link navbarlink phoneDropdownLink" to="/about">About</Link>
+            <br />
             <br />
             { !this.state.loggedIn && <Link className="link navbarlink phoneDropdownLink" to="/createaccount">Create Account</Link>}
             <br />
@@ -111,17 +111,25 @@ class Navbar extends React.Component {
           </nav>
         </div>
 
+
+
+
         <div id="logo">
           <p><strong>AlgorithmOcean</strong></p>
           { this.state.theme === 'theme-light' && <img src={wave1} className="logowave" title="dark blue wave" alt="Algorithm Ocean logo that looks like a blue ocean wave"/> }
           { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that looks like a blue ocean wave"/> }
         </div>
+
+
+        <button id="toggleButton" onClick={this.handleOnClick}>
+          { this.state.theme==='theme-light' && <img src={toggle2} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
+          { this.state.theme==='theme-dark' && <img src={toggle1} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
+        </button>
+
         <nav aria-label='Menu' id='menu' role='navigation'>
-          { this.state.loggedIn && <button className="navbarButton navbarlink" onClick={this.logout}>Logout</button>}
-          <Link className="link navbarlink" to="/contact">Contact</Link>
-          { !this.state.loggedIn && <Link className="link navbarlink" to="/login">Login</Link>}
-          { !this.state.loggedIn && <Link className="link navbarlink" to="/createaccount">Create Account</Link>}
-          
+          { this.state.loggedIn && <Link className="link navbarlink" to="/dashboard">Dashboard</Link>}
+          <Link className="link navbarlink" to="/">Home</Link>
+          { this.state.loggedIn && <Link className="link navbarlink" to="/account">Account</Link>}
           { !this.state.loggedIn && <div className='dropdown'>
             <p>Try one!</p>
             <div className='dropdownContent'>
@@ -132,18 +140,14 @@ class Navbar extends React.Component {
                 <Link className="link" to="/demo-lesson/selection">Selection Sort</Link>
             </div> 
           </div> }
+          { !this.state.loggedIn && <Link className="link navbarlink" to="/createaccount">Create Account</Link>}
+          { !this.state.loggedIn && <Link className="link navbarlink" to="/login">Login</Link>}
+          <Link className="link navbarlink" to="/about">About</Link>
+          { this.state.loggedIn && <button className="navbarButton navbarlink" onClick={this.logout}>Logout</button>}
 
-          { this.state.loggedIn && <Link className="link navbarlink" to="/account">Account</Link>}
-          
-          
-          <Link className="link navbarlink" to="/">Home</Link>
-          { this.state.loggedIn && <Link className="link navbarlink" to="/dashboard">Dashboard</Link>}
         </nav>
 
-        <button id="toggleButton" onClick={this.handleOnClick}>
-          { this.state.theme==='theme-light' && <img src={toggle2} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
-          { this.state.theme==='theme-dark' && <img src={toggle1} className="toggle" alt="A toggle switch that changes the background color from light to dark"/> }
-        </button>
+
 
         
       </header>

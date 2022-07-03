@@ -32,7 +32,6 @@ class HelpModal extends React.Component {
     let submitButtonArrowLocation;
     if (this.props.isQuiz) submitButtonArrowLocation = '435px';
     else submitButtonArrowLocation = '605px';
-    console.log('isquiz: ', this.props.isQuiz);
 
     if (this.props.sortType === 'Insertion') {
       /* array of directions will hold 
@@ -45,15 +44,15 @@ class HelpModal extends React.Component {
 
       this.directions = [
         ['Click on a number',       'Next', 
-          '. You will find the number buttons in the activity region.', 
+          '. The number buttons are in the activity region.', 
           '145px', '485px', 'grow 1s ease-in-out infinite',
         ],
         ['Click on a triangle where you want to insert the number',     'Next', 
-          '. You can find the triangle buttons in the activity region.', 
+          '. The triangle buttons are in the activity region.', 
           '225px', '130px', 'growRotate45 1s ease-in-out infinite'
         ],
         ['You can undo your moves anytime',     'Next', 
-          '. The Undo button in the toolbox region.', 
+          '. The undo button is in the toolbox region.', 
           '405px', '245px', 'growRotate270 1s ease-in-out infinite'
         ],
         ['You can mark what numbers you sorted with the \'Mark Sorted\' tool',      'Next', 
@@ -61,7 +60,7 @@ class HelpModal extends React.Component {
           '405px', '130px', 'growRotate270 1s ease-in-out infinite'
         ],
         ['Make sure you click on \'Insert\' again to keep sorting',       'Next', 
-          '. The Insert button in the toolbox region.', 
+          '. The Insert button is in the toolbox region.', 
           '405px', '10px', 'growRotate270 1s ease-in-out infinite'
         ],
         ['When the array is sorted, a Submit button will appear. Click it when you are done',       'Next', 
@@ -78,15 +77,15 @@ class HelpModal extends React.Component {
     else {
       this.directions = [
         ['Click on a number',       'Next', 
-          '. You will find the number buttons in the activity region.', 
+          '. The number buttons are in the activity region.', 
           '215px', '130px', 'growRotate90 1s ease-in-out infinite'
         ],
         ['Click on another number to swap them',      'Next', 
-          '. You will find the number buttons in the activity region.', 
+          '. The number buttons are in the activity region.', 
           '215px', '180px', 'growRotate90 1s ease-in-out infinite'
         ],
         ['You can undo your moves anytime',       'Next', 
-          '. The Undo button in the toolbox region.',  
+          '. The undo button is in the toolbox region.',  
           '405px', '245px', 'growRotate270 1s ease-in-out infinite'
         ],
         ['You can mark what numbers you sorted with the \'Mark Sorted\' tool',      'Next', 
@@ -94,10 +93,10 @@ class HelpModal extends React.Component {
           '405px', '130px', 'growRotate270 1s ease-in-out infinite'
         ],
         ['Make sure you click on \'Swap\' again to keep sorting',       'Next', 
-          '. The Swap button in the toolbox region.',
+          '. The swap button is in the toolbox region.',
           '405px', '10px', 'growRotate270 1s ease-in-out infinite'
         ],
-        ['When the array is sorted, a Submit button will appear in the toolbox. Click it when you are done.',       'Next', 
+        ['When the array is sorted, a Submit button will appear in the toolbox. Click it when you are done',       'Next', 
           '. The submit button is in the toolbox region',  
           '405px', submitButtonArrowLocation, 'growRotate270 1s ease-in-out infinite'
         ],

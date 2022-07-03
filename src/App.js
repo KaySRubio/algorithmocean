@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { keepTheme } from './utils/themes';
 import { useEffect } from 'react';import CreateAccount from './CreateAccount';
+import About from './About';
 import Dashboard from './Dashboard';
 import Demo from './Demo';
 import Footer from './Footer';
@@ -11,7 +12,8 @@ import Lesson from './Lesson';
 import Login from './Login.js';
 import Navbar from './Navbar';
 import NotFound from './NotFound';
-import Token from './Token';
+import Terms from './Terms';
+import Privacy from './Privacy';
 import { LiveAnnouncer, LiveMessage } from 'react-aria-live';
 import React from 'react';
 
@@ -37,9 +39,6 @@ class App extends React.Component {
   }; */
 
   updateLiveMessage = (message) => {
-    console.log('this ran');
-    console.log('message: ', message);
-
     this.setState({ a11yMessage: message });
   }
 
@@ -80,6 +79,15 @@ class App extends React.Component {
               </Route>
               <Route path="/dashboard">
                 <Dashboard />
+              </Route>
+              <Route path="/about">
+                <About />
+              </Route>
+              <Route path="/terms">
+                <Terms />
+              </Route>
+              <Route path="/privacy">
+                <Privacy />
               </Route>
               <Route path="*">
                 <NotFound />

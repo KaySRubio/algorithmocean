@@ -64,7 +64,7 @@ h3 {
   margin: 0px;
 }
 
-p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink, legend, label {
+p, ul, li, ol, h2, h3, .link, #footer, #footer>p>a, .footerlink, legend, label, a {
   color: var(--small-text);
 }
 
@@ -184,11 +184,10 @@ li {
   }
   
   .navbarlink {
-    float: right;
+    float: left;
     position: relative;
     margin: 10px;
   }
-
 
   .navbarButton {
     border: none;
@@ -210,6 +209,7 @@ li {
   #menu {
     float: right;
   }
+
   /* #menuButton {
     display: none;
   } */
@@ -220,7 +220,7 @@ li {
   #toggleButton {
     border: none;
     background-color: var(--main-background);
-    float: right;
+    float: left;
     margin: 0px;
   }
   
@@ -1682,8 +1682,6 @@ iframe {
 
 /*************** Dashboard *****************/
 .dashboard {
-  padding: 40px;
-  width: 820px;
   margin: auto;
 }
 
@@ -1695,7 +1693,6 @@ iframe {
 .dashboardHeading {
   width: 300px;
   float: left;
-
 }
 
 .dashboardHeading>h1 {
@@ -1711,17 +1708,7 @@ iframe {
 .dashboardSection {
   background-color: var(--box);
   border: 2px solid var(--small-text);
-  margin: 20px 0px 20px 0px;
   float: left;
-}
-
-#dashboardAssignments {
-  width: 800px;
-}
-
-#dashboardPractice {
-  width: 430px;
-  padding: 0px 0px 15px 0px;
 }
 
 .dashboardSectionTitle {
@@ -1753,28 +1740,15 @@ iframe {
 }
 .dashboardSection>table {
   border-collapse: collapse;
-  width: 400px;
-  margin: 10px 15px 10px 15px;
-}
-
-
-.dashboardSection>table>tbody{
-
-}
-
-.tableCol2 {
-  width: 60px;
 }
 
 .dashboardSection>table>tbody>tr {
   border-bottom: 1px solid var(--small-text);
-  
 }
 
 .dashboardSection>table>tbody>tr>th {
   text-align: left;
   color: var(--small-text);
-  
   border-bottom: 2px solid var(--small-text);
   margin: 0px;
   padding: 10px 10px 0px 10px;
@@ -1785,6 +1759,76 @@ iframe {
   padding: 10px 10px 0px 10px;
   
 }
+
+/* computer screen */
+@media (min-width: 900px) {
+  .dashboard {
+    padding: 40px;
+    width: 820px;
+  }
+  
+  .dashboardSection {
+    margin: 20px 0px 20px 0px;
+  }
+  
+  #dashboardAssignments {
+    width: 800px;
+  }
+  
+  #dashboardPractice {
+    width: 430px;
+    padding: 0px 0px 15px 0px;
+  }
+  
+  .dashboardSection>table {
+    width: 400px;
+    margin: 10px 15px 10px 15px;
+  }
+  
+  .tableCol2 {
+    width: 60px;
+  }
+}
+
+/* smaller screens */
+@media (max-width: 900px) {
+
+  .dashboard {
+    padding: 0px;
+    width: 99%;
+    max-width: 820px;
+  }
+  
+  .dashboardSection {
+    margin: 20px 0px 20px 0px;
+  }
+  
+  #dashboardAssignments {
+    width: 99%;
+    max-width: 800px;
+  }
+  
+  #dashboardPractice {
+    width: 99%;
+    max-width: 430px;
+    padding: 0px 0px 15px 0px;
+  }
+  
+  .dashboardSection>table {
+    width: 99%;
+    max-width: 400px;
+    margin: 10px 0px 10px 0px;
+  }
+  
+  .tableCol2 {
+    width: 50%;
+    max-width: 60px;
+  }
+
+}
+
+
+
 /*************** Footer *****************/
 #footer {
   width: 100%;
@@ -1831,6 +1875,17 @@ iframe {
 }
 
 
-
+/*************** About Page *****************/
+.col1of1 {
+  background-color: var(--box);
+  margin: 20px auto 20px auto;
+  width: 80%;
+  max-width: 800px;
+  padding: 40px;
+  -moz-box-shadow: 0 0 10px var(--small-text);
+  -webkit-box-shadow: 0 0 10px var(--small-text);
+  box-shadow: 0 0 10px var(--small-text);
+  position: relative;
+}
 
 
