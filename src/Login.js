@@ -134,6 +134,7 @@ import Csrftoken from './Csrftoken';
     axios.defaults.withCredentials = true;
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+    axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 '; // newly added
 
     // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
 
@@ -153,7 +154,7 @@ import Csrftoken from './Csrftoken';
     
     console.log("Attempting to use axios to login");
 
-    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", string)
+    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", string, { withCredentials: true }) // added this again to see if this helps
     // headers: {"X-CSRFToken": csrfToken},
     // axios.post("/authenticateUser/", string )
     // axios.post("/accounts/login/", user )
