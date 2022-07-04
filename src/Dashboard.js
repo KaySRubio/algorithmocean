@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import hermitcrab from './img/hermitcrab.png';
+import { checkIfLoggedIn } from './utils/utils';
 
 class Dashboard extends React.Component {
    constructor(props) {
@@ -11,13 +12,15 @@ class Dashboard extends React.Component {
   } 
 
   componentDidMount() {
-    const first_name = localStorage.getItem('first_name');
-    console.log('first_name', first_name);
-    if (first_name === null || first_name === undefined || first_name === 'undefined') {
+
+    if(!checkIfLoggedIn()){
       // window.location.replace('http://localhost:3000/login'); // Development
       window.location.replace('https://stormy-sierra-07970.herokuapp.com/login'); // Production
+    } else {
+      const first_name = localStorage.getItem('first_name');
+      this.setState({ first_name: first_name });
     }
-    this.setState({ first_name: first_name });
+    
   }
   
   render(){

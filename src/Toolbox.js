@@ -22,80 +22,103 @@ class Toolbox extends React.Component {
       sortType: PropTypes.string,
       activeTool: PropTypes.string, // Used to help button that's activeTool have inner shadow
       isQuiz: PropTypes.bool,
+      hidden: PropTypes.bool,
     };
   }
 
   render(){
     return (
-      <aside id="toolbox">
+      <aside 
+        aria-label='Toolbox'
+        aria-hidden={this.props.hidden}
+        id="toolbox"
+        role='region'
+      >
           <h2>Toolbox</h2>
           { this.props.sortType === 'Insertion' ? 
-          <button 
+          <button
+            aria-label='Insert an array element before another array element'
+            aria-pressed={this.props.activeTool === 'Insert' ? true : false}
             className={`toolboxButton ${this.props.activeTool}`}
             id='Insert' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
-            <img src={insert} alt="Insert symbol that looks a single arrow pointing up."/>
+            <img src={insert} alt=''/>
             Insert
             </button> 
           : 
-          <button 
-          className={`toolboxButton ${this.props.activeTool}`}
-          id='Swap' 
-          onClick={this.props.onClick}
+          <button
+            aria-label='Swap array elements'
+            aria-pressed={this.props.activeTool === 'Swap' ? true : false}
+            className={`toolboxButton ${this.props.activeTool}`}
+            id='Swap' 
+            onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
-            <img src={swap} alt="Swap symbol that looks like a U-shaped curve with arrows pointing up."/>
+            <img src={swap} alt=''/>
             Swap
           </button> }
           <button 
+            aria-label='Mark array elements as sorted'
+            aria-pressed={this.props.activeTool === 'markSorted' ? true : false}
             className={`toolboxButton ${this.props.activeTool}`}
             id='markSorted' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
-            <img src={mark} alt="Paintbrush symbol for marking an element as sorted."/>
+            <img src={mark} alt=''/>
             Mark Sorted
           </button>
           <button 
+            aria-label='Undo your last move'
             className='toolboxButton' 
             id='undo' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
-            <img src={undo} alt="Undo symbol that looks an arrow pointing backwards."/>
+            <img src={undo} alt=''/>
             Undo
           </button>
-          <button 
+          <button
+            aria-label='Open directions'
             className='toolboxButton' 
             id='help' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
-            <img src={questionMark} alt="Question mark symbol."/>
+            <img src={questionMark} alt=''/>
             Help
           </button>
-          { !this.props.isQuiz && <button 
+          { !this.props.isQuiz && <button
+            aria-label='Open help video'
             className='toolboxButton' 
             id='video' 
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
           >
-            <img src={video} alt="Video camera symbol."/>
+            <img src={video} alt=''/>
             Show me a video
           </button> }
 
-
-
-          <button 
-            className='toolboxButton' 
-            id='submit'
-            disabled={!this.props.enableSubmit}
+          <button
             aria-disabled={!this.props.enableSubmit}
+            aria-label='Submit your answer when complete'
+            className='toolboxButton' 
+            disabled={!this.props.enableSubmit}
+            id='submit'
             onClick={this.props.onClick}
+            tabIndex={this.props.hidden ? '-1' : '0'}
             >
-            <img src={checkmark} alt="A checkmark in a box."/>
+            <img src={checkmark} alt=''/>
               Submit
             </button>
       </aside>
     );
   }
 }
+
+// aria-pressed={this.props.activeTool}
 
 /* Removed hints button for now
           <button 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stage, Shape, Container, Text, Ticker } from '@createjs/easeljs';
-
+import PropTypes from 'prop-types';
 import Toolbox from './Toolbox';
 import HelpModal from './HelpModal';
 import VideoModal from './VideoModal';
@@ -80,10 +80,16 @@ class Lesson extends React.Component {
       userStack: [], // Stack will hold all moves of user, including operation, both numbers swapped, and resulting array
       enableSubmit: false, // controls when the submit button will appear when array is sorted
       answerSubmitted: false, // controls when submission feedback appears
-      hints: '', // hint messages will appear on screen to help user
+      hint: '', // hint messages will appear in activity region to help user
       answerCorrect: false, // controls what submission feedback looks like
       showVideoModal: false, // controls if the video modal appears
       showHelpModal: true, // controls if the help modal appears
+    };
+  }
+
+  static get propTypes() {
+    return {
+      updateLiveMessage: PropTypes.func,
     };
   }
 
@@ -156,7 +162,6 @@ class Lesson extends React.Component {
 
     // If the randomly generated array was almost sorted and only took 2 moves to re-sort, try again
     if(this.programSP < 3){
-      console.log("Too easy");
       // reset SP and programStack, then re-initialize and re-sort array
       this.programSP = 0;
       this.programStack = [];
@@ -177,8 +182,8 @@ class Lesson extends React.Component {
         }
       }
     }
-    console.log("sorted array is: ", array);
-    console.log("program stack is: ", this.programStack);
+    // console.log("sorted array is: ", array);
+    // console.log("program stack is: ", this.programStack);
   }
 
   insertionSort(array) {
@@ -207,8 +212,8 @@ class Lesson extends React.Component {
         this.programStack.push(['Insert', operand1, operand2]);
       }
     }
-    console.log("sorted array is: ", array);
-    console.log("program stack is: ", this.programStack);
+    // console.log("sorted array is: ", array);
+    // console.log("program stack is: ", this.programStack);
   }
   
   selectionSort(array){
@@ -229,9 +234,9 @@ class Lesson extends React.Component {
       }
     }
 
-    console.log("sorted array is: ", array);
-    console.log("program stack is: ", this.programStack);
-    console.log("program stack pointer is: ", this.programSP);
+    // console.log("sorted array is: ", array);
+    // console.log("program stack is: ", this.programStack);
+    // console.log("program stack pointer is: ", this.programSP);
   }
 
   // Initialize the createJS canvas
@@ -302,7 +307,8 @@ class Lesson extends React.Component {
 
             // don't allow more moves if they've hit 20
     if ( this.userSP >= this.maxNumberOfOperations ) {
-      alert("You should not need more than 18 operations");
+      this.setState({ hint: 'You should not need more than 18 operations. Please submit answer or undo some moves to continue.' });
+      this.props.updateLiveMessage('You should not need more than 18 operations. Please submit answer or undo some moves to continue.');
       if (this.operandContainers[0]) this.operandContainers[0].y=0;
       if (this.operandContainers[1]) this.operandContainers[1].y=0;
       this.stage.update();
@@ -358,7 +364,6 @@ class Lesson extends React.Component {
       // if user clicked on same square twice move it back to it's original place then clear it out 
       if (this.operandContainers[0] === event.target.parent) {
         this.operandContainers[0].y=0;
-        // monkey 
         this.operandContainers[0].children[2].fillCommand.style = this.darkblue; // make triangle appear again
         this.operandContainers[0].children[2].borderCommand.style = this.lightblue;
         this.operandContainers[0] = 0;
@@ -383,7 +388,10 @@ class Lesson extends React.Component {
       }
       this.stage.update();
 
-    } else { alert("Please select a tool from the toolbox"); }
+    } else { 
+      this.setState({ hint: 'Please select a tool from the toolbox' }); 
+      this.props.updateLiveMessage('Please select a tool from the toolbox');
+    }
 
   }
 
@@ -397,12 +405,17 @@ class Lesson extends React.Component {
       const opBIndex = this.userArray.findIndex(e => e === event.target.parent.children[1].text)
 
       // if user tried to move square in the wrong direction (to the right) don't run operation  
-      if (opAIndex < opBIndex ) {alert("Hint: You can only move squares to the left");}
-      else {
+      if (opAIndex < opBIndex ) { 
+        this.setState({ hint: 'Hint: You can only move squares to the left' }); 
+        this.props.updateLiveMessage('Hint: You can only move squares to the left.');
+      } else {
         this.operandContainers[1] = event.target.parent;
         this.runOperation();
       }
-    } else { alert("Please first click on a square with a number to insert into this location"); }
+    } else { 
+      this.setState({ hint: 'Please first click on a square with a number to insert into this location' }); 
+      this.props.updateLiveMessage('Please first click on a square with a number to insert into this location.');
+    }
   }
 
   runOperation(){
@@ -416,18 +429,18 @@ class Lesson extends React.Component {
         this.insert();
         break;
       case 'Split':
-        console.log("splitting");
+        console.log('splitting');
         break;
       case 'Merge':
-        console.log('splitting');
+        console.log('merging');
         break;
       default:
         break;
     }
     // show submit button when the userArray is sorted 
     if (  this.arrayEquals(this.userArray, this.programArray) ) { 
-      console.log("Array is sorted yay!"); 
       this.setState({ enableSubmit: true });
+      this.props.updateLiveMessage('Submit button is now active in the Toolbox region. When you are done with the algorithm, please navigate to the Toolbox region and click on the submit button.');
       document.getElementById('submit').setAttribute("style", "animation: grow 0.5s ease-in-out 2"); // Run small animation to make submit button noticeable
     }
   }
@@ -598,33 +611,41 @@ class Lesson extends React.Component {
       this.setState({ operation: event.target.id });
     } else if (event.target.id === 'video') {
       this.setState({ showVideoModal: true });
-      console.log("video");
     } else if (event.target.id === 'help') {
       this.setState({ showHelpModal: true });
-    } else if (event.target.id === 'hint') {
-      console.log("hint");
     } else if (event.target.id === 'closeVideo') {
       this.setState({ showVideoModal: false });
+      document.getElementById('activity').focus();
     } else if (event.target.id === 'closeHelp') {
       this.setState({ showHelpModal: false });
+      document.getElementById('activity').focus();
     } else {
-      console.warn("Error! Invalid tool selected from the toolbox.");
+      console.warn('Error! Invalid tool selected from the toolbox.');
     }
 
   }
 
+  // Click event on the button in the help Modal that normally goes to next, but when directions are over can close modal
   closeModal = () => {
     this.setState({ showHelpModal: false });
+    document.getElementById('activity').focus();
   }
 
   // Submit event
   handleSubmit() {
     // set state of answerSubmitted to true to re-render DOM and show submissionFeedback
     this.setState( { operation: 'None', answerSubmitted: true} );
-    this.setState({ answerCorrect: this.UserVsProgram() });
+    const answerCorrect = this.checkIfAnswerCorrect()
+    this.setState({ answerCorrect: answerCorrect });
+    if(answerCorrect) {
+      this.props.updateLiveMessage('Great job! Your answer was correct.');
+    } else {
+      this.props.updateLiveMessage('Your answer was not correct. Try again another time.');
+    }
+
   }
 
-  UserVsProgram() {
+  checkIfAnswerCorrect() {
     // console.log("userMoves: ", this.props.userMoves);
     // console.log("programMoves: ", this.props.programMoves);
 
@@ -635,10 +656,7 @@ class Lesson extends React.Component {
       if( this.state.userStack[i][1] !== this.programStack[i][1]) return false;
       if( this.state.userStack[i][2] !== this.programStack[i][2]) return false;
     }
-
-    console.log("Great job");
-
-
+    
     return true;
   }
 
@@ -653,14 +671,13 @@ class Lesson extends React.Component {
         case 'Swap':
             // swap the elements back visually using the containers stored on the top of the stack
             this.visualSwap(this.state.userStack[this.userSP-1][4], this.state.userStack[this.userSP-1][5]);
-
           break;
         case 'Insert':
           // swap elements back visually using the containers stored on the top of the stack
           this.visualUndoInsert(this.state.userStack[this.userSP-1][4], this.state.userStack[this.userSP-1][5])
           break;
         default:
-          console.log("cannot undo ", operation);
+          console.log('cannot undo ', operation);
 
       }
 
@@ -674,7 +691,10 @@ class Lesson extends React.Component {
       arr = [...this.state.userStack];
       arr.length = this.userSP; // chop off last element of array copy
       this.setState( {userStack: arr } ); // call set state to update the list of moves that displays for user
+      this.props.updateLiveMessage('Your last move was undone.');
 
+    } else {
+      this.props.updateLiveMessage('You have no moves to undo.');
     }
   }
 
@@ -700,31 +720,31 @@ class Lesson extends React.Component {
     if (this.sortType === 'Bubble') {
       if (this.state.answerCorrect) {
         critterWithText.critter = anemsmile;
-        critterWithText.altText = "An anemone with green body and pink tentacles that is smiling";
+        critterWithText.altText = 'An anemone with green body and pink tentacles that is smiling';
       }
       else {
         critterWithText.critter = anem;
-        critterWithText.altText = "An anemone with green body and pink tentacles";
+        critterWithText.altText = 'An anemone with green body and pink tentacles';
       }
     }
     else if (this.sortType === 'Insertion') {
       if (this.state.answerCorrect) {
         critterWithText.critter = yellowjellysmile;
-        critterWithText.altText = "A yellow jellyfish that is smiling";
+        critterWithText.altText = 'A yellow jellyfish that is smiling';
       }
       else {
         critterWithText.critter = yellowjelly;
-        critterWithText.altText = "A yellow jellyfish";
+        critterWithText.altText = 'A yellow jellyfish';
       }
     }
     else {
       if (this.state.answerCorrect) {
         critterWithText.critter = starfishsmile;
-        critterWithText.altText = "A red starfish that is smiling";
+        critterWithText.altText = 'A red starfish that is smiling';
       }
       else {
         critterWithText.critter = starfish;
-        critterWithText.altText = "A red starfish";
+        critterWithText.altText = 'A red starfish';
       }
     }
 
@@ -743,10 +763,18 @@ class Lesson extends React.Component {
   render(){
     return (
         <div className="lesson">
-          <div 
+          <div
+            aria-hidden={this.state.showVideoModal || this.state.showHelpModal}
             style={{cursor: `url(${this.cursor()}), default`}}
-            id="activity">
-            { !this.state.answerSubmitted && <div className={this.state.operation} id="sortSection">
+            id="activity"
+            tabIndex='-1'
+          >
+            { !this.state.answerSubmitted && <main 
+              aria-label='activity' 
+              className={this.state.operation}
+              id="sortSection" 
+              role='region' 
+            >
               <h1>{this.sortType} Sort</h1>
               <p className='center'>Sort from left to right, smallest to biggest</p>
               <canvas 
@@ -754,8 +782,14 @@ class Lesson extends React.Component {
                 width={this.canvasWidth} 
                 height="135px">
               </canvas>
-            </div> }
-            { !this.state.answerSubmitted && <div className={ this.state.operation} id="yourMoves">
+              { this.state.hint !== '' && <p id='activityHint'>{this.state.hint}</p> }
+            </main> }
+            { !this.state.answerSubmitted && <aside 
+              aria-label='Your moves' 
+              className={ this.state.operation} 
+              id="yourMoves"
+              role='region'
+            >
               <h2>Your moves</h2>
               {this.state.userStack>0} <ol>
                 {this.state.userStack.map((item, index) => (
@@ -764,11 +798,13 @@ class Lesson extends React.Component {
                   >
                     {item[0]} {item[1]} 
                     {item[0]==='Insert' ? ' before ' : ' and '}
-                    {item[2]}: [{item[3].join(', ')}] 
+                    {item[2]}:&nbsp;
+                    <span className='sr-only'> resulting array is&nbsp;</span>
+                    [{item[3].join(', ')}] 
                   </li>
                 ))}
               </ol>
-            </div> }
+            </aside> }
 
             { this.state.answerSubmitted && !this.isQuiz && <SubmissionFeedback 
               array={this.array}
@@ -780,10 +816,11 @@ class Lesson extends React.Component {
             /> }
             
           </div>
-            {!this.state.answerSubmitted && <Toolbox 
+            {!this.state.answerSubmitted && <Toolbox
               activeTool={this.state.operation}
-              isQuiz = {this.isQuiz}
-              enableSubmit={this.state.enableSubmit} 
+              hidden={this.state.showVideoModal || this.state.showHelpModal}
+              enableSubmit={this.state.enableSubmit}
+              isQuiz = {this.isQuiz} 
               onClick={this.toolboxClickHandler} 
               sortType={this.sortType} 
             />}
@@ -798,7 +835,12 @@ class Lesson extends React.Component {
               sortType={this.sortType}
             />}
 
-            { !this.state.showVideoModal && <img src={this.critter().critter} className='critter' alt={this.critter().altText}/>}
+            { !this.state.showVideoModal && <img 
+              alt={this.critter().altText}
+              aria-hidden={this.state.showVideoModal || this.state.showHelpModal}
+              className='critter'
+              src={this.critter().critter} 
+            />}
         </div>
       );
   }

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import video from './img/video1.png';
 import incorrectX from './img/incorrectX.png';
 import correctCheck from './img/correctCheck.png';
+import { Link } from 'react-router-dom';
+import { checkIfLoggedIn } from './utils/utils';
 
 class SubmissionFeedback extends React.Component {
   constructor(props) {
@@ -12,6 +14,10 @@ class SubmissionFeedback extends React.Component {
     }; */
 
     console.log("correct?", this.props.correct);
+  }
+
+  componentDidMount() {
+    document.getElementById('feedback').focus();
   }
 
   static get propTypes() {
@@ -52,11 +58,19 @@ class SubmissionFeedback extends React.Component {
 
   render(){
     return (
-      <div id="feedback">
+      <main 
+        aria-label='Feedback After Activity Completion'
+        id="feedback"
+        role='region'
+        tabIndex='-1'
+      >
         <h1>{this.props.sortType} Sort</h1>
         <p className='center'>Sort from left to right, smallest to biggest</p>
         <br />
-        <p className="center">[{this.props.array.join(', ')}]</p>
+        <p className="center">
+          <span className='sr-only'>Original array was&nbsp;</span>
+          [{this.props.array.join(', ')}]
+        </p>
         <div id="movesListLeft" className="movesList">
           <h2>Your Moves</h2>
           <ol>
@@ -64,7 +78,7 @@ class SubmissionFeedback extends React.Component {
               <li key={index}
                 className="movesListItem"
               >
-                {item[0]} {item[1]}
+                {item[0]}ed {item[1]}
                 {item[0]==='Insert' ? ' before ' : ' and '}
                 {item[2]}
               </li>
@@ -87,23 +101,30 @@ class SubmissionFeedback extends React.Component {
         </div>
         {this.props.correct ? 
           <div id="correctFeedback">
-            <h3 className="center" id="greatJob">Great job!</h3>
+            <p className="center" id="greatJob">Great job!</p>
             <img src={correctCheck} className="feedbackImg" alt="Green checkmark for answer correct."/>
           </div> :
           
           <div id="incorrectFeedback">
             <img src={incorrectX} className="feedbackImg" alt="Red X mark for incorrect answer."/>
-            <button 
+            <button
+              aria-label='Watch a video to learn more'
               className='toolboxButton' 
               id='video' 
               onClick={this.props.onClick}
             >
-            <img src={video} alt="Video camera symbol."/>
+            <img src={video} alt=''/>
             Learn more here
             </button>
           </div>
+          
         }
-      </div>
+        {checkIfLoggedIn() ? 
+          <Link className="link submissionFeedbackReturn" to="/dashboard">Return to Dashboard</Link> :
+          <Link className="link submissionFeedbackReturn" to="/">Return Home</Link>
+        }
+        
+      </main>
     );
   }
 }
