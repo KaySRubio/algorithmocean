@@ -76,9 +76,9 @@ class Navbar extends React.Component {
 
   logout = () => {
     localStorage.clear(); // for now logging out just clears out account info from local storage. In future may send logout to django
-    // window.location.replace('http://localhost:3000/'); // Development
     this.props.updateLiveMessage('You have been logged out. Redirecting to the home page.');
-    window.location.replace('https://stormy-sierra-07970.herokuapp.com/'); // Production
+    // window.location.replace('http://localhost:3000/'); // Development
+    window.location.replace('https://algorithmocean.herokuapp.com/'); // Production
   }
 
   render(){

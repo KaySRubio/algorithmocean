@@ -104,7 +104,7 @@ class Login extends React.Component {
         let a = localStorage.getItem('username');
         console.log('in local storage: ', a);
         // window.location.replace('http://localhost:3000/dashboard'); // Development
-        window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
+        window.location.replace('https://algorithmocean.herokuapp.com/dashboard'); // Production
       } else {
         this.tryAxios(csrftoken, string);
       }
@@ -184,7 +184,7 @@ class Login extends React.Component {
         console.log('in local storage: ', a);
         console.log("logged in");
         // window.location.replace('http://localhost:3000/dashboard'); // Development
-        // window.location.replace('https://stormy-sierra-07970.herokuapp.com/dashboard'); // Production
+        window.location.replace('https://algorithmocean.herokuapp.com/dashboard'); // Production
       })
         .catch(err => {
           console.log(err);

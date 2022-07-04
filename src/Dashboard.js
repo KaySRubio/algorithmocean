@@ -15,7 +15,7 @@ class Dashboard extends React.Component {
 
     if(!checkIfLoggedIn()){
       // window.location.replace('http://localhost:3000/login'); // Development
-      window.location.replace('https://stormy-sierra-07970.herokuapp.com/login'); // Production
+      window.location.replace('https://algorithmocean.herokuapp.com/login'); // Production
     } else {
       const first_name = localStorage.getItem('first_name');
       this.setState({ first_name: first_name });
