@@ -1,6 +1,7 @@
 // Attempted to get django to work with react, but could not resolve csrf errors so this is not currently in use
 import * as React from 'react';
 import axios from "axios";
+import { backendUrl, getCookie } from './utils/utils';
 
 class Csrftoken extends React.Component {
   constructor(props) {
@@ -9,33 +10,19 @@ class Csrftoken extends React.Component {
     this.state = { 
       csrftoken: 'x'
     }; 
-
   }
-
-
 
   componentDidMount() {
     // Try to get it from a cookie if it already exists in browser cookies
-    let _csrftoken = this.getCookie('csrftoken');
-    
-    console.log('if csrftoken was found in cookie, returning:', _csrftoken);
+    let _csrftoken = getCookie('csrftoken');
 
     if(_csrftoken !== null && _csrftoken !== "undefined") {
-      console.log('_csrftoken was found');
+      console.log('csrftoken was found in browser cookie');
       this.setState({ csrftoken: _csrftoken });
     }
     // if it doesn't exist in browser cookies yet, request from the server
     else {
-      //let _csrftokenObject = this.getCsrfToken();
       this.getCsrfToken();
-      // the getCsrfToken requests it from the server, and returns a json object, so need to get the inside string
-      // monkey
-      // console.log('_csrftokenObject: ', _csrftokenObject);
-      // console.log('_csrftokenObject.result: ', _csrftokenObject.result);
-      // _csrftoken = _csrftokenObject.result;
-
-      //_csrftoken = this.getCookie('csrftoken'); // used in development, but not working in production because browser not setting cookie
-      // console.log('csrftoken wasnt found in cookie so requested from server, returning:', _csrftoken);
     }
   }
 
@@ -44,14 +31,11 @@ class Csrftoken extends React.Component {
     let _csrfToken = null;
     console.log('csrfToken was not found in cookie so performing request to get it from the server');
 
-    /* Workaround for Production */
     const axios = require('axios').default;
-    axios.get("https://algorithmoceanbackend.herokuapp.com/csrf/", {withCredentials:true}) // Production
+    // axios.get("https://algorithmoceanbackend.herokuapp.com/csrf/", {withCredentials:true}) // Production
     // axios.get("/csrf/", {withCredentials:true}) // Development
-    // Browser is not setting the cookie in production, so passed it through response body
+    axios.get(backendUrl + 'csrf/', {withCredentials:true})
       .then(res => {
-        console.log(res);
-        console.log(res.data);
         _csrfToken = res.data.result;
         if (_csrfToken !== undefined && _csrfToken !== null) {
           this.setState({ csrftoken: _csrfToken });
@@ -59,35 +43,18 @@ class Csrftoken extends React.Component {
           // Give the browser a chance to set it by itself, and see if that worked
           let csrftokenBrowser = this.getCookie('csrftoken');
           if (csrftokenBrowser !== undefined && csrftokenBrowser !== null) {
-            console.log('Browser set csrf token by itself: ', csrftokenBrowser);
+            console.log('Browser set csrf token by itself YAY: ', csrftokenBrowser);
           } else {
-            console.log('Browser did not set csrf token, token still: ', csrftokenBrowser);
+            // Issues with browser is not setting the cookie in production, so passed it through response body from django and set manually in JS
             console.log('Browser did not set csrf token, token still: ', csrftokenBrowser, ' so manually setting token');
             document.cookie = "csrftoken="+_csrfToken+'; SameSite=None; Secure';
-            document.cookie = "user=Kay; secure"; // experiment
-            document.cookie = "hello=Judy; SameSite=None;"; // experiment
-            // document.cookie = "csrftoken="+_csrfToken;
           }
-
         }
-
-        //return _csrfToken;
       })
         .catch(err => console.log(err));
-    
-    /* BACKUP CODE FOR DEVELOPMENT IF AXIOS ISN'T WORKING 
-    // const response = await fetch(`https://algorithmoceanbackend.herokuapp.com/csrf/`, {
-    const response = await fetch(`/csrf/`, {
-      credentials: 'include',
-    });
-    const data = await response.json();
-    //_csrfToken = data.csrfToken;
-    document.cookie = "csrftoken="+data.csrfToken; */
-    
-
   } 
   
-
+/*
   // Method to get the csrf token value from a cookie if the server already sent it
   // and the browser already saved it
   getCookie(name) {
@@ -105,13 +72,14 @@ class Csrftoken extends React.Component {
       }
     }
     return cookieValue;
-  }
+  } */
 
+  // rendering a hidden html element in the form similar to the way django would if this were a static django app.
+  // Not sure if this helps with subsequent csrf/cors issues in the login, but trying everything to help resolve csrf/cors
   render(){
     console.log('this.state.csrftoken', this.state.csrftoken);
     return (
       <input type="hidden" name="csrfmiddlewaretoken" value={this.state.csrftoken} />
-      
     );}
 }
 

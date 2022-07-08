@@ -1,25 +1,29 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import hermitcrab from './img/hermitcrab.png';
-import { checkIfLoggedIn } from './utils/utils';
+import { checkIfLoggedIn, getPracticeScores, backendUrl, frontendUrl } from './utils/utils';
 
 class Dashboard extends React.Component {
    constructor(props) {
     super(props);
     this.state = { 
       first_name: '',
+      practiceScores: {'bubblesort': 0, 'insertionsort': 0, 'selectionsort': 0},
     };
+    // console.log(this.state.practiceScores.bubblesort);
   } 
 
   componentDidMount() {
-
     if(!checkIfLoggedIn()){
       // window.location.replace('http://localhost:3000/login'); // Development
-      window.location.replace('https://algorithmocean.herokuapp.com/login'); // Production
+      // window.location.replace('https://algorithmocean.herokuapp.com/login'); // Production
+      window.location.replace(frontendUrl + 'login');
     } else {
       const first_name = localStorage.getItem('first_name');
       this.setState({ first_name: first_name });
     }
+    
+    this.setState({ practiceScores: getPracticeScores() });
     
   }
   
@@ -54,15 +58,15 @@ class Dashboard extends React.Component {
             </tr>
             <tr>
               <td><Link className="link" to="/demo-lesson/bubble">Bubble Sort</Link></td>
-              <td className="tableCol2">2</td>
+              <td className="tableCol2">{this.state.practiceScores.bubblesort ? this.state.practiceScores.bubblesort : '0'}</td>
             </tr>
             <tr>
               <td><Link className="link" to="/demo-lesson/selection">Selection Sort</Link></td>
-              <td className="tableCol2">3</td>
+              <td className="tableCol2">{this.state.practiceScores.selectionsort ? this.state.practiceScores.selectionsort : '0'}</td>
             </tr>
             <tr>
               <td><Link className="link" to="/demo-lesson/insertion">Insertion Sort</Link></td>
-              <td className="tableCol2">8</td>
+              <td className="tableCol2">{this.state.practiceScores.insertionsort ? this.state.practiceScores.insertionsort : 0}</td>
             </tr>
           </tbody>
         </table>
@@ -71,5 +75,6 @@ class Dashboard extends React.Component {
     </div>
   );}
 }
+
  
 export default Dashboard;

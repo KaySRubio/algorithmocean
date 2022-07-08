@@ -7,6 +7,7 @@ import VideoModal from './VideoModal';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
 import { useLocation } from 'react-router-dom';
+import { checkIfLoggedIn, incrementScore } from './utils/utils';
 
 import anem from './img/anem.png';
 import anemsmile from './img/anemsmile.png';
@@ -45,11 +46,9 @@ import insertc from './img/insertc4.png';
 class Lesson extends React.Component {
   constructor(props) {
     super(props);
-    // this.path = window.location.pathname;
-    if (window.location.pathname.includes('insertion')) this.sortType = 'Insertion';
-    else if (window.location.pathname.includes('selection')) this.sortType = 'Selection';
-    else this.sortType = 'Bubble';
-    // this.sortType = 'Insertion'; // todo - set sortType from URL after home page links are programmed
+    
+    this.sortType = this.findSortTypeFromURL();
+
     if (this.sortType === 'Insertion') { this.defaultOperation = 'Insert'; this.length = 7; } // Set length of array based on sort Type
     else { this.defaultOperation = 'Swap'; this.length = 6; }
     
@@ -64,15 +63,10 @@ class Lesson extends React.Component {
     this.programStack = []; // Stack will hold all moves of program, including operation and both numbers swapped
     this.canvasWidth = this.length * 52.5; // Set the width of the canvas depending on number of elements in array
     
-    
-
     // Color variables
     this.darkblue = '#16324F';
     this.lightblue = '#E5ECF3';
     this.medblue = '#2D6BA9';
-    
-    // this.triangleLightBlue = 'rgba(229, 236, 243, 1)';
-    // this.triangleDarkBlue = 'rgba(22, 50, 79, 1)';
     this.transparent = 'rgba(255, 255, 255, 0)'; // transparent triangle
 
     this.state = { 
@@ -85,7 +79,9 @@ class Lesson extends React.Component {
       showVideoModal: false, // controls if the video modal appears
       showHelpModal: true, // controls if the help modal appears
     };
+
   }
+
 
   static get propTypes() {
     return {
@@ -114,18 +110,30 @@ class Lesson extends React.Component {
   programSP = 0; // program Stack Pointer
   maxNumberOfOperations = 18;
 
+  findSortTypeFromURL() {
+    let sortType;
+    if (window.location.pathname.includes('insertion')) {
+     sortType = 'Insertion';
+    } else if (window.location.pathname.includes('selection')) {
+      sortType = 'Selection';
+    } else {
+      sortType = 'Bubble';
+    }
+    return sortType;
+  }
+
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
     // this.array = [20, 30, 40, 50, 10, 60]; // testing
    
     // get the first random number
-    this.array[0] = this.randomNumBetween10and100();
+    this.array[0] = this.getRandomNumBetween10and100();
     for (let i = 1; i < this.length; i++ ) {
-      let m = this.randomNumBetween10and100();
+      let m = this.getRandomNumBetween10and100();
       // get a different random number if that number was already in the array
       while(this.array.includes(m)){
-        m = this.randomNumBetween10and100();
+        m = this.getRandomNumBetween10and100();
       }
       this.array[i] = m;
     } 
@@ -136,7 +144,7 @@ class Lesson extends React.Component {
   }
 
   // get a random number between 10 and 100
-  randomNumBetween10and100 = () => {
+  getRandomNumBetween10and100 = () => {
       let m = Math.floor(Math.random()*100);
       while(m < 10) {
         m = Math.floor(Math.random()*100);
@@ -148,15 +156,16 @@ class Lesson extends React.Component {
   sort = (type, array) => {
     switch(type) {
       case 'Bubble':
-        this.bubbleSort(array);
+        this.performBubbleSort(array);
         break;
       case 'Insertion':
-        this.insertionSort(array);
+        this.performInsertionSort(array);
         break;
       case 'Selection':
-        this.selectionSort(array);
+        this.performSelectionSort(array);
         break;
       default:
+        console.warn('Program requested that a different type of array be sorted that is not available.');
         break;
     }
 
@@ -165,12 +174,12 @@ class Lesson extends React.Component {
       // reset SP and programStack, then re-initialize and re-sort array
       this.programSP = 0;
       this.programStack = [];
-      this.initializeArray(); // Kay turn back on
-      this.sort(this.sortType, this.programArray); // Kay turn back on
+      this.initializeArray();
+      this.sort(this.sortType, this.programArray);
     }
   }
 
-  bubbleSort(array){
+  performBubbleSort(array){
     let i, j;
     for (i = 0; i < array.length; i++) {
       for (j = 0; j < array.length - i - 1; j++) {
@@ -186,7 +195,7 @@ class Lesson extends React.Component {
     // console.log("program stack is: ", this.programStack);
   }
 
-  insertionSort(array) {
+  performInsertionSort(array) {
 
     // Operation is Insert operand1 right before operand2
     // When examining a number, if that number causes other numbers to shift right that number becomes operand1
@@ -216,7 +225,7 @@ class Lesson extends React.Component {
     // console.log("program stack is: ", this.programStack);
   }
   
-  selectionSort(array){
+  performSelectionSort(array){
     for(let i = 0; i < array.length; i++) {
 
       let min = i;
@@ -438,20 +447,24 @@ class Lesson extends React.Component {
         break;
     }
     // show submit button when the userArray is sorted 
-    if (  this.arrayEquals(this.userArray, this.programArray) ) { 
-      this.setState({ enableSubmit: true });
-      this.props.updateLiveMessage('Submit button is now active in the Toolbox region. When you are done with the algorithm, please navigate to the Toolbox region and click on the submit button.');
-      document.getElementById('submit').setAttribute("style", "animation: grow 0.5s ease-in-out 2"); // Run small animation to make submit button noticeable
+    if ( this.isArraySorted(this.userArray, this.programArray) ) {
+      this.showSubmitButton();
     }
   }
 
   // Check if two arrays with same number of elements are equal
-  arrayEquals(arr1, arr2) {
+  isArraySorted(arr1, arr2) {
     let i;
     for (i = 0; i < arr1.length; i++) {
       if(arr1[i] !== arr2[i]) return false;
     }
     return true;
+  }
+
+  showSubmitButton(){
+    this.setState({ enableSubmit: true });
+    this.props.updateLiveMessage('Submit button is now active in the Toolbox region. When you are done with the algorithm, please navigate to the Toolbox region and click on the submit button.');
+    document.getElementById('submit').setAttribute("style", "animation: grow 0.5s ease-in-out 2"); // Run small animation to make submit button noticeable
   }
 
   swap(){
@@ -635,17 +648,21 @@ class Lesson extends React.Component {
   handleSubmit() {
     // set state of answerSubmitted to true to re-render DOM and show submissionFeedback
     this.setState( { operation: 'None', answerSubmitted: true} );
-    const answerCorrect = this.checkIfAnswerCorrect()
+    const answerCorrect = this.isAnswerCorrect()
     this.setState({ answerCorrect: answerCorrect });
     if(answerCorrect) {
       this.props.updateLiveMessage('Great job! Your answer was correct.');
+      if(checkIfLoggedIn()) {
+        let algorithmName = this.sortType.toLowerCase() + 'sort';
+        incrementScore(algorithmName);
+      }
     } else {
       this.props.updateLiveMessage('Your answer was not correct. Try again another time.');
     }
 
   }
 
-  checkIfAnswerCorrect() {
+  isAnswerCorrect() {
     // console.log("userMoves: ", this.props.userMoves);
     // console.log("programMoves: ", this.props.programMoves);
 
@@ -659,7 +676,6 @@ class Lesson extends React.Component {
     
     return true;
   }
-
 
   undoLastMove() {
     if (this.userSP > 0) {

@@ -1,16 +1,14 @@
 import * as React from 'react';
 import scuba from './img/scuba.png';
-import { validateFormElement } from './utils/utils';
+import { validateFormElement, backendUrl } from './utils/utils';
 import axios from "axios";
 import PropTypes from 'prop-types';
 
 class CreateAccount extends React.Component {
   constructor(props) {
 
-
     const axios = require('axios').default;
-    // axios.defaults.baseURL = 'http://localhost:8000/';  // Development
-    axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
+    axios.defaults.baseURL = backendUrl;
 
     super(props);
     
@@ -46,16 +44,11 @@ class CreateAccount extends React.Component {
     
     // Send to the server
     axios.post("/customusers/", newAccount )
-    // axios.post("/api/customusers/", newAccount )
-    // axios.post("/api/accounts/", newAccount )
       .then(res => {
-        // console.log('res: ', res);
-        // console.log('res.data', res.data);
         this.setState({ accountCreated: true });
         this.props.updateLiveMessage('Account created successfully. Please go to login page.');
       })
         .catch(err => {
-          // console.log('err: ', err);
           let rawError = ''
           if (err.response.data) {
             rawError = JSON.stringify(err.response.data);
@@ -70,7 +63,6 @@ class CreateAccount extends React.Component {
           }
           this.setState({ error: true });
         });
-        
   }
 
   displayClassCode = (value) => {

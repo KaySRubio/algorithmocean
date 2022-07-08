@@ -12,8 +12,6 @@ class SubmissionFeedback extends React.Component {
     /* this.state = { 
       answerCorrect: false, // controls what submission feedback looks like
     }; */
-
-    console.log("correct?", this.props.correct);
   }
 
   componentDidMount() {

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import submarine from './img/submarine.png';
 import { Link } from 'react-router-dom';
-import { validateFormElement } from './utils/utils';
 import axios from "axios";
 import Csrftoken from './Csrftoken';
 import PropTypes from 'prop-types';
+import { validateFormElement, backendUrl, frontendUrl, getCookie } from './utils/utils';
 
 //const Login = () => {
 class Login extends React.Component {
@@ -29,44 +29,32 @@ class Login extends React.Component {
 
     e.preventDefault();
 
-    let csrftoken = this.getCookie('csrftoken');
+    let csrftoken = getCookie('csrftoken');
     if(csrftoken === null) {
       csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       console.log('csrftoken wasnt in a cookie so retrieved from the DOM: ', csrftoken );
     }
 
     const user = {};
-    // user.csrftoken = csrftoken;
     user.username = document.getElementById('emailField').value;
     user.password = document.getElementById('passwordField').value;
 
     console.log('credentials: ', user);
 
-    
-
-    /* Alternate method to send the same info using fetch */
-    //csrftoken = getCookie('csrftoken');
-
-
-    // let csrftokenCookieForSafari = 'cookie=' + csrftoken; // new for safari
-
-    
     let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
     console.log("Fetch Request with ", string);
-    fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
-    // fetch('/authenticateUser/', { // Development
+    // fetch(backendUrl + 'uthenticateUser/', { // Production
+    // fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Or try this one Production
+    fetch('/authenticateUser/', { // Development
       credentials: 'include',
       method: 'POST',
-      // mode: 'same-origin', // Development
-      mode: 'cors', // Production
+      mode: 'same-origin', // Development
+      // mode: 'cors', // Production
       headers: {
         'Accept': 'application/json',
-        //'Content-Type': 'application/json',
         'Content-Type': 'text/html; charset=utf-8',
         'X-CSRFToken': csrftoken,
-        // 'cookie': csrftokenCookieForSafari // New for safari but does not work
       },
-      // body: JSON.stringify(user)
       body: string
     })
     .then(res => {
@@ -84,9 +72,6 @@ class Login extends React.Component {
       data && console.log('data', data);
       data.result && console.log('data.result', data.result)
       
-      // if (data.result === undefined || data.result === 'undefined'){
-      //   this.tryAxios(csrftoken, string);
-      // }
       if (data.result === 'NOT logged in') {
         this.props.updateLiveMessage('Invalid username or password. Please check your username or password and try again.');
         console.log("invalid credentials");
@@ -94,17 +79,16 @@ class Login extends React.Component {
         this.setState({ invalidCredentials: true });
       } else if (data.result.username !== undefined) {
         this.props.updateLiveMessage('You have successfully logged in. Redirecting you to the dashboard.');
-        console.log('logged in');
+
         localStorage.setItem('username', data.result.username);
         localStorage.setItem('first_name', data.result.first_name);
         localStorage.setItem('last_name', data.result.last_name);
         localStorage.setItem('is_active', data.result.is_active);
         localStorage.setItem('classCode', data.result.classCode);
         localStorage.setItem('accountType', data.result.accountType);
-        let a = localStorage.getItem('username');
-        console.log('in local storage: ', a);
-        // window.location.replace('http://localhost:3000/dashboard'); // Development
-        window.location.replace('https://algorithmocean.herokuapp.com/dashboard'); // Production
+        let username = localStorage.getItem('username');
+        console.log(username + 'logged in');
+        window.location.replace(frontendUrl + 'dashboard');
       } else {
         this.tryAxios(csrftoken, string);
       }
@@ -142,61 +126,37 @@ class Login extends React.Component {
     axios.defaults.withCredentials = true;
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-    axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 '; // newly added
+    axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 ';
 
-    // axios.defaults.baseURL = 'https://algorithmoceanbackend.herokuapp.com/';
-
-    // axios.post("/api/v1/users/auth/login/", user )
-    // axios.post("/accounts/login/", user ) // server is sending back a login page, which isn't what we want
-    
-    // replace the '@' with %40 in the username
-    // const username2 = user.username.replace('@', '%40');
-
- 
-    //let string = 'csrfmiddlewaretoken='+csrftoken+'&username='+username2+'&password='+user.password;
-    
-
-    //username='john', password='secret'
-
-    // console.log('string:', string);
-    
-    console.log("Attempting to use axios to login");
-
-    axios.post("https://algorithmoceanbackend.herokuapp.com/authenticateUser/", string, { withCredentials: true }) // added this again to see if this helps
+    axios.post(backendUrl + 'authenticateUser/', string, { withCredentials: true }) // added this again to see if this helps
     // headers: {"X-CSRFToken": csrfToken},
-    // axios.post("/authenticateUser/", string )
-    // axios.post("/accounts/login/", user )
-    // axios.get("/help/")
       .then(res => {
         console.log(res);
       })
       .then(data => {
         this.props.updateLiveMessage('You have successfully logged in. Redirecting you to the dashboard.');
-        console.log('data.result', data.result)
-        console.log('logged in');
         localStorage.setItem('username', data.result.username);
         localStorage.setItem('first_name', data.result.first_name);
         localStorage.setItem('last_name', data.result.last_name);
         localStorage.setItem('is_active', data.result.is_active);
         localStorage.setItem('classCode', data.result.classCode);
         localStorage.setItem('accountType', data.result.accountType);
-        let a = localStorage.getItem('username');
-        console.log('in local storage: ', a);
-        console.log("logged in");
-        // window.location.replace('http://localhost:3000/dashboard'); // Development
-        window.location.replace('https://algorithmocean.herokuapp.com/dashboard'); // Production
+        let username = localStorage.getItem('username');
+        console.log(username + 'logged in');
+        window.location.replace(frontendUrl + 'dashboard');
       })
-        .catch(err => {
-          console.log(err);
-          this.setState({ serverError: true });
-          this.props.updateLiveMessage('An error has occurred. Please check with your system administrator.');
-          // localStorage.clear();
+      .catch(err => {
+        console.log(err);
+        this.setState({ serverError: true });
+        this.props.updateLiveMessage('An error has occurred. Please check with your system administrator.');
+        // localStorage.clear();
 
-        })
+      })
     
 
   }
 
+  /*
   getCookie(name) {
     let cookieValue = null;
     console.log('getCookie method is running in Login and this is document.cookie: ', document.cookie);
@@ -211,7 +171,7 @@ class Login extends React.Component {
       }
     }
     return cookieValue;
-  }
+  } */
   
   render(){
     return (

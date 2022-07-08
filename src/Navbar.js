@@ -9,7 +9,8 @@ import hamburgDark from './img/hamburgDark.png';
 import hamburgLight from './img/hamburgLight.png';
 import PropTypes from "prop-types";
 // import { withRouter } from "react-router";
-import { checkIfLoggedIn } from './utils/utils';
+import { checkIfLoggedIn, frontendUrl } from './utils/utils';
+
 
 class Navbar extends React.Component {
 
@@ -78,7 +79,8 @@ class Navbar extends React.Component {
     localStorage.clear(); // for now logging out just clears out account info from local storage. In future may send logout to django
     this.props.updateLiveMessage('You have been logged out. Redirecting to the home page.');
     // window.location.replace('http://localhost:3000/'); // Development
-    window.location.replace('https://algorithmocean.herokuapp.com/'); // Production
+    // window.location.replace('https://algorithmocean.herokuapp.com/'); // Production
+    window.location.replace(frontendUrl); 
   }
 
   render(){
