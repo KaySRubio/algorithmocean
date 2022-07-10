@@ -13,7 +13,7 @@ class Login extends React.Component {
   
     this.state = { 
       invalidCredentials: false,
-      serverError: false,
+      serverError: '',
     };
       
   } 
@@ -24,6 +24,15 @@ class Login extends React.Component {
     };
   }
 
+  componentDidMount() {
+    if(!navigator.cookieEnabled) {
+      this.setState({ serverError: 'It appears that your browser has cookies disabled.  Please enable cookies before trying to log in.' });
+      console.warn('Browser has cookies disabled. Site may not work properly.');
+    }
+    if(navigator.userAgent.includes('Safari') && navigator.vendor.includes('Apple')) {
+      this.setState({ serverError: 'To login using Safari, please make sure the \'Prevent Cross Site Tracking\' setting is turned off (Safari turns it on by default). Go to Preferences, Privacy tab.' });
+    }
+  }
 
   handleSubmit = (e) => {
 
@@ -43,7 +52,7 @@ class Login extends React.Component {
 
     let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
     console.log("Fetch Request with ", string);
-    // fetch(backendUrl + 'uthenticateUser/', { // Production
+    // fetch(backendUrl + 'authenticateUser/', { // Production
     // fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Or try this one Production
     fetch('/authenticateUser/', { // Development
       credentials: 'include',
@@ -147,7 +156,7 @@ class Login extends React.Component {
       })
       .catch(err => {
         console.log(err);
-        this.setState({ serverError: true });
+        this.setState({ serverError: 'Sorry, something went wrong! Please check with your system administrator.' });
         this.props.updateLiveMessage('An error has occurred. Please check with your system administrator.');
         // localStorage.clear();
 
@@ -177,7 +186,7 @@ class Login extends React.Component {
     return (
       <main className="loginModal">
         {this.state.invalidCredentials && <div className='invalidCredentials'><p>Invalid username or password, please try again or contact your account administrator</p></div> }
-        {this.state.serverError && <div className='invalidCredentials'><p>Sorry, something went wrong! Please check with your system administrator</p></div> }
+        {this.state.serverError && <div className='invalidCredentials'><p>{this.state.serverError}</p></div> }
         <div className='col1of2'>
           <img src={submarine} className="leftSidePic" alt="A submarine in the ocean floating above 5 fish and some seaweed"/>
         </div>

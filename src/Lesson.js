@@ -97,7 +97,7 @@ class Lesson extends React.Component {
   componentDidMount = () => {
     this.initializeArray();
     this.sort(this.sortType, this.programArray);
-    this.init();
+    this.initializeCreateJsCanvas();
   }
 
   // Global variables
@@ -249,7 +249,7 @@ class Lesson extends React.Component {
   }
 
   // Initialize the createJS canvas
-  init() {
+  initializeCreateJsCanvas() {
     let x = 10;
     let y = 10;
     this.stage = new Stage('demoCanvas');
@@ -862,9 +862,4 @@ class Lesson extends React.Component {
   }
 }
 
-
-/* 
-
-
-              */
 export default Lesson;

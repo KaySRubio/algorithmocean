@@ -376,7 +376,7 @@ p.homeRowLight, h3.homeRowLight, h4.homeRowLight, p.homeRowLight>.link {
   }
 
   #row1col1 {
-    padding: 30px 50px 30px 50px;
+    padding: 30px 50px 50px 50px;
   }
 
   #row1col1 {
@@ -1073,9 +1073,11 @@ light-blue: #C5D5E4 */
 }
 
 .invalidCredentials, .successMsg {
-  width: 100%;
-  padding-top: 20px;
+  width: 90%;
+  padding: 10px 5% 10px 5%;
   position: absolute;
+  margin: 0px;
+  background-color: #E5ECF3;
   /*left: 0px;
   top: 0px;*/
 }

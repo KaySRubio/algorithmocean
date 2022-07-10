@@ -10,7 +10,7 @@ class Dashboard extends React.Component {
       first_name: '',
       practiceScores: {'bubblesort': 0, 'insertionsort': 0, 'selectionsort': 0},
     };
-    // console.log(this.state.practiceScores.bubblesort);
+    console.log(this.state.practiceScores.bubblesort);
   } 
 
   componentDidMount() {
@@ -43,7 +43,7 @@ class Dashboard extends React.Component {
           <input type="checkbox" id="fname" name="fname"></input>
         </div>
         <p>No assignments.</p>
-        <p>Expecting assignments?  Check your Account and make sure you have entered the correct class code.</p>
+        <p>The ability for teachers to assign assignments to classes of students is coming soon!</p>
       </div>
 
       <div className="dashboardSection" id="dashboardPractice">
@@ -58,15 +58,15 @@ class Dashboard extends React.Component {
             </tr>
             <tr>
               <td><Link className="link" to="/demo-lesson/bubble">Bubble Sort</Link></td>
-              <td className="tableCol2">{this.state.practiceScores.bubblesort ? this.state.practiceScores.bubblesort : '0'}</td>
+              <td className="tableCol2">{this.state.practiceScores ? this.state.practiceScores.bubblesort : '0'}</td>
             </tr>
             <tr>
               <td><Link className="link" to="/demo-lesson/selection">Selection Sort</Link></td>
-              <td className="tableCol2">{this.state.practiceScores.selectionsort ? this.state.practiceScores.selectionsort : '0'}</td>
+              <td className="tableCol2">{this.state.practiceScores ? this.state.practiceScores.selectionsort : '0'}</td>
             </tr>
             <tr>
               <td><Link className="link" to="/demo-lesson/insertion">Insertion Sort</Link></td>
-              <td className="tableCol2">{this.state.practiceScores.insertionsort ? this.state.practiceScores.insertionsort : 0}</td>
+              <td className="tableCol2">{this.state.practiceScores ? this.state.practiceScores.insertionsort : 0}</td>
             </tr>
           </tbody>
         </table>
@@ -76,5 +76,5 @@ class Dashboard extends React.Component {
   );}
 }
 
- 
+// <p>Expecting assignments?  Check your Account and make sure you have entered the correct class code.</p>
 export default Dashboard;

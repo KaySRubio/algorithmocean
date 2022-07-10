@@ -99,6 +99,20 @@ export function getCookie(name) {
 
 export function getPracticeScores() {
 
+/*
+// TEMPORARY TEST monkey
+axios.get('/api/practices/')
+  .then(res => {
+    console.log('res: ', res);
+    // console.log('res.data', res.data);
+  })
+  .catch(err => {
+     console.log('err: ', err);
+  }); */
+
+  // Make scores into an object
+  let practiceScores = {};
+
   // monkey - trying to refactor this to use listOfAlgorithmNamesInDatabase
   // rather than listnig them every time
   let scoreIsMissing = false;
@@ -112,8 +126,19 @@ export function getPracticeScores() {
   })
 
   if(scoreIsMissing) {
-    getPracticeScoresFromServer();
+    return getPracticeScoresFromServer();
+    
+  } else {
+    practiceScores = getPracticeScoresFromLocalStorage()
+    return practiceScores;
   }
+  // console.log('returning practiceScores from getPracticeScores: ', practiceScores);
+  
+
+
+
+
+  /*
 
  // if any are still blank after call to server, set to zero in local storage
  listOfAlgorithmNamesInDatabase.forEach(e => {
@@ -122,18 +147,17 @@ export function getPracticeScores() {
       localStorage.setItem(e, 0);
     }
   })
-
-
-  // Make scores into an object and return them to the caller
-  let practiceScores = {};
+  
   listOfAlgorithmNamesInDatabase.forEach(e => {
     practiceScores[e] = localStorage.getItem(e);
   })
-  return practiceScores;
+  return practiceScores; */
 
 }
 
 function getPracticeScoresFromServer() {
+
+  let practiceScores = {}
   const username = localStorage.getItem('username');
   console.log('requesting practice scores from the server for user with username ', username);
   
@@ -143,13 +167,51 @@ function getPracticeScoresFromServer() {
     .then(res => {
       console.log(res.data);
       if(res.data) {
+        if(res.data[0]) {
+          console.log(res.data[0].fields.email); // temp - get the numerical ID
+          localStorage.setItem('id', res.data[0].fields.email); // temp - store it in local storage
+        }
+        // Store each algorithm name and score from the array recieved
         res.data.forEach(e => {
-          console.log(e.fields.algorithm, ': ', e.fields.score);
           localStorage.setItem(e.fields.algorithm, e.fields.score);
+          localStorage.setItem(e.fields.algorithm + '_id', e.pk);
         });
+        
       }
+      setBlankPracticeScoresToZero();
+      practiceScores = getPracticeScoresFromLocalStorage()
+      console.log('returning practiceScores from getScoresFromServer: ', practiceScores);
+      return practiceScores;
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.log(err)
+      console.warn('Unable to retrieve practice scores from server');
+      setBlankPracticeScoresToZero();
+      practiceScores = getPracticeScoresFromLocalStorage()
+      return practiceScores;
+    });
+
+}
+
+// Get practice scores from local storage
+function getPracticeScoresFromLocalStorage() {
+  let practiceScores = {}
+  listOfAlgorithmNamesInDatabase.forEach(e => {
+    practiceScores[e] = localStorage.getItem(e);
+  })
+  return practiceScores;
+}
+
+
+
+// if any are still blank after call to server, set to zero in local storage
+function setBlankPracticeScoresToZero() {
+  listOfAlgorithmNamesInDatabase.forEach(e => {
+    let score = localStorage.getItem(e);
+    if(!score || isNaN(score)){
+      localStorage.setItem(e, 0);
+    }
+  })
 }
 
 export function incrementScore(algorithmName){
@@ -178,7 +240,7 @@ function storeScoreInLocalStorage(algorithmName, score){
   localStorage.setItem(algorithmName, scoreString);
 }
 
-function storeScoreInDatabase(algorithmName, score){
+function storeScoreInDatabase(algorithmName, score) {
   // get email from local storage
   const username = localStorage.getItem('username');
 
@@ -191,13 +253,88 @@ function storeScoreInDatabase(algorithmName, score){
     console.warn('Attempted to send grade to database but csrf token not found in browser storage');
   } else {
     console.log('storing score of ', score, ' in database for ', username, ' for', algorithmName);
-    
-    axios.defaults.withCredentials = true;
-    axios.defaults.xsrfCookieName = 'csrftoken';
-    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-    axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 ';
+  }
+  
+  // monkey
+  const practiceObjectId = localStorage.getItem(algorithmName + '_id');
+  const id = localStorage.getItem('id');
 
-    axios.post("/postpracticescore/", {params: { username: username, algorithmName: algorithmName, score: score }})
+  // Create a string to send to the server with the information for a practice score object
+  let practiceObjectString1 = 'csrfmiddlewaretoken='+csrftoken+'&email='+id+'&algorithm='+algorithmName+'&type=1&score='+score+'&_save=Save';
+  console.log('practiceObjectId: ', practiceObjectId);
+  console.log(practiceObjectString1);
+  // &email=53&algorithm=bubblesort&type=1&score=4&_save=Save
+
+
+  const practiceScoreObject = { 
+    csrfmiddlewaretoken: csrftoken, 
+    email: id, 
+    algorithm: algorithmName,
+    type: 1,
+    score: score,
+  };
+
+  //let practiceObjectString2 = 'csrfmiddlewaretoken='+csrftoken+'&email='+'hello2@gmail.com'+'&algorithm='+algorithmName+'&type=1&score='+score+'&_save=Save';
+  // let practiceObjectString2 = 'csrfmiddlewaretoken='+csrftoken+'&email='+id+'&algorithm='+algorithmName+'&type=1&score='+score+'&_save=Save';
+  let practiceObjectString2 = 'csrfmiddlewaretoken='+csrftoken+'&email='+id+'&algorithm='+algorithmName+'&type=1&score='+score;
+  console.log(practiceObjectString2);
+
+
+  if(practiceObjectId) {
+    putUpdatedScoreInDatabase(practiceObjectId, practiceObjectString1, csrftoken);
+  } else {
+    postNewScoreToDatabase(practiceScoreObject, csrftoken)
+  }
+
+}
+
+function postNewScoreToDatabase(practiceObjectString, csrftoken) {
+  console.log('posting new score object in database');
+
+
+  // monkey - going insane here, this method keeps running even after commented it out and restarted server.
+  // I can't figure out where something like this is being called???
+
+  
+  // fetch(backendUrl + 'api/practices/', { // Production
+  // fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/', { // Or try this one Production
+  fetch('/api/practices/', { // Development
+    credentials: 'include',
+    method: 'POST',
+    mode: 'same-origin', // Development
+    // mode: 'cors', // Production
+    headers: {
+      // 'Accept': 'application/json; text/html; charset=utf-8',
+      'Accept': 'application/json',
+      // 'Accept': 'text/html; charset=utf-8',
+      // 'Content-Type': 'text/html; charset=utf-8',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+    },
+    // body: practiceObjectString
+    body: JSON.stringify(practiceObjectString)
+  })
+  .then(res => {
+    console.log('res: ', res);
+    // console.log('res.data', res.data);
+  })
+  .catch(err => {
+    console.log('error')
+    console.log('err: ', err);
+    console.log('somthing is wrong here');
+  }); 
+  
+
+  /*
+  axios.defaults.withCredentials = true;
+  axios.defaults.xsrfCookieName = 'csrftoken';
+  axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+  axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 ';
+    
+
+    // axios.post("/postpracticescore/", {params: { username: username, algorithmName: algorithmName, score: score }})
+    // axios.post("/api/practices/", )
+    axios.post('/api/practices/', practiceObjectString)
       .then(res => {
         console.log('res: ', res);
         // console.log('res.data', res.data);
@@ -206,6 +343,28 @@ function storeScoreInDatabase(algorithmName, score){
         console.log('err: ', err);
       }); 
   }
+  */
+
+}
 
 
+function putUpdatedScoreInDatabase(practiceObjectId, practiceObjectString, csrftoken) {
+  console.log('putting updated score in database');
+  axios.defaults.withCredentials = true;
+  axios.defaults.xsrfCookieName = 'csrftoken';
+  axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+  axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 ';
+    
+
+    // axios.post("/postpracticescore/", {params: { username: username, algorithmName: algorithmName, score: score }})
+    // axios.post("/api/practices/", )
+    axios.put('/api/practices/' + practiceObjectId + '/', practiceObjectString)
+      .then(res => {
+        console.log('res: ', res);
+        // console.log('res.data', res.data);
+      })
+      .catch(err => {
+        console.log('err: ', err);
+      }); 
+  
 }

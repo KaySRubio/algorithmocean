@@ -41,7 +41,7 @@ class Csrftoken extends React.Component {
           this.setState({ csrftoken: _csrfToken });
 
           // Give the browser a chance to set it by itself, and see if that worked
-          let csrftokenBrowser = this.getCookie('csrftoken');
+          let csrftokenBrowser = getCookie('csrftoken');
           if (csrftokenBrowser !== undefined && csrftokenBrowser !== null) {
             console.log('Browser set csrf token by itself YAY: ', csrftokenBrowser);
           } else {
