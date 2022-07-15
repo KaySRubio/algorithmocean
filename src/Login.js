@@ -88,7 +88,7 @@ class Login extends React.Component {
         this.setState({ invalidCredentials: true });
       } else if (data.result.username !== undefined) {
         this.props.updateLiveMessage('You have successfully logged in. Redirecting you to the dashboard.');
-
+        localStorage.setItem('id', data.result.id);
         localStorage.setItem('username', data.result.username);
         localStorage.setItem('first_name', data.result.first_name);
         localStorage.setItem('last_name', data.result.last_name);

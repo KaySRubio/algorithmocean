@@ -10,7 +10,7 @@ export const frontendUrl = 'http://localhost:3000/'; // Development
 
 
 // Important for some methods below related to retrieving specific scores from local storage and db
-const listOfAlgorithmNamesInDatabase = ['bubblesort', 'insertionsort', 'selectionsort'];
+export const listOfAlgorithmNamesInDatabase = ['bubblesort', 'insertionsort', 'selectionsort'];
 
 // Check if they are logged in based on their name being in local storage
 export function checkIfLoggedIn() {
@@ -84,7 +84,6 @@ export function getCookie(name) {
   let cookieValue = null;
   console.log('getCookie method is running in Csrftoken and this is document.cookie: ', document.cookie);
   if (document.cookie && document.cookie !== '') {
-    console.log('attempting to get ', name, ' from cookie');
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
       var cookie = cookies[i].trim();
@@ -97,134 +96,10 @@ export function getCookie(name) {
   return cookieValue;
 }
 
-export function getPracticeScores() {
 
-/*
-// TEMPORARY TEST monkey
-axios.get('/api/practices/')
-  .then(res => {
-    console.log('res: ', res);
-    // console.log('res.data', res.data);
-  })
-  .catch(err => {
-     console.log('err: ', err);
-  }); */
-
-  // Make scores into an object
-  let practiceScores = {};
-
-  // monkey - trying to refactor this to use listOfAlgorithmNamesInDatabase
-  // rather than listnig them every time
-  let scoreIsMissing = false;
-
-  // Deturmine if any of the scores are missing from local storage
-  listOfAlgorithmNamesInDatabase.forEach(e => {
-    let score = localStorage.getItem(e);
-    if(!score || isNaN(score)){
-      scoreIsMissing = true;
-    }
-  })
-
-  if(scoreIsMissing) {
-    return getPracticeScoresFromServer();
-    
-  } else {
-    practiceScores = getPracticeScoresFromLocalStorage()
-    return practiceScores;
-  }
-  // console.log('returning practiceScores from getPracticeScores: ', practiceScores);
-  
-
-
-
-
-  /*
-
- // if any are still blank after call to server, set to zero in local storage
- listOfAlgorithmNamesInDatabase.forEach(e => {
-    let score = localStorage.getItem(e);
-    if(!score || isNaN(score)){
-      localStorage.setItem(e, 0);
-    }
-  })
-  
-  listOfAlgorithmNamesInDatabase.forEach(e => {
-    practiceScores[e] = localStorage.getItem(e);
-  })
-  return practiceScores; */
-
-}
-
-function getPracticeScoresFromServer() {
-
-  let practiceScores = {}
-  const username = localStorage.getItem('username');
-  console.log('requesting practice scores from the server for user with username ', username);
-  
-    const axios = require('axios').default;
-    // axios.get("https://algorithmoceanbackend.herokuapp.com/getpracticescores/") // Production
-    axios.get('/getpracticescores/', {params: { username: username } }) // Development
-    .then(res => {
-      console.log(res.data);
-      if(res.data) {
-        if(res.data[0]) {
-          console.log(res.data[0].fields.email); // temp - get the numerical ID
-          localStorage.setItem('id', res.data[0].fields.email); // temp - store it in local storage
-        }
-        // Store each algorithm name and score from the array recieved
-        res.data.forEach(e => {
-          localStorage.setItem(e.fields.algorithm, e.fields.score);
-          localStorage.setItem(e.fields.algorithm + '_id', e.pk);
-        });
-        
-      }
-      setBlankPracticeScoresToZero();
-      practiceScores = getPracticeScoresFromLocalStorage()
-      console.log('returning practiceScores from getScoresFromServer: ', practiceScores);
-      return practiceScores;
-    })
-    .catch(err => {
-      console.log(err)
-      console.warn('Unable to retrieve practice scores from server');
-      setBlankPracticeScoresToZero();
-      practiceScores = getPracticeScoresFromLocalStorage()
-      return practiceScores;
-    });
-
-}
-
-// Get practice scores from local storage
-function getPracticeScoresFromLocalStorage() {
-  let practiceScores = {}
-  listOfAlgorithmNamesInDatabase.forEach(e => {
-    practiceScores[e] = localStorage.getItem(e);
-  })
-  return practiceScores;
-}
-
-
-
-// if any are still blank after call to server, set to zero in local storage
-function setBlankPracticeScoresToZero() {
-  listOfAlgorithmNamesInDatabase.forEach(e => {
-    let score = localStorage.getItem(e);
-    if(!score || isNaN(score)){
-      localStorage.setItem(e, 0);
-    }
-  })
-}
 
 export function incrementScore(algorithmName){
   let previousScore = localStorage.getItem(algorithmName);
-
-    // If it does not exist in local storage, get it from the database
-    if(previousScore === undefined || isNaN(previousScore) || previousScore === null ) {
-      console.log('previousScore was not defined or NaN so requesting from database');
-      let practiceScores = getPracticeScores()
-      console.log(practiceScores);
-      
-      previousScore = practiceScores[algorithmName];
-    }
     
     let previousScoreNum = parseFloat(previousScore);
     let newScore = 0;
@@ -252,50 +127,31 @@ function storeScoreInDatabase(algorithmName, score) {
   } else if (csrftoken === null) {
     console.warn('Attempted to send grade to database but csrf token not found in browser storage');
   } else {
-    console.log('storing score of ', score, ' in database for ', username, ' for', algorithmName);
+
+    const practiceObjectId = localStorage.getItem(algorithmName + '_id');
+    const id = localStorage.getItem('id');
+  
+    const practiceScoreObject = { 
+      csrfmiddlewaretoken: csrftoken, 
+      email: id,
+      algorithm: algorithmName,
+      type: 1,
+      score: score,
+    };
+  
+    if(practiceObjectId) {
+      putUpdatedScoreInDatabase(practiceObjectId, practiceScoreObject, csrftoken);
+    } else {
+      postNewScoreToDatabase(practiceScoreObject, csrftoken)
+    }
   }
   
-  // monkey
-  const practiceObjectId = localStorage.getItem(algorithmName + '_id');
-  const id = localStorage.getItem('id');
-
-  // Create a string to send to the server with the information for a practice score object
-  let practiceObjectString1 = 'csrfmiddlewaretoken='+csrftoken+'&email='+id+'&algorithm='+algorithmName+'&type=1&score='+score+'&_save=Save';
-  console.log('practiceObjectId: ', practiceObjectId);
-  console.log(practiceObjectString1);
-  // &email=53&algorithm=bubblesort&type=1&score=4&_save=Save
-
-
-  const practiceScoreObject = { 
-    csrfmiddlewaretoken: csrftoken, 
-    email: id, 
-    algorithm: algorithmName,
-    type: 1,
-    score: score,
-  };
-
-  //let practiceObjectString2 = 'csrfmiddlewaretoken='+csrftoken+'&email='+'hello2@gmail.com'+'&algorithm='+algorithmName+'&type=1&score='+score+'&_save=Save';
-  // let practiceObjectString2 = 'csrfmiddlewaretoken='+csrftoken+'&email='+id+'&algorithm='+algorithmName+'&type=1&score='+score+'&_save=Save';
-  let practiceObjectString2 = 'csrfmiddlewaretoken='+csrftoken+'&email='+id+'&algorithm='+algorithmName+'&type=1&score='+score;
-  console.log(practiceObjectString2);
-
-
-  if(practiceObjectId) {
-    putUpdatedScoreInDatabase(practiceObjectId, practiceObjectString1, csrftoken);
-  } else {
-    postNewScoreToDatabase(practiceScoreObject, csrftoken)
-  }
 
 }
 
-function postNewScoreToDatabase(practiceObjectString, csrftoken) {
-  console.log('posting new score object in database');
+function postNewScoreToDatabase(practiceObject, csrftoken) {
+  console.log('Posting new score of ', practiceObject.score, ' in database ' + practiceObject.algorithm);
 
-
-  // monkey - going insane here, this method keeps running even after commented it out and restarted server.
-  // I can't figure out where something like this is being called???
-
-  
   // fetch(backendUrl + 'api/practices/', { // Production
   // fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/', { // Or try this one Production
   fetch('/api/practices/', { // Development
@@ -304,24 +160,20 @@ function postNewScoreToDatabase(practiceObjectString, csrftoken) {
     mode: 'same-origin', // Development
     // mode: 'cors', // Production
     headers: {
-      // 'Accept': 'application/json; text/html; charset=utf-8',
       'Accept': 'application/json',
-      // 'Accept': 'text/html; charset=utf-8',
-      // 'Content-Type': 'text/html; charset=utf-8',
       'Content-Type': 'application/json',
       'X-CSRFToken': csrftoken,
     },
-    // body: practiceObjectString
-    body: JSON.stringify(practiceObjectString)
+    body: JSON.stringify(practiceObject)
   })
-  .then(res => {
-    console.log('res: ', res);
-    // console.log('res.data', res.data);
+  .then(response => response.json())  // convert to json
+  .then(json => {
+    if(json.id){
+      localStorage.setItem(practiceObject.algorithm + '_id', json.id);
+    }
   })
   .catch(err => {
-    console.log('error')
-    console.log('err: ', err);
-    console.log('somthing is wrong here');
+    console.warn(err);
   }); 
   
 
@@ -348,8 +200,31 @@ function postNewScoreToDatabase(practiceObjectString, csrftoken) {
 }
 
 
-function putUpdatedScoreInDatabase(practiceObjectId, practiceObjectString, csrftoken) {
-  console.log('putting updated score in database');
+function putUpdatedScoreInDatabase(practiceObjectId, practiceObject, csrftoken) {
+  console.log('Putting updated score of ', practiceObject.score, ' in database ' + practiceObject.algorithm);
+
+  // fetch(backendUrl + 'api/practices/' + practiceObjectId + '/', { // Production
+  // fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/' + practiceObjectId + '/', { // Or try this one Production
+  fetch('/api/practices/' + practiceObjectId + '/', { // Development
+    credentials: 'include',
+    method: 'PUT',
+    mode: 'same-origin', // Development
+    // mode: 'cors', // Production
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+    },
+    body: JSON.stringify(practiceObject)
+  })
+  .then(res => {
+    console.log('res: ', res);
+  })
+  .catch(err => {
+    console.warn('Error! ', err);
+  }); 
+
+  /*
   axios.defaults.withCredentials = true;
   axios.defaults.xsrfCookieName = 'csrftoken';
   axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -366,5 +241,5 @@ function putUpdatedScoreInDatabase(practiceObjectId, practiceObjectString, csrft
       .catch(err => {
         console.log('err: ', err);
       }); 
-  
+  */
 }
