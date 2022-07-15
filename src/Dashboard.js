@@ -49,8 +49,8 @@ class Dashboard extends React.Component {
     console.log('requesting practice scores from the server for user with username ', username);
     
       const axios = require('axios').default;
-      // axios.get("https://algorithmoceanbackend.herokuapp.com/getpracticescores/") // Production
-      axios.get('/getpracticescores/', {params: { username: username } }) // Development
+      axios.get("https://algorithmoceanbackend.herokuapp.com/getpracticescores/") // Production
+      // axios.get('/getpracticescores/', {params: { username: username } }) // Development
       .then(res => {
         if(res.data) {
           // Store each algorithm score object's ID and score from the array recieved from server

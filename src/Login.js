@@ -53,12 +53,12 @@ class Login extends React.Component {
     let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
     console.log("Fetch Request with ", string);
     // fetch(backendUrl + 'authenticateUser/', { // Production
-    // fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Or try this one Production
-    fetch('/authenticateUser/', { // Development
+    fetch('https://algorithmoceanbackend.herokuapp.com/authenticateUser/', { // Production
+    // fetch('/authenticateUser/', { // Development
       credentials: 'include',
       method: 'POST',
-      mode: 'same-origin', // Development
-      // mode: 'cors', // Production
+      // mode: 'same-origin', // Development
+      mode: 'cors', // Production
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'text/html; charset=utf-8',

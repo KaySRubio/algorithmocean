@@ -1,13 +1,14 @@
 
 import axios from "axios";
 
-export const backendUrl = 'http://localhost:8000/'; // Development
-// export const backendUrl = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
+// export const backendUrl = 'http://localhost:8000/'; // Development
+export const backendUrl = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
 
-export const frontendUrl = 'http://localhost:3000/'; // Development
-// export const frontendUrl = 'https://algorithmocean.herokuapp.com/'; // Production
+// export const frontendUrl = 'http://localhost:3000/'; // Development
+export const frontendUrl = 'https://algorithmocean.herokuapp.com/'; // Production
 
-
+// fetchMode = 'same-origin', // Development
+fetchMode = 'cors', // Production
 
 // Important for some methods below related to retrieving specific scores from local storage and db
 export const listOfAlgorithmNamesInDatabase = ['bubblesort', 'insertionsort', 'selectionsort'];
@@ -153,12 +154,11 @@ function postNewScoreToDatabase(practiceObject, csrftoken) {
   console.log('Posting new score of ', practiceObject.score, ' in database ' + practiceObject.algorithm);
 
   // fetch(backendUrl + 'api/practices/', { // Production
-  // fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/', { // Or try this one Production
-  fetch('/api/practices/', { // Development
+  fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/', { // Or try this one Production
+  // fetch('/api/practices/', { // Development
     credentials: 'include',
     method: 'POST',
-    mode: 'same-origin', // Development
-    // mode: 'cors', // Production
+    mode: fetchMode,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -204,12 +204,11 @@ function putUpdatedScoreInDatabase(practiceObjectId, practiceObject, csrftoken) 
   console.log('Putting updated score of ', practiceObject.score, ' in database ' + practiceObject.algorithm);
 
   // fetch(backendUrl + 'api/practices/' + practiceObjectId + '/', { // Production
-  // fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/' + practiceObjectId + '/', { // Or try this one Production
-  fetch('/api/practices/' + practiceObjectId + '/', { // Development
+  fetch('https://algorithmoceanbackend.herokuapp.com/api/practices/' + practiceObjectId + '/', { // Or try this one Production
+  // fetch('/api/practices/' + practiceObjectId + '/', { // Development
     credentials: 'include',
     method: 'PUT',
-    mode: 'same-origin', // Development
-    // mode: 'cors', // Production
+    mode: fetchMode,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
