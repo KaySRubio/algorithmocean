@@ -7,8 +7,8 @@ export const backendUrl = 'https://algorithmoceanbackend.herokuapp.com/'; // Pro
 // export const frontendUrl = 'http://localhost:3000/'; // Development
 export const frontendUrl = 'https://algorithmocean.herokuapp.com/'; // Production
 
-// fetchMode = 'same-origin', // Development
-fetchMode = 'cors', // Production
+// const fetchMode = 'same-origin'; // Development
+const fetchMode = 'cors'; // Production
 
 // Important for some methods below related to retrieving specific scores from local storage and db
 export const listOfAlgorithmNamesInDatabase = ['bubblesort', 'insertionsort', 'selectionsort'];
