@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
     console.log('requesting practice scores from the server for user with username ', username);
     
       const axios = require('axios').default;
-      axios.get("https://algorithmoceanbackend.herokuapp.com/getpracticescores/") // Production
+      axios.get("https://algorithmoceanbackend.herokuapp.com/getpracticescores/", {params: { username: username } }) // Production
       // axios.get('/getpracticescores/', {params: { username: username } }) // Development
       .then(res => {
         if(res.data) {
