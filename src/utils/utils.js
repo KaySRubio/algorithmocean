@@ -1,6 +1,3 @@
-
-import axios from "axios";
-
 // export const backendUrl = 'http://localhost:8000/'; // Development
 export const backendUrl = 'https://algorithmoceanbackend.herokuapp.com/'; // Production
 
@@ -83,7 +80,7 @@ function showAsInvalid(element) {
 // and the browser already saved it
 export function getCookie(name) {
   let cookieValue = null;
-  console.log('getCookie method is running in Csrftoken and this is document.cookie: ', document.cookie);
+  // console.log('getCookie method is running in Csrftoken and this is document.cookie: ', document.cookie);
   if (document.cookie && document.cookie !== '') {
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
@@ -97,8 +94,6 @@ export function getCookie(name) {
   return cookieValue;
 }
 
-
-
 export function incrementScore(algorithmName){
   let previousScore = localStorage.getItem(algorithmName);
     
@@ -109,7 +104,6 @@ export function incrementScore(algorithmName){
     storeScoreInLocalStorage(algorithmName, newScore);
     storeScoreInDatabase(algorithmName, newScore);
 }
-
 
 function storeScoreInLocalStorage(algorithmName, score){
   let scoreString = score.toString();
@@ -146,8 +140,6 @@ function storeScoreInDatabase(algorithmName, score) {
       postNewScoreToDatabase(practiceScoreObject, csrftoken)
     }
   }
-  
-
 }
 
 function postNewScoreToDatabase(practiceObject, csrftoken) {
@@ -175,30 +167,7 @@ function postNewScoreToDatabase(practiceObject, csrftoken) {
   .catch(err => {
     console.warn(err);
   }); 
-  
-
-  /*
-  axios.defaults.withCredentials = true;
-  axios.defaults.xsrfCookieName = 'csrftoken';
-  axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-  axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 ';
-    
-
-    // axios.post("/postpracticescore/", {params: { username: username, algorithmName: algorithmName, score: score }})
-    // axios.post("/api/practices/", )
-    axios.post('/api/practices/', practiceObjectString)
-      .then(res => {
-        console.log('res: ', res);
-        // console.log('res.data', res.data);
-      })
-      .catch(err => {
-        console.log('err: ', err);
-      }); 
-  }
-  */
-
 }
-
 
 function putUpdatedScoreInDatabase(practiceObjectId, practiceObject, csrftoken) {
   console.log('Putting updated score of ', practiceObject.score, ' in database ' + practiceObject.algorithm);
@@ -223,22 +192,4 @@ function putUpdatedScoreInDatabase(practiceObjectId, practiceObject, csrftoken) 
     console.warn('Error! ', err);
   }); 
 
-  /*
-  axios.defaults.withCredentials = true;
-  axios.defaults.xsrfCookieName = 'csrftoken';
-  axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-  axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8 ';
-    
-
-    // axios.post("/postpracticescore/", {params: { username: username, algorithmName: algorithmName, score: score }})
-    // axios.post("/api/practices/", )
-    axios.put('/api/practices/' + practiceObjectId + '/', practiceObjectString)
-      .then(res => {
-        console.log('res: ', res);
-        // console.log('res.data', res.data);
-      })
-      .catch(err => {
-        console.log('err: ', err);
-      }); 
-  */
 }

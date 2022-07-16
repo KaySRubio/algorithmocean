@@ -167,6 +167,4 @@ class HelpModal extends React.Component {
   }
 }
 
-// alt={this.state.directionNum > -1 ? this.directions[this.state.directionNum][2] : 'An arrow'}
-
 export default HelpModal;

@@ -6,7 +6,6 @@ import HelpModal from './HelpModal';
 import VideoModal from './VideoModal';
 import SubmissionFeedback from './SubmissionFeedback';
 import { Tween, Ease } from "@createjs/tweenjs";
-import { useLocation } from 'react-router-dom';
 import { checkIfLoggedIn, incrementScore } from './utils/utils';
 
 import anem from './img/anem.png';
@@ -79,9 +78,7 @@ class Lesson extends React.Component {
       showVideoModal: false, // controls if the video modal appears
       showHelpModal: true, // controls if the help modal appears
     };
-
   }
-
 
   static get propTypes() {
     return {
@@ -121,7 +118,6 @@ class Lesson extends React.Component {
     }
     return sortType;
   }
-
 
   // Initialize an array of 6 elements with random numbers [10-100]
   initializeArray = () => {
@@ -242,7 +238,6 @@ class Lesson extends React.Component {
         
       }
     }
-
     // console.log("sorted array is: ", array);
     // console.log("program stack is: ", this.programStack);
     // console.log("program stack pointer is: ", this.programSP);
@@ -531,7 +526,6 @@ class Lesson extends React.Component {
     // Copy userArray into a static temporary version to write to stack
     const auditTrail = [...this.userArray];
 
-
     // Add 5 objects to the stack of user moves including 1) operation, 2-3) numeric operands in order from larger to smaller, 4) resulting array, 5-6) operand containers for visual swap
     this.setState(prevState => ({
       userStack: [...prevState.userStack, [ this.state.operation, numA, numB, auditTrail, containerA, shiftToRight ]]
@@ -635,7 +629,6 @@ class Lesson extends React.Component {
     } else {
       console.warn('Error! Invalid tool selected from the toolbox.');
     }
-
   }
 
   // Click event on the button in the help Modal that normally goes to next, but when directions are over can close modal
@@ -659,13 +652,11 @@ class Lesson extends React.Component {
     } else {
       this.props.updateLiveMessage('Your answer was not correct. Try again another time.');
     }
-
   }
 
   isAnswerCorrect() {
     // console.log("userMoves: ", this.props.userMoves);
     // console.log("programMoves: ", this.props.programMoves);
-
     if (this.state.userStack.length !== this.programStack.length) return false;
     let i;
     for(i = 0; i < this.state.userStack.length; i++) {
@@ -673,13 +664,11 @@ class Lesson extends React.Component {
       if( this.state.userStack[i][1] !== this.programStack[i][1]) return false;
       if( this.state.userStack[i][2] !== this.programStack[i][2]) return false;
     }
-    
     return true;
   }
 
   undoLastMove() {
     if (this.userSP > 0) {
-
       // Get the most recent operation from the top of the stack
       const operation = this.state.userStack[this.userSP-1][0];
       let arr
@@ -694,7 +683,6 @@ class Lesson extends React.Component {
           break;
         default:
           console.log('cannot undo ', operation);
-
       }
 
       this.userSP--; // decrement user stack pointer
@@ -763,13 +751,11 @@ class Lesson extends React.Component {
         critterWithText.altText = 'A red starfish';
       }
     }
-
     return critterWithText;
   }
 
 
   /* React render method
-  
      Structure of stack of moves to be printed should be:
      item[0] = Operation (e.g., 'Insert' or 'Swap')
      item[1] = Operand1

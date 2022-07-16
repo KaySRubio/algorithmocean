@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-
 import anemsmile from './img/anemsmile.png';
 
 const ForgotPassword = () => {

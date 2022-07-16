@@ -4,16 +4,11 @@ import swap from './img/swap1.png';
 import undo from './img/undo2.png';
 import insert from './img/insert1.png';
 import mark from './img/mark1.png';
-// import hint from './img/hint1.png'; // removed hints button for now
 import video from './img/video1.png';
 import questionMark from './img/q.png';
 import checkmark from './img/checkmark.png';
 
-
 class Toolbox extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   static get propTypes() {
     return {
@@ -100,7 +95,6 @@ class Toolbox extends React.Component {
             <img src={video} alt=''/>
             Show me a video
           </button> }
-
           <button
             aria-disabled={!this.props.enableSubmit}
             aria-label='Submit your answer when complete'
@@ -117,19 +111,6 @@ class Toolbox extends React.Component {
     );
   }
 }
-
-// aria-pressed={this.props.activeTool}
-
-/* Removed hints button for now
-          <button 
-            className='toolboxButton' 
-            id='hint' 
-            onClick={this.props.onClick}
-          >
-            <img src={hint} alt="Lightbulb for hints."/>
-            Give me a hint
-          </button>
-*/
 
 export default Toolbox;
 

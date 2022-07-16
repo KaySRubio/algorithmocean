@@ -6,10 +6,8 @@ import PropTypes from 'prop-types';
 
 class CreateAccount extends React.Component {
   constructor(props) {
-
     const axios = require('axios').default;
     axios.defaults.baseURL = backendUrl;
-
     super(props);
     
     this.state = { 
@@ -18,7 +16,6 @@ class CreateAccount extends React.Component {
       accountCreated: false,
     };
     this.errorMsg = '';
-    
   }
 
   static get propTypes() {
@@ -228,104 +225,11 @@ class CreateAccount extends React.Component {
               />
           </p>
           <p className="smallText hidden" id="dontHaveOne">If you do not have a class code, please leave blank. You can enter one later.</p>
-
-
-          
           <input className='createAccountButton' type="submit" name="login" value="Create Account" />
-
         </form>
-
       </div>
-
     </main>
   );}
 }
-
-/*
-
-
-
-
-
-
-
-*/
-/* Taking out for now to keep it short 
-
-          <p>
-            <input className='textInputSmall' placeholder='School or University *' type="text" name="school" size="20" maxLength="30" />
-          </p>
-          <p>
-            <input className='textInputSmall' placeholder='City *' type="text" name="city" size="20" maxLength="30" required aria-required="true"/>
-          </p>
-
-                    <p id='selectState'>State/Territory *</p>
-          <select
-            aria-required="true"
-            id='stateField'
-            defaultValue="MA" 
-            required 
-            >
-            <option value="AL">Alabama</option>
-            <option value="AK">Alaska</option>
-            <option value="AS">American Samoa</option>
-            <option value="AZ">Arizona</option>
-            <option value="AR">Arkansas</option>
-            <option value="CA">California</option>
-            <option value="CO">Colorado</option>
-            <option value="CT">Connecticut</option>
-            <option value="DE">Delaware</option>
-            <option value="DC">District Of Columbia</option>
-            <option value="FL">Florida</option>
-            <option value="GA">Georgia</option>
-            <option value="GU">Guam</option>
-            <option value="HI">Hawaii</option>
-            <option value="ID">Idaho</option>
-            <option value="IL">Illinois</option>
-            <option value="IN">Indiana</option>
-            <option value="IA">Iowa</option>
-            <option value="KS">Kansas</option>
-            <option value="KY">Kentucky</option>
-            <option value="LA">Louisiana</option>
-            <option value="ME">Maine</option>
-            <option value="MD">Maryland</option>
-            <option value="MA">Massachusetts</option>
-            <option value="MI">Michigan</option>
-            <option value="MN">Minnesota</option>
-            <option value="MS">Mississippi</option>
-            <option value="MO">Missouri</option>
-            <option value="MT">Montana</option>
-            <option value="NE">Nebraska</option>
-            <option value="NV">Nevada</option>
-            <option value="NH">New Hampshire</option>
-            <option value="NJ">New Jersey</option>
-            <option value="NM">New Mexico</option>
-            <option value="NY">New York</option>
-            <option value="NC">North Carolina</option>
-            <option value="ND">North Dakota</option>
-            <option value="MP">Northern Mariana Islands</option>
-            <option value="OH">Ohio</option>
-            <option value="OK">Oklahoma</option>
-            <option value="OR">Oregon</option>
-            <option value="PA">Pennsylvania</option>
-            <option value="PR">Puerto Rico</option>
-            <option value="RI">Rhode Island</option>
-            <option value="SC">South Carolina</option>
-            <option value="SD">South Dakota</option>
-            <option value="TN">Tennessee</option>
-            <option value="TX">Texas</option>
-            <option value="UM">US Minor Outlying Islands</option>
-            <option value="UT">Utah</option>
-            <option value="VT">Vermont</option>
-            <option value="VI">Virgin Islands</option>
-            <option value="VA">Virginia</option>
-            <option value="WA">Washington</option>
-            <option value="WV">West Virginia</option>
-            <option value="WI">Wisconsin</option>
-            <option value="WY">Wyoming</option>
-            <option value="OUTSIDEUS">Outside the US</option>
-          </select>	
-
-*/
  
 export default CreateAccount;

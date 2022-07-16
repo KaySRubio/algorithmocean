@@ -1,10 +1,9 @@
 // import { ReactDOM } from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { keepTheme } from './utils/themes';
-import { useEffect } from 'react';import CreateAccount from './CreateAccount';
+import CreateAccount from './CreateAccount';
 import About from './About';
 import Dashboard from './Dashboard';
-import Demo from './Demo';
 import Footer from './Footer';
 import ForgotPassword from './ForgotPassword';
 import Home from './Home';
@@ -33,11 +32,6 @@ class App extends React.Component {
     keepTheme();
   }
 
-  /*
-  state = {
-    a11yMessage: '',
-  }; */
-
   updateLiveMessage = (message) => {
     this.setState({ a11yMessage: message });
   }
@@ -48,7 +42,6 @@ class App extends React.Component {
         <LiveAnnouncer>
           <LiveMessage message={this.state.a11yMessage} aria-live="polite" />
         </LiveAnnouncer>
-
         <Router>
         <div className="App">
           <div className="content">
@@ -59,7 +52,7 @@ class App extends React.Component {
               <Route exact path="/">
                 <Home />
               </Route>
-              <Route path="/createaccount">
+              <Route path="/createaccount"> 
                 <CreateAccount 
                   updateLiveMessage={this.updateLiveMessage}
                 />
@@ -102,53 +95,5 @@ class App extends React.Component {
     );
   }
 }
-/*
-function App() {
-  useEffect(() => {
-    keepTheme();
-  })
 
-
-
-  return (
-    <Router>
-    <div className="App">
-      <div className="content">
-        <Navbar/>
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/createaccount">
-            <CreateAccount 
-            />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/forgotpassword">
-            <ForgotPassword />
-          </Route>
-          <Route path="/demo-lesson">
-            <Lesson />
-          </Route>
-
-          <Route path="/token">
-            <Token />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="*">
-            <NotFound />
-          </Route>
-        </Switch>
-      </div>
-      <Footer />
-    </div>
-  </Router>
-  );
-}
-
-*/
 export default App;

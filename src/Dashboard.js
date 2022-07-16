@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import hermitcrab from './img/hermitcrab.png';
-import { checkIfLoggedIn, backendUrl, listOfAlgorithmNamesInDatabase, frontendUrl } from './utils/utils';
+import { checkIfLoggedIn, listOfAlgorithmNamesInDatabase, frontendUrl } from './utils/utils';
 
 class Dashboard extends React.Component {
    constructor(props) {
@@ -41,7 +41,6 @@ class Dashboard extends React.Component {
       this.setBlankPracticeScoresToZero();
       this.getPracticeScoresFromLocalStorage()
     }
-    
   }
   
   getPracticeScoresFromServer() {
@@ -80,14 +79,12 @@ class Dashboard extends React.Component {
   
   // if any are still blank after call to server, set to zero in local storage
   setBlankPracticeScoresToZero() {
-
     listOfAlgorithmNamesInDatabase.forEach(e => {
       let score = localStorage.getItem(e);
       if(!score || isNaN(score)){
         localStorage.setItem(e, 0);
       }
     })
-
     this.getPracticeScoresFromLocalStorage();
   }
   
@@ -139,6 +136,6 @@ class Dashboard extends React.Component {
     </div>
   );}
 }
-
+// Change to text below in future when there are teacher accounts:
 // <p>Expecting assignments?  Check your Account and make sure you have entered the correct class code.</p>
 export default Dashboard;

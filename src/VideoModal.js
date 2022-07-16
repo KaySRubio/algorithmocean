@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
 class VideoModal extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     document.getElementById('videoModal').focus();
   }
@@ -49,4 +44,3 @@ class VideoModal extends React.Component {
 }
 
 export default VideoModal;
-

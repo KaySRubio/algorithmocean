@@ -1,6 +1,4 @@
-// Attempted to get django to work with react, but could not resolve csrf errors so this is not currently in use
 import * as React from 'react';
-import axios from "axios";
 import { backendUrl, getCookie } from './utils/utils';
 
 class Csrftoken extends React.Component {
@@ -17,7 +15,7 @@ class Csrftoken extends React.Component {
     let _csrftoken = getCookie('csrftoken');
 
     if(_csrftoken !== null && _csrftoken !== "undefined") {
-      console.log('csrftoken was found in browser cookie');
+      // console.log('csrftoken was found in browser cookie');
       this.setState({ csrftoken: _csrftoken });
     }
     // if it doesn't exist in browser cookies yet, request from the server
@@ -32,21 +30,20 @@ class Csrftoken extends React.Component {
     console.log('csrfToken was not found in cookie so performing request to get it from the server');
 
     const axios = require('axios').default;
-    // axios.get("https://algorithmoceanbackend.herokuapp.com/csrf/", {withCredentials:true}) // Production
     // axios.get("/csrf/", {withCredentials:true}) // Development
-    axios.get(backendUrl + 'csrf/', {withCredentials:true})
+    axios.get(backendUrl + 'csrf/', {withCredentials:true}) // Production
       .then(res => {
         _csrfToken = res.data.result;
         if (_csrfToken !== undefined && _csrfToken !== null) {
           this.setState({ csrftoken: _csrfToken });
 
-          // Give the browser a chance to set it by itself, and see if that worked
+          // Give the browser a chance to set it by itself, and see if that worked but hasn't been
           let csrftokenBrowser = getCookie('csrftoken');
           if (csrftokenBrowser !== undefined && csrftokenBrowser !== null) {
-            console.log('Browser set csrf token by itself YAY: ', csrftokenBrowser);
+            // console.log('Browser set csrf token by itself YAY: ', csrftokenBrowser);
           } else {
             // Issues with browser is not setting the cookie in production, so passed it through response body from django and set manually in JS
-            console.log('Browser did not set csrf token, token still: ', csrftokenBrowser, ' so manually setting token');
+            // console.log('Browser did not set csrf token, token still: ', csrftokenBrowser, ' so manually setting token');
             document.cookie = "csrftoken="+_csrfToken+'; SameSite=None; Secure';
           }
         }
@@ -54,30 +51,10 @@ class Csrftoken extends React.Component {
         .catch(err => console.log(err));
   } 
   
-/*
-  // Method to get the csrf token value from a cookie if the server already sent it
-  // and the browser already saved it
-  getCookie(name) {
-    let cookieValue = null;
-    console.log('getCookie method is running in Csrftoken and this is document.cookie: ', document.cookie);
-    if (document.cookie && document.cookie !== '') {
-      console.log('attempting to get ', name, ' from cookie');
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  } */
-
   // rendering a hidden html element in the form similar to the way django would if this were a static django app.
   // Not sure if this helps with subsequent csrf/cors issues in the login, but trying everything to help resolve csrf/cors
   render(){
-    console.log('this.state.csrftoken', this.state.csrftoken);
+    // console.log('this.state.csrftoken', this.state.csrftoken);
     return (
       <input type="hidden" name="csrfmiddlewaretoken" value={this.state.csrftoken} />
     );}
@@ -93,95 +70,4 @@ export default Csrftoken;
 
 
 
-// const csrftoken = getCookie('csrftoken');
 
-/*
-let _csrfToken = getCsrfToken();
-console.log(_csrfToken);
-let csrftoken = getCookie('csrftoken');
-console.log(this.csrfToken);
-
-async function getCsrfToken() {
-  if (_csrfToken === null) {
-    const response = await fetch(`/csrf/`, {
-      credentials: 'include',
-    });
-    const data = await response.json();
-    _csrfToken = data.csrfToken;
-
-  }
-  //document.cookie = "csrftoken="+_csrfToken;
-  console.log("in csrftoken component: ", _csrfToken);
-  return _csrfToken;
-} 
-
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  console.log('cookieValue: ', cookieValue);
-  return cookieValue;
-}
-
-/* Only returns null
-function getCookie(name) {
-
-  var cookieValue = null;
-  console.log("document.cookie: ", document.cookie);
-  
-  if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-          var cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  console.log('cookieValue: ', cookieValue); */
-
-
-
-  
-  // console.log('csrftoken', csrftoken);
-
-//   return cookieValue;
-// } 
-
-/* ONLY RETURNS NULL
-function getCookie(name) {
-  if (!document.cookie) {
-    return null;
-  }
-
-  const xsrfCookies = document.cookie.split(';')
-    .map(c => c.trim())
-    .filter(c => c.startsWith(name + '='));
-
-  if (xsrfCookies.length === 0) {
-    return null;
-  }
-  return decodeURIComponent(xsrfCookies[0].split('=')[1]);
-} */
-
-/*
-const CSRFToken = () => {
-  //console.log(csrftoken);
-
-    return (
-      <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
-    );
-}; */
-
-// {/*<input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />*/}

@@ -6,16 +6,13 @@ import Csrftoken from './Csrftoken';
 import PropTypes from 'prop-types';
 import { validateFormElement, backendUrl, frontendUrl, getCookie } from './utils/utils';
 
-//const Login = () => {
 class Login extends React.Component {
   constructor(props) {
     super(props);
-  
     this.state = { 
       invalidCredentials: false,
       serverError: '',
     };
-      
   } 
 
   static get propTypes() {
@@ -35,20 +32,18 @@ class Login extends React.Component {
   }
 
   handleSubmit = (e) => {
-
     e.preventDefault();
-
     let csrftoken = getCookie('csrftoken');
     if(csrftoken === null) {
       csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-      console.log('csrftoken wasnt in a cookie so retrieved from the DOM: ', csrftoken );
+      // console.log('csrftoken wasnt in a cookie so retrieved from the DOM: ', csrftoken );
     }
 
     const user = {};
     user.username = document.getElementById('emailField').value;
     user.password = document.getElementById('passwordField').value;
 
-    console.log('credentials: ', user);
+    // console.log('credentials: ', user);
 
     let string = 'username=\''+user.username+'\', password=\''+user.password+'\'';
     console.log("Fetch Request with ", string);
@@ -68,22 +63,19 @@ class Login extends React.Component {
     })
     .then(res => {
       console.log('res: ', res);
-      
       if (!res.ok) {
         res.status && console.log('res.status: ', res.status);
         this.tryAxios(csrftoken, string);
       }
-      
       return res.json();
-
       })
     .then(data => {
       data && console.log('data', data);
-      data.result && console.log('data.result', data.result)
+      // data.result && console.log('data.result', data.result)
       
       if (data.result === 'NOT logged in') {
         this.props.updateLiveMessage('Invalid username or password. Please check your username or password and try again.');
-        console.log("invalid credentials");
+        console.warn("invalid credentials");
         localStorage.clear();
         this.setState({ invalidCredentials: true });
       } else if (data.result.username !== undefined) {
@@ -101,35 +93,11 @@ class Login extends React.Component {
       } else {
         this.tryAxios(csrftoken, string);
       }
-    }
-    // .catch( err => console.error(`Fetch problem: ${err.message}`) 
-    /*.then(res => {
-      console.log(res.json().Object.result);*/
-    /*
-    .then(data => {
-      console.log(data); */
-      
-      /*if (data.key) {
-        console.log('logged in with data: ', data);
-        localStorage.clear();
-        localStorage.setItem('token', data.key);
-        //window.location.replace('http://localhost:3000/dashboard');
-      } else { 
-        */
-        //console.log('not logged in?'); 
-        /*
-        setEmail('');
-        setPassword('');
-        localStorage.clear();
-        setErrors(true); */
-      //}
-    //}
-    );
-        
+    });   
   }
   
   tryAxios(csrftoken, string) {
-    console.log("trying to login via an axios request with csrftoken: ", csrftoken);
+    // console.log("trying to login via an axios request with csrftoken: ", csrftoken);
 
     // Use axios to send the csrf token in header, csrf cookie, as well as user login info 
     axios.defaults.withCredentials = true;
@@ -159,29 +127,9 @@ class Login extends React.Component {
         this.setState({ serverError: 'Sorry, something went wrong! Please check with your system administrator.' });
         this.props.updateLiveMessage('An error has occurred. Please check with your system administrator.');
         // localStorage.clear();
-
       })
-    
-
   }
 
-  /*
-  getCookie(name) {
-    let cookieValue = null;
-    console.log('getCookie method is running in Login and this is document.cookie: ', document.cookie);
-    if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  } */
-  
   render(){
     return (
       <main className="loginModal">
@@ -228,23 +176,14 @@ class Login extends React.Component {
                 type='password'
                 />
             </p>
-            
             <input className='loginButton' type="submit" name="login" value="Login" />
-            
           </form>
-          
           <p className="smallText">New to Algorithm Ocean?</p>
           <Link className="link signup" to="/createaccount">Sign Up</Link>
-
         </div>
-
       </main>
   );}
 }
-
+// Add later when forgot password method is created on the back end
 // <Link className="link" id="forgotPasswordLink" to="/forgotpassword">Forgot Password</Link>
- 
-/*         { this.state.theme === 'theme-light' && <img src={wave1} className="logowave" title="dark blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
-        { this.state.theme === 'theme-dark' && <img src={wave2} className="logowave" title="light blue wave" alt="Algorithm Ocean logo that includes a blue ocean wave"/> }
-        */
 export default Login;

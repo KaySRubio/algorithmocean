@@ -13,6 +13,11 @@ import portrait from './img/portraitPlaceholder.png';
 const Home = () => {
   return (
     <div className="home">
+      <div id='homeAlgorithmMenu'>
+        <Link className="link navbarlink" to="/demo-lesson/bubble">Bubble Sort</Link>
+        <Link className="link navbarlink" to="/demo-lesson/insertion">Insertion Sort</Link>
+        <Link className="link navbarlink" to="/demo-lesson/selection">Selection Sort</Link>
+      </div>
       <div className='homeRowDark'>
         <div className='innerRow' id="innerRow1">
           <div id='row1col1'>
@@ -49,12 +54,12 @@ const Home = () => {
       <div className='homeRowDark'>
         <div className='innerRow' id="innerRow3">
           <div id='row3col1'>
-            <img src={numbers} id='homeNumbers' alt="An image of an array of numbers 28, 34, 38, 48, 52, 75."/>
+            <img src={numbers} id='homeNumbers' alt="An array of numbers 28, 34, 38, 48, 52, 75."/>
             <img src={swapc} id='homeSwap' alt="A symbol for swapping two numbers that looks like a curved U-shaped arrow."/>
           </div>
           <div id='row3col2' >
             <h2 className='homeRowDark'>How it works</h2>
-            <p className='homeRowDark'>You solve a problem using an algorithm on the screen. The program performs the algorithm behind the scenes. When you&apos;re done, your moves are compared with the program&apos;s moves. You get a detailed report of what you did right, and where you may have gone astray. No coding involved.</p>
+            <p className='homeRowDark'>You solve a problem using an algorithm on the screen. The program performs the algorithm behind the scenes. When you&apos;re done, your moves are compared with the program&apos;s moves. You get a detailed report of what you did right, and where you may have gone astray. No coding needed.</p>
           </div>
         </div>
       </div>
@@ -121,37 +126,27 @@ const Home = () => {
         <div className='innerRow' id="innerRow6">
           <h2 className='homeRowLight'>What Users Say</h2>
           <div className='col1of3'>
-            <p>User quote here</p>
-            <p>User quote here</p>
+            <p>User quotes</p>
+            <p>coming soon!</p>
             <img src={portrait} id='homeSwap' alt="Placeholder for a portrait of a person."/>
             <p>Author, Location</p>
           </div>
           <div className='col1of3' >
-            <p>User quote here</p>
-            <p>User quote here</p>
+            <p>User quotes</p>
+            <p>coming soon!</p>
             <img src={portrait} id='homeSwap' alt="Placeholder for a portrait of a person."/>
             <p>Author, Location</p>
           </div>
           <div className='col1of3' >
-            <p>User quote here</p>
-            <p>User quote here</p>
+            <p>User quotes</p>
+            <p>coming soon!</p>
             <img src={portrait} id='homeSwap' alt="Placeholder for a portrait of a person."/>
             <p>Author, Location</p>
           </div>
         </div>
       </div>
-
-
-
-
-
-
     </div>
   );
 }
-
-/*
-<img className='naut hideUntilHover' src={nautInside} alt="The inside of a spiral nautilus shell with split into boxes according to fibonnaci numbers, with 1 being the closest to the inside of the spiral, then 3, 5, 8, 13, 21, and 34 being the largest outside part of the spiral."/>
-*/
  
 export default Home;
