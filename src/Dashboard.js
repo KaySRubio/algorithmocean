@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
     <div className="dashboard">
       <div className="dashboardHeading">
         <p id="dashboardWelcome">Welcome {this.state.first_name}!</p>
-        <h1>Student Dashboard</h1>
+        <h1>Dashboard</h1>
       </div>
       <img id="dashboardImg" src={hermitcrab} alt="A red hermit crab with a yellow shell that is holding one claw upwards"/>
 
